@@ -13,16 +13,19 @@
  * 
  * Examples:
  * stringTransformation("abcd", ["U","R"]) // "DCBA"
+ * // "abcd" → "ABCD" → "DCBA"
+ * 
  * stringTransformation("abc", ["D","L"])  // "aabbcc"
+ * // "abc" → "aabbcc" → "aabbcc" (lowercase already applied)
+ * 
  * stringTransformation("AbCd", ["L","R"]) // "dcba"
+ * // "AbCd" → "abcd" → "dcba"
  * 
  * Note:
  * Input string length is 1 <= n <= 10^5, length of transformations is 0 <= n <= 10^5,
  * in all tests is guaranteed that the string will be not longer than 10^8.
  */
 
-function stringTransformation(s, transformations) {
-  // Your solution here
-}
+function stringTransformation(s, pattern) {
 
-module.exports = { stringTransformation };
+}
