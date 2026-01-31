@@ -1,7 +1,8 @@
 function listComprehension(str) {
-  // Trim and validate basic structure
+  // Trim whitespace
   str = str.trim();
   
+  // Check if it starts with [ and ends with ]
   if (!str.startsWith('[') || !str.endsWith(']')) {
     throw new Error('Invalid list comprehension');
   }
@@ -9,16 +10,23 @@ function listComprehension(str) {
   // Remove outer brackets
   const inner = str.slice(1, -1).trim();
   
-  // Parse the list comprehension: expression for variable in iterable
+  // Parse the list comprehension pattern: expression for variable in iterable
   const forMatch = inner.match(/^(.+?)\s+for\s+(\w+)\s+in\s+(.+)$/);
   
   if (!forMatch) {
-    throw new Error('Invalid list comprehension syntax');
+    throw new Error('Invalid list comprehension');
   }
   
-  const [, expression, variable, iterableExpr] = forMatch;
+  const expression = forMatch[1].trim();
+  const variable = forMatch[2].trim();
+  const iterableExpr = forMatch[3].trim();
   
-  // Evaluate the iterable
+  // Validate variable name
+  if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(variable)) {
+    throw new Error('Invalid variable name');
+  }
+  
+  // Evaluate the iterable expression
   let iterable;
   try {
     iterable = eval(iterableExpr);
@@ -26,15 +34,17 @@ function listComprehension(str) {
     throw new Error('Invalid iterable expression');
   }
   
+  // Check if iterable is actually iterable (array-like)
   if (!Array.isArray(iterable)) {
     throw new Error('Iterable must be an array');
   }
   
-  // Map over the iterable, evaluating the expression for each element
+  // Build result by evaluating expression for each element
   const result = [];
-  for (const value of iterable) {
+  for (let i = 0; i < iterable.length; i++) {
+    const value = iterable[i];
     try {
-      // Create a function that takes the variable and returns the expression result
+      // Create a function that evaluates the expression with the variable bound
       const fn = new Function(variable, `return (${expression});`);
       result.push(fn(value));
     } catch (e) {
