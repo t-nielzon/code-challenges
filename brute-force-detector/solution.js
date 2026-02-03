@@ -19,3 +19,5 @@ function detectBruteForce(logs) {
   
   return Array.from(suspiciousIPs).sort();
 }
+
+module.exports = { detectBruteForce };
