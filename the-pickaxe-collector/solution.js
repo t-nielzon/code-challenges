@@ -1,13 +1,14 @@
 function pickaxeCollector(materials, store, inventory, budget) {
-  // Find current best damage from inventory
-  let currentBestDamage = 0;
+  // Find current best damage in inventory
+  let currentBestDamage = -1;
   for (const material of inventory) {
     if (materials[material] > currentBestDamage) {
       currentBestDamage = materials[material];
     }
   }
-  
-  // Get sellable items from inventory (in store and sell_price > 0), sorted by damage ascending
+
+  // Get sellable items from inventory (in store and sell_price > 0)
+  // Sorted by damage ascending (sell weakest first)
   const sellable = [];
   for (const material of inventory) {
     if (store[material] && store[material][1] > 0) {
@@ -19,8 +20,8 @@ function pickaxeCollector(materials, store, inventory, budget) {
     }
   }
   sellable.sort((a, b) => a.damage - b.damage);
-  
-  // Get store items sorted by damage descending (strongest first)
+
+  // Get store items sorted by damage descending (try strongest first)
   const storeItems = [];
   for (const material in store) {
     storeItems.push({
@@ -30,39 +31,43 @@ function pickaxeCollector(materials, store, inventory, budget) {
     });
   }
   storeItems.sort((a, b) => b.damage - a.damage);
-  
+
   // Try to buy the strongest pickaxe we can afford
   for (const item of storeItems) {
-    // Only buy if strictly stronger than current best
+    // Only consider if strictly stronger than current best
     if (item.damage <= currentBestDamage) {
       continue;
     }
-    
+
     // Skip if we already own this material
     if (inventory.has(item.name)) {
       continue;
     }
-    
-    // Check if we can afford it, possibly by selling
-    let currentBudget = budget;
+
+    // Try to afford this item by selling from weakest up
+    let funds = budget;
     const toSell = new Set();
-    
-    // Try selling from lowest damage upward until we can afford
-    for (const sellableItem of sellable) {
-      if (currentBudget >= item.buyPrice) {
+
+    // Sell items starting from lowest damage until we can afford or run out
+    for (const sellItem of sellable) {
+      if (funds >= item.buyPrice) {
         break;
       }
-      currentBudget += sellableItem.sellPrice;
-      toSell.add(sellableItem.name);
+      // Don't sell something stronger than what we're buying
+      if (sellItem.damage >= item.damage) {
+        continue;
+      }
+      funds += sellItem.sellPrice;
+      toSell.add(sellItem.name);
     }
-    
-    // If we can afford it now, buy it
-    if (currentBudget >= item.buyPrice) {
-      const remainingBudget = currentBudget - item.buyPrice;
-      return [item.name, toSell, remainingBudget];
+
+    if (funds >= item.buyPrice) {
+      const remaining = funds - item.buyPrice;
+      return [item.name, toSell, remaining];
     }
   }
-  
-  // Couldn't buy anything better
+
   return null;
 }
+
+module.exports = { pickaxeCollector };

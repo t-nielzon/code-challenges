@@ -40,5 +40,7 @@ Decide which pickaxe to buy and which to sell, if any, to obtain the **strongest
 */
 
 function pickaxeCollector(materials, store, inventory, budget) {
-  
+  // Your solution here
 }
+
+module.exports = { pickaxeCollector };
