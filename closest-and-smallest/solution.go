@@ -10,16 +10,7 @@ import (
 type numInfo struct {
 	weight int
 	index  int
-	value  int
-}
-
-func digitSum(n int) int {
-	sum := 0
-	for n > 0 {
-		sum += n % 10
-		n /= 10
-	}
-	return sum
+	value  string
 }
 
 func Closest(strng string) string {
@@ -34,15 +25,14 @@ func Closest(strng string) string {
 
 	nums := make([]numInfo, len(parts))
 	for i, p := range parts {
-		val, _ := strconv.Atoi(p)
 		nums[i] = numInfo{
-			weight: digitSum(val),
+			weight: digitSum(p),
 			index:  i,
-			value:  val,
+			value:  p,
 		}
 	}
 
-	// Sort by weight, then by index
+	// sort by weight, then by index
 	sorted := make([]numInfo, len(nums))
 	copy(sorted, nums)
 	sort.Slice(sorted, func(i, j int) bool {
@@ -52,7 +42,7 @@ func Closest(strng string) string {
 		return sorted[i].index < sorted[j].index
 	})
 
-	// Find the closest pair
+	// find the closest pair by comparing adjacent elements in sorted order
 	var bestA, bestB numInfo
 	bestDiff := -1
 
@@ -64,15 +54,15 @@ func Closest(strng string) string {
 			bestDiff = diff
 			bestA, bestB = a, b
 		} else if diff == bestDiff {
-			// Compare by smallest weight first
+			// compare by smallest weight first
 			if a.weight < bestA.weight {
 				bestA, bestB = a, b
 			} else if a.weight == bestA.weight {
-				// Compare by smallest index of first element
+				// compare by smallest index of first element
 				if a.index < bestA.index {
 					bestA, bestB = a, b
 				} else if a.index == bestA.index {
-					// Compare by smallest index of second element
+					// compare by smallest index of second element
 					if b.index < bestB.index {
 						bestA, bestB = a, b
 					}
@@ -81,13 +71,25 @@ func Closest(strng string) string {
 		}
 	}
 
-	// Format output - ensure sorted by weight, then by index
-	first, second := bestA, bestB
-	if first.weight > second.weight || (first.weight == second.weight && first.index > second.index) {
-		first, second = second, first
+	// ensure bestA comes before bestB (by weight, then by index)
+	if bestA.weight > bestB.weight || (bestA.weight == bestB.weight && bestA.index > bestB.index) {
+		bestA, bestB = bestB, bestA
 	}
 
+	valA, _ := strconv.Atoi(bestA.value)
+	valB, _ := strconv.Atoi(bestB.value)
+
 	return fmt.Sprintf("[(%d, %d, %d), (%d, %d, %d)]",
-		first.weight, first.index, first.value,
-		second.weight, second.index, second.value)
+		bestA.weight, bestA.index, valA,
+		bestB.weight, bestB.index, valB)
+}
+
+func digitSum(s string) int {
+	sum := 0
+	for _, c := range s {
+		if c >= '0' && c <= '9' {
+			sum += int(c - '0')
+		}
+	}
+	return sum
 }

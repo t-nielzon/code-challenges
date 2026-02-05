@@ -20,13 +20,13 @@ of `strng` that have:
 
 - an array of two arrays, each subarray in the following format:
 
-`[number-weight, index in strng of the corresponding number, original corresponding number in strng]`
+[number-weight, index in strng of the corresponding number, original corresponding number in strng]
 
 The two subarrays are sorted in ascending order by their number weights if these weights are different,
 by their indexes in the string if they have the same weights.
 
-#### Notes :
-If `n == 0` `closest("")` should return "[(), ()]" in Go.
+#### Notes:
+If n == 0 closest("") should return "[(), ()]" in Go
 */
 package kata
 
