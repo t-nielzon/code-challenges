@@ -3,49 +3,49 @@ function Dictionary(words) {
 }
 
 Dictionary.prototype.findMostSimilar = function(term) {
-  let minDistance = Infinity;
-  let mostSimilar = null;
+  // uses levenshtein distance to find minimum edit distance
+  const levenshtein = (a, b) => {
+    if (a === b) return 0;
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    
+    const matrix = [];
+    
+    for (let i = 0; i <= b.length; i++) {
+      matrix[i] = [i];
+    }
+    
+    for (let j = 0; j <= a.length; j++) {
+      matrix[0][j] = j;
+    }
+    
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b[i - 1] === a[j - 1]) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, // substitution
+            matrix[i][j - 1] + 1,     // insertion
+            matrix[i - 1][j] + 1      // deletion
+          );
+        }
+      }
+    }
+    
+    return matrix[b.length][a.length];
+  };
   
-  for (const word of this.words) {
-    const distance = levenshteinDistance(term, word);
+  let mostSimilar = this.words[0];
+  let minDistance = levenshtein(term, this.words[0]);
+  
+  for (let i = 1; i < this.words.length; i++) {
+    const distance = levenshtein(term, this.words[i]);
     if (distance < minDistance) {
       minDistance = distance;
-      mostSimilar = word;
+      mostSimilar = this.words[i];
     }
   }
   
   return mostSimilar;
 };
-
-function levenshteinDistance(s1, s2) {
-  const m = s1.length;
-  const n = s2.length;
-  
-  // Create a 2D array for dynamic programming
-  const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
-  
-  // Initialize base cases
-  for (let i = 0; i <= m; i++) {
-    dp[i][0] = i;
-  }
-  for (let j = 0; j <= n; j++) {
-    dp[0][j] = j;
-  }
-  
-  // Fill in the rest of the matrix
-  for (let i = 1; i <= m; i++) {
-    for (let j = 1; j <= n; j++) {
-      if (s1[i - 1] === s2[j - 1]) {
-        dp[i][j] = dp[i - 1][j - 1];
-      } else {
-        dp[i][j] = 1 + Math.min(
-          dp[i - 1][j],     // deletion
-          dp[i][j - 1],     // insertion
-          dp[i - 1][j - 1]  // replacement
-        );
-      }
-    }
-  }
-  
-  return dp[m][n];
-}
