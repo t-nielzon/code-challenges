@@ -1,9 +1,8 @@
 function mineLocation(field) {
-  for (let row = 0; row < field.length; row++) {
-    for (let col = 0; col < field[row].length; col++) {
-      if (field[row][col] === 1) {
-        return [row, col];
-      }
-    }
+  for (let r = 0; r < field.length; r++) {
+    const c = field[r].indexOf(1);
+    if (c !== -1) return [r, c];
   }
 }
+
+module.exports = { mineLocation };
