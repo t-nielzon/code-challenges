@@ -17,8 +17,8 @@ be counted only once.
 
 E.g.
 count_odd_pentaFib(5) -----> 1
-count_odd_pentaFib(10) ------> 3
-count_odd_pentaFib(15) ------> 5
+count_odd_pentaFib(10) -----> 3
+count_odd_pentaFib(15) -----> 5
 */
 package kata
 
