@@ -1,22 +1,13 @@
 package kata
 
-import (
-	"strings"
-	"unicode"
-)
+import "strings"
 
 func CamelCase(s string) string {
 	words := strings.Fields(s)
-	var result strings.Builder
-	
-	for _, word := range words {
-		if len(word) == 0 {
-			continue
+	for i, w := range words {
+		if len(w) > 0 {
+			words[i] = strings.ToUpper(w[:1]) + w[1:]
 		}
-		runes := []rune(word)
-		runes[0] = unicode.ToUpper(runes[0])
-		result.WriteString(string(runes))
 	}
-	
-	return result.String()
+	return strings.Join(words, "")
 }
