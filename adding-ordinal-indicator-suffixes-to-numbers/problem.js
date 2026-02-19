@@ -18,11 +18,11 @@
  * - st is used with numbers ending in 1 (e.g. 1st)
  * - nd is used with numbers ending in 2 (e.g. 92nd)
  * - rd is used with numbers ending in 3 (e.g. 33rd)
- * - Exception: "teen" numbers ending with 11, 12 or 13 use -th (e.g. 11th, 112th)
+ * - All "teen" numbers ending with 11, 12 or 13 use -th (e.g. 11th, 112th)
  * - th is used for all other numbers (e.g. 9th)
  */
 
 function numberToOrdinal(n) {
 }
 
-module.exports = { numberToOrdinal };
+module.exports = numberToOrdinal;

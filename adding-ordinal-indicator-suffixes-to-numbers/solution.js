@@ -13,4 +13,4 @@ function numberToOrdinal(n) {
   }
 }
 
-module.exports = { numberToOrdinal };
+module.exports = numberToOrdinal;
