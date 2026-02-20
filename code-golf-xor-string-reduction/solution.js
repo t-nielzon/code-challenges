@@ -1,0 +1,1 @@
+xor=s=>s.split(1).length+1&1
