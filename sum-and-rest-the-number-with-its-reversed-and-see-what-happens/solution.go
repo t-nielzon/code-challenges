@@ -1,13 +1,9 @@
 package kata
 
-var cache []int64
+var cache []int
 
-func init() {
-	cache = buildSequence(65)
-}
-
-func reverseNum(n int64) int64 {
-	var rev int64
+func reverseNum(n int) int {
+	rev := 0
 	for n > 0 {
 		rev = rev*10 + n%10
 		n /= 10
@@ -15,34 +11,32 @@ func reverseNum(n int64) int64 {
 	return rev
 }
 
-func buildSequence(limit int) []int64 {
-	seq := make([]int64, 0, limit)
-	var num int64
-	for num = 10; len(seq) < limit; num++ {
-		// skip numbers ending in 0 (reversed would have leading zero)
-		if num%10 == 0 {
-			continue
+func SumDivRev(n int) int {
+	for len(cache) < n {
+		start := 10
+		if len(cache) > 0 {
+			start = cache[len(cache)-1] + 1
 		}
-		rev := reverseNum(num)
-		// skip palindromes (difference would be 0)
-		if rev == num {
-			continue
+		for i := start; ; i++ {
+			if i%10 == 0 {
+				continue
+			}
+			rev := reverseNum(i)
+			if rev == i {
+				continue
+			}
+			sum := i + rev
+			diff := i - rev
+			if diff < 0 {
+				diff = -diff
+			}
+			if sum%diff == 0 {
+				cache = append(cache, i)
+				if len(cache) >= n {
+					break
+				}
+			}
 		}
-		sum := num + rev
-		diff := num - rev
-		if diff < 0 {
-			diff = -diff
-		}
-		if sum%diff == 0 {
-			seq = append(seq, num)
-		}
-	}
-	return seq
-}
-
-func SumAndRest(n int) int64 {
-	if n < 1 || n > len(cache) {
-		return 0
 	}
 	return cache[n-1]
 }
