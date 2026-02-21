@@ -20,5 +20,4 @@
  * For points = [[0,0],[1,0],[10,0],[1,17],[10,17],[0,17]], the output should be 3.
  */
 function countRectangles(points) {
-
 }
