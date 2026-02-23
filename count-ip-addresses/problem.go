@@ -1,6 +1,4 @@
 /*
-Count IP Addresses (5 kyu)
-
 Implement a function that receives two IPv4 addresses, and returns the number
 of addresses between them (including the first one, excluding the last one).
 
@@ -9,11 +7,12 @@ address will always be greater than the first one.
 
 Examples:
 
-  * With input "10.0.0.0", "10.0.0.50"  => return   50
-  * With input "10.0.0.0", "10.0.1.0"   => return  256
-  * With input "20.0.0.10", "20.0.1.0"  => return  246
+  - With input "10.0.0.0", "10.0.0.50"  => return   50
+  - With input "10.0.0.0", "10.0.1.0"   => return  256
+  - With input "20.0.0.10", "20.0.1.0"  => return  246
 */
 package kata
 
 func IpsBetween(start, end string) int {
+
 }
