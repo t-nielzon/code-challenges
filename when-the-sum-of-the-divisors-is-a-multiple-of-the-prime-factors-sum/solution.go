@@ -1,3 +1,4 @@
+// solution.go
 package kata
 
 func primeFactorSum(n int) int {
@@ -28,7 +29,7 @@ func divisorSum(n int) int {
 }
 
 func DsMultofPfs(nMin, nMax int) []int {
-	result := []int{}
+	var result []int
 	for n := nMin; n <= nMax; n++ {
 		if n < 2 {
 			continue
