@@ -5,4 +5,4 @@ function mineLocation(field) {
   }
 }
 
-module.exports = { mineLocation };
+module.exports = mineLocation;
