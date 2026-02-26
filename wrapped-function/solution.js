@@ -1,6 +1,6 @@
 Function.prototype.wrap = function(wrapper) {
   const original = this;
-  return function(...args) {
-    return wrapper.call(this, original, ...args);
+  return function() {
+    return wrapper.apply(this, [original.bind(this), ...arguments]);
   };
 };
