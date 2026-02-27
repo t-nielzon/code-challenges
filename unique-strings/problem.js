@@ -1,20 +1,19 @@
 /*
  * Unique Strings
  *
- * Given a string that contains only letters, you have to find out the number
- * of unique strings (including the string itself) that can be produced by
- * re-arranging the letters of the string. Strings are case insensitive.
+ * Given a string that contains only letters, find out the number of unique
+ * strings (including the string itself) that can be produced by re-arranging
+ * the letters of the string. Strings are case insensitive.
  *
  * Examples:
- *   uniqCount("AB") = 2n      // "AB", "BA"
- *   uniqCount("ABC") = 6n     // "ABC", "ACB", "BAC", "BCA", "CAB", "CBA"
- *   uniqCount("ABA") = 3n     // "AAB", "ABA", "BAA"
- *   uniqCount("ABBb") = 4n    // "ABBB", "BABB", "BBAB", "BBBA"
- *   uniqCount("AbcD") = 24n   // "ABCD", etc.
+ *   uniqCount("AB")    = 2n
+ *   uniqCount("ABC")   = 6n
+ *   uniqCount("ABA")   = 3n
+ *   uniqCount("ABBb")  = 4n
+ *   uniqCount("AbcD")  = 24n
  *
- * Note that you should return a BigInt, not a Number
+ * Note: return a BigInt, not a Number.
  */
-
 function uniqCount(s) {
 }
 
