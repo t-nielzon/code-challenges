@@ -1,32 +1,16 @@
 package kata
 
 func Cakes(recipe, available map[string]int) int {
-	if len(recipe) == 0 {
-		return 0
-	}
-
-	minCakes := -1
-
+	min := -1
 	for ingredient, needed := range recipe {
-		if needed == 0 {
-			continue
-		}
-
-		have, exists := available[ingredient]
-		if !exists {
-			return 0
-		}
-
-		possible := have / needed
-
-		if minCakes == -1 || possible < minCakes {
-			minCakes = possible
+		have := available[ingredient]
+		count := have / needed
+		if min == -1 || count < min {
+			min = count
 		}
 	}
-
-	if minCakes == -1 {
+	if min == -1 {
 		return 0
 	}
-
-	return minCakes
+	return min
 }
