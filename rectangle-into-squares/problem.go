@@ -11,8 +11,8 @@ You will be given two dimensions:
 You will return a collection with the size of each of the squares.
 
 Examples:
-  SqInRect(5, 3) should return [3, 2, 1, 1]
-  SqInRect(3, 5) should return [3, 2, 1, 1]
+  sqInRect(5, 3) should return [3, 2, 1, 1]
+  sqInRect(3, 5) should return [3, 2, 1, 1]
 
 Notes:
 - When lng == wdth, return nil.
