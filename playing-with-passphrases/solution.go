@@ -24,12 +24,8 @@ func PlayPass(s string, n int) string {
 		}
 		buf = append(buf, c)
 	}
-
-	// reverse
-	result := []byte(string(buf))
-	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
-		result[i], result[j] = result[j], result[i]
+	for i, j := 0, len(buf)-1; i < j; i, j = i+1, j-1 {
+		buf[i], buf[j] = buf[j], buf[i]
 	}
-
-	return strings.TrimRight(string(result), "\x00")
+	return strings.TrimRight(string(buf), "\x00")
 }
