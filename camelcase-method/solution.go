@@ -3,11 +3,9 @@ package kata
 import "strings"
 
 func CamelCase(s string) string {
-	words := strings.Fields(s)
-	for i, w := range words {
-		if len(w) > 0 {
-			words[i] = strings.ToUpper(w[:1]) + w[1:]
-		}
+	var b strings.Builder
+	for _, word := range strings.Fields(s) {
+		b.WriteString(strings.ToUpper(word[:1]) + word[1:])
 	}
-	return strings.Join(words, "")
+	return b.String()
 }
