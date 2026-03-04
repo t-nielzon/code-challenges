@@ -1,56 +1,30 @@
 function listComprehension(str) {
-  // Trim whitespace
   str = str.trim();
-  
-  // Check if it starts with [ and ends with ]
-  if (!str.startsWith('[') || !str.endsWith(']')) {
-    throw new Error('Invalid list comprehension');
-  }
-  
-  // Remove outer brackets
-  const inner = str.slice(1, -1).trim();
-  
-  // Parse the list comprehension pattern: expression for variable in iterable
-  const forMatch = inner.match(/^(.+?)\s+for\s+(\w+)\s+in\s+(.+)$/);
-  
-  if (!forMatch) {
-    throw new Error('Invalid list comprehension');
-  }
-  
-  const expression = forMatch[1].trim();
-  const variable = forMatch[2].trim();
-  const iterableExpr = forMatch[3].trim();
-  
-  // Validate variable name
-  if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(variable)) {
-    throw new Error('Invalid variable name');
-  }
-  
-  // Evaluate the iterable expression
-  let iterable;
+  if (str[0] !== '[' || str[str.length - 1] !== ']') throw new Error('Invalid');
+
+  var inner = str.slice(1, -1).trim();
+  var match = inner.match(/^(.*?)\s+for\s+(\w+)\s+in\s+([\s\S]+)$/);
+  if (!match) throw new Error('Invalid');
+
+  var expr = match[1];
+  var varName = match[2];
+  var source = match[3];
+
+  var arr;
   try {
-    iterable = eval(iterableExpr);
+    arr = new Function('return ' + source)();
   } catch (e) {
-    throw new Error('Invalid iterable expression');
+    throw new Error('Invalid');
   }
-  
-  // Check if iterable is actually iterable (array-like)
-  if (!Array.isArray(iterable)) {
-    throw new Error('Iterable must be an array');
+
+  if (!Array.isArray(arr)) throw new Error('Invalid');
+
+  var fn;
+  try {
+    fn = new Function(varName, 'return ' + expr);
+  } catch (e) {
+    throw new Error('Invalid');
   }
-  
-  // Build result by evaluating expression for each element
-  const result = [];
-  for (let i = 0; i < iterable.length; i++) {
-    const value = iterable[i];
-    try {
-      // Create a function that evaluates the expression with the variable bound
-      const fn = new Function(variable, `return (${expression});`);
-      result.push(fn(value));
-    } catch (e) {
-      throw new Error('Invalid expression');
-    }
-  }
-  
-  return result;
+
+  return arr.map(function(val) { return fn(val); });
 }
