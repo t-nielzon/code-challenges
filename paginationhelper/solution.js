@@ -21,3 +21,5 @@ PaginationHelper.prototype.pageIndex = function(itemIndex) {
   if (itemIndex < 0 || itemIndex >= this.collection.length) return -1;
   return Math.floor(itemIndex / this.itemsPerPage);
 };
+
+module.exports = PaginationHelper;
