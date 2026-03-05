@@ -3,46 +3,39 @@ package kata
 import "sort"
 
 func Prod2Sum(a, b, c, d int) [][2]int {
-	// Using Brahmagupta–Fibonacci identity:
-	// (a² + b²)(c² + d²) = (ac + bd)² + (ad - bc)² = (ac - bd)² + (ad + bc)²
-	
-	results := make(map[[2]int]bool)
-	
-	// First decomposition: (ac + bd, ad - bc)
-	e1 := abs(a*c + b*d)
-	f1 := abs(a*d - b*c)
-	addPair(results, e1, f1)
-	
-	// Second decomposition: (ac - bd, ad + bc)
-	e2 := abs(a*c - b*d)
-	f2 := abs(a*d + b*c)
-	addPair(results, e2, f2)
-	
-	// Convert map to slice
-	var pairs [][2]int
-	for pair := range results {
-		pairs = append(pairs, pair)
+	// brahmagupta–fibonacci identity: (a²+b²)(c²+d²) = (ac-bd)²+(ad+bc)² = (ac+bd)²+(ad-bc)²
+	pairs := make(map[[2]int]bool)
+
+	candidates := [][2]int{
+		normalize(a*c+b*d, a*d-b*c),
+		normalize(a*c-b*d, a*d+b*c),
 	}
-	
-	// Sort by first element
-	sort.Slice(pairs, func(i, j int) bool {
-		return pairs[i][0] < pairs[j][0]
+
+	for _, p := range candidates {
+		pairs[p] = true
+	}
+
+	result := make([][2]int, 0, len(pairs))
+	for p := range pairs {
+		result = append(result, p)
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		return result[i][0] < result[j][0]
 	})
-	
-	return pairs
+
+	return result
 }
 
-func addPair(results map[[2]int]bool, e, f int) {
-	// Ensure lower element is first
-	if e > f {
-		e, f = f, e
-	}
-	results[[2]int{e, f}] = true
-}
-
-func abs(x int) int {
+func normalize(x, y int) [2]int {
 	if x < 0 {
-		return -x
+		x = -x
 	}
-	return x
+	if y < 0 {
+		y = -y
+	}
+	if x > y {
+		x, y = y, x
+	}
+	return [2]int{x, y}
 }
