@@ -8,17 +8,8 @@ which are also primes, so 13 and 17 are "emirps". But primes 757, 787, 797 are
 palindromic primes, meaning that the reversed number is the same as the
 original, so they are not considered as "emirps" and should be discarded.
 
-The emirps sequence is registered in OEIS as A006567
-
-Your task:
-Create a function that receives one argument n, as an upper limit, and return
-the following array:
-[number_of_emirps_below_n, largest_emirp_below_n, sum_of_emirps_below_n]
-
-Examples:
-  FindEmirp(10)  => [3]int{0, 0, 0}
-  FindEmirp(50)  => [3]int{4, 37, 98}
-  FindEmirp(100) => [3]int{8, 97, 418}
+Your task: Create a function that receives one argument n, as an upper limit,
+and returns [number_of_emirps_below_n, largest_emirp_below_n, sum_of_emirps_below_n]
 */
 package kata
 

@@ -1,28 +1,28 @@
 package kata
 
 func FindEmirp(n int) [3]int {
-	// sieve large enough to cover reversed primes
+	// sieve of eratosthenes up to a limit that covers reversed primes
 	limit := n
 	if limit < 10 {
 		return [3]int{0, 0, 0}
 	}
 
-	// upper bound for reversed numbers: a number below n can reverse to
-	// something with the same digit count, so we need a sieve that covers
-	// the largest possible reversal
-	sieveSize := 10
-	for sieveSize < n*10 {
-		sieveSize *= 10
+	// reversed primes can be larger than n, so we need a bigger sieve
+	// a number below n has at most the same number of digits, so its
+	// reverse is at most 10x larger
+	sieveLimit := n * 10
+	if sieveLimit < 1000 {
+		sieveLimit = 1000
 	}
 
-	sieve := make([]bool, sieveSize)
-	for i := 2; i < sieveSize; i++ {
-		sieve[i] = true
+	isPrime := make([]bool, sieveLimit+1)
+	for i := 2; i <= sieveLimit; i++ {
+		isPrime[i] = true
 	}
-	for i := 2; i*i < sieveSize; i++ {
-		if sieve[i] {
-			for j := i * i; j < sieveSize; j += i {
-				sieve[j] = false
+	for i := 2; i*i <= sieveLimit; i++ {
+		if isPrime[i] {
+			for j := i * i; j <= sieveLimit; j += i {
+				isPrime[j] = false
 			}
 		}
 	}
@@ -30,14 +30,14 @@ func FindEmirp(n int) [3]int {
 	count, largest, sum := 0, 0, 0
 
 	for i := 13; i < n; i++ {
-		if !sieve[i] {
+		if !isPrime[i] {
 			continue
 		}
-		rev := reverseNum(i)
+		rev := reverse(i)
 		if rev == i {
 			continue
 		}
-		if rev < sieveSize && sieve[rev] {
+		if rev <= sieveLimit && isPrime[rev] {
 			count++
 			largest = i
 			sum += i
@@ -47,7 +47,7 @@ func FindEmirp(n int) [3]int {
 	return [3]int{count, largest, sum}
 }
 
-func reverseNum(n int) int {
+func reverse(n int) int {
 	rev := 0
 	for n > 0 {
 		rev = rev*10 + n%10
