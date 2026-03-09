@@ -1,20 +1,27 @@
 /*
- * List Comprehensions
+ * List Comprehensions (5 kyu)
  *
- * The purpose of this is to parse basic list comprehensions for javascript.
+ * List comprehensions are a great feature provided by python.
+ *
+ * The purpose of this kata is to parse basic list comprehensions for javascript.
  *
  * Examples:
- *   [x for x in a]       // => copies array a
- *   [x*x+2 for x in a]   // => maps each element
- *   [17 for x in a]       // => constant fill
+ *   var a = [1,2,3,4,5];
+ *   [x for x in a]       // => [1,2,3,4,5]
+ *   [x*x+2 for x in a]   // => [3,6,11,18,27]
+ *   [17 for x in a]       // => [17,17,17,17,17]
  *
- * You must write a function listComprehension(str) that evaluates a given
- * list comprehension in string form. Throw an error if the list
- * comprehension is invalid.
+ * Write a function listComprehension(str) that evaluates a given list
+ * comprehension in string form. Throw an error if the list comprehension
+ * is invalid.
  *
- * The array part of the list comprehension does not have to be a simple
- * array. It can be a function evaluated that returns an array.
+ * Example:
+ *   listComprehension("[3 for x in [3,1,2,3]]") // => [3,3,3,3]
+ *
+ * Note: the array part can be a function call that returns an array.
  */
 
 function listComprehension(str) {
 }
+
+module.exports = listComprehension;

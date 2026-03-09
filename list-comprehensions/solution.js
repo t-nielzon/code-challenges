@@ -1,30 +1,47 @@
 function listComprehension(str) {
   str = str.trim();
-  if (str[0] !== '[' || str[str.length - 1] !== ']') throw new Error('Invalid');
+
+  if (str[0] !== '[' || str[str.length - 1] !== ']') {
+    throw new Error('Invalid list comprehension');
+  }
 
   var inner = str.slice(1, -1).trim();
-  var match = inner.match(/^(.*?)\s+for\s+(\w+)\s+in\s+([\s\S]+)$/);
-  if (!match) throw new Error('Invalid');
 
-  var expr = match[1];
-  var varName = match[2];
-  var source = match[3];
+  // split on " for " to separate expression from iteration
+  var forIndex = inner.indexOf(' for ');
+  if (forIndex === -1) throw new Error('Invalid list comprehension');
+
+  var expr = inner.slice(0, forIndex).trim();
+  var rest = inner.slice(forIndex + 5).trim();
+
+  // split on " in " to separate variable from iterable
+  var inIndex = rest.indexOf(' in ');
+  if (inIndex === -1) throw new Error('Invalid list comprehension');
+
+  var varName = rest.slice(0, inIndex).trim();
+  var iterableExpr = rest.slice(inIndex + 4).trim();
+
+  if (!varName || !expr || !iterableExpr) {
+    throw new Error('Invalid list comprehension');
+  }
 
   var arr;
   try {
-    arr = new Function('return ' + source)();
+    arr = Function('return (' + iterableExpr + ')')();
   } catch (e) {
-    throw new Error('Invalid');
+    throw new Error('Invalid list comprehension');
   }
 
-  if (!Array.isArray(arr)) throw new Error('Invalid');
+  if (!Array.isArray(arr)) throw new Error('Invalid list comprehension');
 
-  var fn;
+  var mapFn;
   try {
-    fn = new Function(varName, 'return ' + expr);
+    mapFn = Function(varName, 'return (' + expr + ')');
   } catch (e) {
-    throw new Error('Invalid');
+    throw new Error('Invalid list comprehension');
   }
 
-  return arr.map(function(val) { return fn(val); });
+  return arr.map(mapFn);
 }
+
+module.exports = listComprehension;
