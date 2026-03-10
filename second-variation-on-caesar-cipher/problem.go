@@ -2,19 +2,28 @@
 Second Variation on Caesar Cipher
 
 In this country soldiers are poor but they need a certain level of secrecy
-for their communications so they reinvent Caesar cipher in the following way.
+for their communications so, though they do not know Caesar cypher, they
+reinvent it in the following way.
 
-They shift each letter by a given amount (cyclic a-z, A-Z). Non-letter
-characters are kept as-is.
+The action of a Caesar cipher is to replace each plaintext letter with a
+different one a fixed number of places up or down the alphabet. This
+displacement is called the "shift" or "rotate". The shift is cyclic.
 
-They prefix the coded message with 2 letters: the first letter of the
-original message (downcased), and that letter shifted by the rotate amount.
+They code only letters a-z and A-Z. Other characters are kept as is.
 
-They then split the result into 5 parts where parts 1-4 are equal length
-and part 5 is shorter or equal. If the fifth part is empty, omit it.
+They change the "rotate" each new message. This "rotate" is a prefix for
+their message once coded. The prefix is built of 2 letters, the second
+shifted from the first by the rotate, the first being the downcased first
+letter of the uncoded message.
 
-Encode: given a string and shift, return the array of parts.
-Decode: given the array of parts, return the original string.
+To lessen risk they cut the coded message and prefix into five pieces.
+If possible evenly split; if not, parts 1-4 are longer and part 5 shorter.
+Choose the option where part 5 has the longest length. If the last part is
+empty, don't include it in the result.
+
+Example with shift = 1:
+  message: "I should have known that you would have a perfect answer for me!!!"
+  code: ["ijJ tipvme ibw", "f lopxo uibu z", "pv xpvme ibwf ", "b qfsgfdu botx", "fs gps nf!!!"]
 */
 package kata
 
