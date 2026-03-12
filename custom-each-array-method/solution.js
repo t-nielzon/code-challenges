@@ -1,0 +1,7 @@
+Array.prototype.each = function(callback) {
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i], i) === true) {
+      break;
+    }
+  }
+};
