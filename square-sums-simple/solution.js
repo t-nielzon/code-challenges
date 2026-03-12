@@ -1,68 +1,58 @@
 function squareSumsRow(n) {
-  // Precompute all perfect squares up to 2*n (max possible sum is n + (n-1))
-  const maxSum = 2 * n;
-  const squares = new Set();
-  for (let i = 2; i * i <= maxSum; i++) {
-    squares.add(i * i);
-  }
-  
-  // Build adjacency list: for each number, find all valid neighbors
-  const neighbors = new Array(n + 1).fill(null).map(() => []);
+  const isSquare = num => {
+    const s = Math.sqrt(num);
+    return s === Math.floor(s);
+  };
+
+  // build adjacency list: for each number 1..n, which other numbers can follow it
+  const adj = Array.from({ length: n + 1 }, () => []);
   for (let i = 1; i <= n; i++) {
     for (let j = i + 1; j <= n; j++) {
-      if (squares.has(i + j)) {
-        neighbors[i].push(j);
-        neighbors[j].push(i);
+      if (isSquare(i + j)) {
+        adj[i].push(j);
+        adj[j].push(i);
       }
     }
   }
-  
-  // Sort neighbors by degree (fewest connections first) for better pruning
-  for (let i = 1; i <= n; i++) {
-    neighbors[i].sort((a, b) => neighbors[a].length - neighbors[b].length);
-  }
-  
-  const used = new Array(n + 1).fill(false);
+
   const path = [];
-  
-  function backtrack() {
-    if (path.length === n) {
-      return true;
-    }
-    
+  const used = new Uint8Array(n + 1);
+
+  function dfs() {
+    if (path.length === n) return true;
     const last = path[path.length - 1];
-    for (const next of neighbors[last]) {
+    const neighbors = adj[last];
+    for (let i = 0; i < neighbors.length; i++) {
+      const next = neighbors[i];
       if (!used[next]) {
-        used[next] = true;
+        used[next] = 1;
         path.push(next);
-        if (backtrack()) {
-          return true;
-        }
+        if (dfs()) return true;
         path.pop();
-        used[next] = false;
+        used[next] = 0;
       }
     }
     return false;
   }
-  
-  // Try starting from each number, prioritizing those with fewer neighbors
-  const startOrder = [];
+
+  // try each starting number, prefer nodes with fewer connections first
+  const starts = Array.from({ length: n }, (_, i) => i + 1);
+  starts.sort((a, b) => adj[a].length - adj[b].length);
+
+  // sort adjacency lists by degree (Warnsdorff-like heuristic)
   for (let i = 1; i <= n; i++) {
-    startOrder.push(i);
+    adj[i].sort((a, b) => adj[a].length - adj[b].length);
   }
-  startOrder.sort((a, b) => neighbors[a].length - neighbors[b].length);
-  
-  for (const start of startOrder) {
-    used[start] = true;
+
+  for (const start of starts) {
+    path.length = 0;
+    used.fill(0);
+    used[start] = 1;
     path.push(start);
-    if (backtrack()) {
-      return path;
-    }
-    path.pop();
-    used[start] = false;
+    if (dfs()) return path;
   }
-  
+
   return false;
 }
 
-module.exports = { squareSumsRow };
+module.exports = squareSumsRow;
