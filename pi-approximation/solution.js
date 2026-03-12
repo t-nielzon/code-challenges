@@ -1,22 +1,17 @@
 function iterPi(epsilon) {
-  let piOver4 = 0;
-  let iterations = 0;
+  let pi4 = 0;
+  let i = 0;
   let sign = 1;
-  let denominator = 1;
-  
+
   while (true) {
-    piOver4 += sign / denominator;
-    iterations++;
-    
-    const piApprox = piOver4 * 4;
-    
-    if (Math.abs(piApprox - Math.PI) < epsilon) {
-      // Round to 10 decimal places
-      const roundedPi = Math.round(piApprox * 1e10) / 1e10;
-      return [iterations, roundedPi];
+    pi4 += sign / (2 * i + 1);
+    sign = -sign;
+    i++;
+    const pi = pi4 * 4;
+    if (Math.abs(pi - Math.PI) < epsilon) {
+      return [i, Math.round(pi * 1e10) / 1e10];
     }
-    
-    sign *= -1;
-    denominator += 2;
   }
 }
+
+module.exports = { iterPi };
