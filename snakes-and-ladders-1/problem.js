@@ -7,18 +7,16 @@
  * of the state of the game or the player turn.
  *
  * Rules:
- * 1. Two players start on square 0.
- * 2. Player 1 starts and alternates with player 2.
- * 3. Follow numbers 1-100.
- * 4. If both dice are the same, that player gets another turn.
- * 5. Land on bottom of ladder -> move to top.
- * 6. Land on top of snake -> slide to bottom.
- * 7. Must land exactly on 100 to win; excess moves bounce back.
- * 8. If player rolls double and lands on 100, they win (no extra turn).
+ * 1. Two players start on square 0. Player 1 starts.
+ * 2. Players alternate turns. Doubles grant another turn.
+ * 3. Land on bottom of ladder -> climb to top.
+ * 4. Land on top of snake -> slide to bottom.
+ * 5. Must land exactly on 100 to win; excess bounces back.
+ * 6. After a win, further plays return "Game over!"
  *
  * Returns:
- * - "Player n Wins!" if player n lands on 100
- * - "Game over!" if a move is attempted after someone has won
+ * - "Player n Wins!" when landing exactly on 100
+ * - "Game over!" if game already won
  * - "Player n is on square x" otherwise
  */
 
