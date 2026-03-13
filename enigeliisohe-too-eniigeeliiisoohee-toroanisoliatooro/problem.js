@@ -5,15 +5,12 @@
  * or semivowel inserts in lower case form the last vowel which precedes it
  * in the alphabet.
  *
- * Vowels: a, e, i, o, u
- * Consonants/semivowels get the last vowel that precedes them in the alphabet
- * appended after them (in lowercase).
+ * Vowel mapping by preceding vowel:
+ *   b,c,d -> a | f,g,h -> e | j,k,l,m,n -> i | p,q,r,s,t -> o | v,w,x,y,z -> u
  *
- * Accented letters (letters with diacritic marks) should remain unchanged
- * and not get a vowel attached to them.
+ * Vowels (a,e,i,o,u) pass through unchanged.
+ * Accented/diacritic letters remain unchanged.
+ * Non-letter characters remain unchanged.
  */
-
 function translate(str) {
 }
-
-module.exports = { translate };
