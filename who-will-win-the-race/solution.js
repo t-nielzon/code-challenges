@@ -1,22 +1,26 @@
 function whoWillWin(arr) {
   if (!arr.length) return "No one raced!";
 
-  const qualified = arr
-    .map(racer => {
-      const speed = parseFloat(racer.speed);
-      const distance = parseFloat(racer.distanceToRun);
-      return { name: racer.name, speed, distance };
+  const parseNum = str => parseFloat(str.match(/-?[\d.]+/)[0]);
+
+  const valid = arr
+    .map(r => {
+      const speed = parseNum(r.speed);
+      const distance = parseNum(r.distanceToRun);
+      return { name: r.name, speed, distance };
     })
     .filter(r => r.speed > 0 && r.distance > 0);
 
-  if (!qualified.length) return "Everyone was disqualified!";
+  if (!valid.length) return "Everyone was disqualified!";
 
-  const times = qualified.map(r => ({
+  const times = valid.map(r => ({
     name: r.name,
     time: Math.round(r.distance / r.speed)
   }));
 
-  const bestTime = Math.min(...times.map(t => t.time));
+  times.sort((a, b) => a.time - b.time);
+
+  const bestTime = times[0].time;
   const winners = times.filter(t => t.time === bestTime);
 
   if (winners.length === 1) {
@@ -25,3 +29,5 @@ function whoWillWin(arr) {
 
   return `${winners.length} people tied in ${bestTime} second(s)!`;
 }
+
+module.exports = whoWillWin;

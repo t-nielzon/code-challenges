@@ -36,3 +36,5 @@ If the race was a tie, return the string "N people tied in S second(s)!", N bein
 
 function whoWillWin(arr) {
 }
+
+module.exports = whoWillWin;
