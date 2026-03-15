@@ -3,93 +3,62 @@ package kata
 import (
 	"fmt"
 	"sort"
-	"strconv"
 	"strings"
 )
-
-type numInfo struct {
-	weight int
-	index  int
-	value  string
-}
 
 func Closest(strng string) string {
 	if strng == "" {
 		return "[(), ()]"
 	}
-
 	parts := strings.Fields(strng)
-	if len(parts) < 2 {
+	n := len(parts)
+	if n < 2 {
 		return "[(), ()]"
 	}
 
-	nums := make([]numInfo, len(parts))
+	type entry struct {
+		weight int
+		index  int
+		num    string
+	}
+
+	entries := make([]entry, n)
 	for i, p := range parts {
-		nums[i] = numInfo{
-			weight: digitSum(p),
-			index:  i,
-			value:  p,
+		w := 0
+		for _, c := range p {
+			w += int(c - '0')
 		}
+		entries[i] = entry{w, i, p}
 	}
 
 	// sort by weight, then by index
-	sorted := make([]numInfo, len(nums))
-	copy(sorted, nums)
-	sort.Slice(sorted, func(i, j int) bool {
+	sorted := make([]entry, n)
+	copy(sorted, entries)
+	sort.SliceStable(sorted, func(i, j int) bool {
 		if sorted[i].weight != sorted[j].weight {
 			return sorted[i].weight < sorted[j].weight
 		}
 		return sorted[i].index < sorted[j].index
 	})
 
-	// find the closest pair by comparing adjacent elements in sorted order
-	var bestA, bestB numInfo
-	bestDiff := -1
+	// find the closest pair among consecutive elements in sorted order
+	bestDiff := int(^uint(0) >> 1)
+	var bestA, bestB entry
 
 	for i := 0; i < len(sorted)-1; i++ {
 		a, b := sorted[i], sorted[i+1]
 		diff := b.weight - a.weight
-
-		if bestDiff == -1 || diff < bestDiff {
+		if diff < bestDiff ||
+			(diff == bestDiff && a.weight < bestA.weight) ||
+			(diff == bestDiff && a.weight == bestA.weight && a.index < bestA.index) ||
+			(diff == bestDiff && a.weight == bestA.weight && a.index == bestA.index && b.index < bestB.index) {
 			bestDiff = diff
-			bestA, bestB = a, b
-		} else if diff == bestDiff {
-			// compare by smallest weight first
-			if a.weight < bestA.weight {
-				bestA, bestB = a, b
-			} else if a.weight == bestA.weight {
-				// compare by smallest index of first element
-				if a.index < bestA.index {
-					bestA, bestB = a, b
-				} else if a.index == bestA.index {
-					// compare by smallest index of second element
-					if b.index < bestB.index {
-						bestA, bestB = a, b
-					}
-				}
-			}
+			bestA = a
+			bestB = b
 		}
 	}
 
-	// ensure bestA comes before bestB (by weight, then by index)
-	if bestA.weight > bestB.weight || (bestA.weight == bestB.weight && bestA.index > bestB.index) {
-		bestA, bestB = bestB, bestA
-	}
-
-	valA, _ := strconv.Atoi(bestA.value)
-	valB, _ := strconv.Atoi(bestB.value)
-
-	return fmt.Sprintf("[(%d, %d, %d), (%d, %d, %d)]",
-		bestA.weight, bestA.index, valA,
-		bestB.weight, bestB.index, valB)
-}
-
-func digitSum(s string) int {
-	sum := 0
-	for _, c := range s {
-		if c >= '0' && c <= '9' {
-			sum += int(c - '0')
-		}
-	}
-	return sum
+	return fmt.Sprintf("[(%d, %d, %s), (%d, %d, %s)]",
+		bestA.weight, bestA.index, bestA.num,
+		bestB.weight, bestB.index, bestB.num)
 }
