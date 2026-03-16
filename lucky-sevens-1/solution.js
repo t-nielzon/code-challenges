@@ -15,8 +15,8 @@ function luckySevens(arr) {
       ];
 
       const sum = neighbors.reduce((s, v) => s + (typeof v === 'number' ? v : 0), 0);
-      const cbrt = Math.round(Math.cbrt(sum));
-      if (cbrt * cbrt * cbrt === sum) count++;
+      const cubeRoot = Math.round(Math.cbrt(sum));
+      if (cubeRoot * cubeRoot * cubeRoot === sum) count++;
     }
   }
 
