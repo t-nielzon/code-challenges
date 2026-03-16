@@ -1,29 +1,24 @@
-function greet() {
-  var t = !![];
-  var zero = +[];
-  var one = +t;
-  var two = one + one;
-  var three = two + one;
-  var four = two + two;
-  var seven = three + four;
-  var eight = four + four;
-  var nine = eight + one;
-  var ten = nine + one;
+function greeting() {
+  const a = +!![];        // 1
+  const b = a + a;        // 2
+  const c = b + b;        // 4
+  const d = c + c;        // 8
+  const e = d + d;        // 16
+  const f = e + e;        // 32
+  const g = f + f;        // 64
 
-  var fc = ([] + []).constructor.fromCharCode;
-
-  return fc(
-    eight * nine,            // 72  H
-    ten * ten + one,         // 101 e
-    ten * ten + eight,       // 108 l
-    ten * ten + eight,       // 108 l
-    ten * ten + ten + one,   // 111 o
-    four * eight,            // 32  (space)
-    eight * ten + seven,     // 87  W
-    ten * ten + ten + one,   // 111 o
-    ten * ten + ten + four,  // 114 r
-    ten * ten + eight,       // 108 l
-    ten * ten,               // 100 d
-    four * eight + one       // 33  !
+  return String.fromCharCode(
+    g + d,                 // 72  H
+    g + f + c + a,         // 101 e
+    g + f + d + c,         // 108 l
+    g + f + d + c,         // 108 l
+    g + f + d + c + b + a, // 111 o
+    f,                     // 32  (space)
+    g + e + c + b + a,     // 87  W
+    g + f + d + c + b + a, // 111 o
+    g + f + e + b,         // 114 r
+    g + f + d + c,         // 108 l
+    g + f + c,             // 100 d
+    f + a                  // 33  !
   );
 }

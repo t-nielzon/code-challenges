@@ -15,6 +15,7 @@
  * Without using the above, output the string "Hello World!" to prove
  * that there is always a way.
  */
-function greet() {
+
+function greeting() {
 
 }
