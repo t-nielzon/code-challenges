@@ -5,15 +5,16 @@
  * strings (including the string itself) that can be produced by re-arranging
  * the letters of the string. Strings are case insensitive.
  *
- * Examples:
- *   uniqCount("AB")    = 2n
- *   uniqCount("ABC")   = 6n
- *   uniqCount("ABA")   = 3n
- *   uniqCount("ABBb")  = 4n
- *   uniqCount("AbcD")  = 24n
+ * Return a BigInt.
  *
- * Note: return a BigInt, not a Number.
+ * Examples:
+ *   uniqCount("AB") = 2n
+ *   uniqCount("ABC") = 6n
+ *   uniqCount("ABA") = 3n
+ *   uniqCount("ABBb") = 4n
+ *   uniqCount("AbcD") = 24n
  */
+
 function uniqCount(s) {
 }
 

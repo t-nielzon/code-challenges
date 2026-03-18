@@ -5,7 +5,7 @@ function uniqCount(s) {
     freq[ch] = (freq[ch] || 0) + 1;
   }
 
-  const factorial = n => {
+  const factorial = (n) => {
     let result = 1n;
     for (let i = 2n; i <= n; i++) result *= i;
     return result;
@@ -15,6 +15,7 @@ function uniqCount(s) {
   for (const count of Object.values(freq)) {
     result /= factorial(BigInt(count));
   }
+
   return result;
 }
 
