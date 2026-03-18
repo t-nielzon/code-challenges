@@ -12,12 +12,12 @@
  * Returns [[unique primes], [their powers]].
  * Example: n = 100 -> [[2, 5], [2, 2]]
  *
- * Function 3: getUniquePrimeFactorsWithProducts(n)
+ * Function 3: getPrimeFactorPotpieces(n)
  * Returns array of each prime raised to its power.
  * Example: n = 100 -> [4, 25]
  *
  * Invalid input (not a number, not integer, negative, or 0):
- *   Return [], [[],[]], [] respectively.
+ *   Function 1: [], Function 2: [[], []], Function 3: []
  *
  * Edge cases:
  *   n = 1 -> [1], [[1],[1]], [1]
@@ -30,5 +30,5 @@ function getAllPrimeFactors(n) {
 function getUniquePrimeFactorsWithCount(n) {
 }
 
-function getUniquePrimeFactorsWithProducts(n) {
+function getPrimeFactorPotpieces(n) {
 }

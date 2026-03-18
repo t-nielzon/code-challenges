@@ -21,12 +21,9 @@ function getAllPrimeFactors(n) {
 
 function getUniquePrimeFactorsWithCount(n) {
   if (!isValid(n)) return [[], []];
-  if (n === 1) return [[1], [1]];
-
   const factors = getAllPrimeFactors(n);
   const primes = [];
   const counts = [];
-
   for (const f of factors) {
     if (primes.length && primes[primes.length - 1] === f) {
       counts[counts.length - 1]++;
@@ -38,10 +35,8 @@ function getUniquePrimeFactorsWithCount(n) {
   return [primes, counts];
 }
 
-function getUniquePrimeFactorsWithProducts(n) {
+function getPrimeFactorPotpieces(n) {
   if (!isValid(n)) return [];
-  if (n === 1) return [1];
-
   const [primes, counts] = getUniquePrimeFactorsWithCount(n);
   return primes.map((p, i) => Math.pow(p, counts[i]));
 }
