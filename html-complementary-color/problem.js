@@ -5,23 +5,24 @@
  * representing the complementary color.
  *
  * Input:
- * - A hexadecimal string (case-ignored, chars 0..9 or A..F) without "#".
- * - If shorter than 6 characters, pad with zeroes from the left.
- *   "a23" <=> "000a23", "" <=> "000000"
+ * A hexadecimal string (case-ignored with chars 0..9 or A..F) without hash "#".
+ * If shorter than 6 characters, pad with zeroes from the left to make it 6 chars.
+ *   "a23" <=> "000a23"
+ *   "" <=> "0" <=> "000000"
  *
  * Output:
- * - Uppercased string with "#" followed by the complementary color.
- *   Complementary color gives white when summed: #000A23 + #FFF5DC = #FFFFFF
+ * An uppercased string containing "#" followed by the complementary color.
+ * Complementary color gives white when summed with the input:
+ *   #000A23 + #FFF5DC = #FFFFFF
  *
  * Errors:
- * - Throw Error if: length > 6, non-hex chars, or non-string type.
+ * Throw an Error if: string length is 7+, has non-hex chars, or non-string type.
  *
  * Examples:
  *   "01fD08" --> "#FE02F7"
  *      "a23" --> "#FFF5DC"
  *         "" --> "#FFFFFF"
  */
-
 function complementaryColor(hex) {
 }
 
