@@ -1,4 +1,3 @@
-// solution.go
 package kata
 
 func FaultyOdometer(n int) int {
@@ -6,7 +5,7 @@ func FaultyOdometer(n int) int {
 	base := 1
 	for n > 0 {
 		d := n % 10
-		if d > 4 {
+		if d >= 5 {
 			d--
 		}
 		result += d * base
