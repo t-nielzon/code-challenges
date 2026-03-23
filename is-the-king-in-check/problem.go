@@ -4,13 +4,13 @@ of a bi-dimensional array of strings of length 1 and returns a boolean
 indicating whether the king is in check.
 
 The array will include 64 squares which can contain the following characters:
-- '♔' for the black King
-- '♛' for a white Queen
-- '♝' for a white Bishop
-- '♞' for a white Knight
-- '♜' for a white Rook
-- '♟' for a white Pawn
-- ' ' (a space) if there is no piece on that square.
+  - '♔' for the black King
+  - '♛' for a white Queen
+  - '♝' for a white Bishop
+  - '♞' for a white Knight
+  - '♜' for a white Rook
+  - '♟' for a white Pawn
+  - ' ' (a space) if there is no piece on that square
 
 There will always be exactly one king, which is the black king, whereas all
 the other pieces are white.
