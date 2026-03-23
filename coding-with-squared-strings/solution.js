@@ -29,5 +29,5 @@ function decode(s) {
     }
     result.push(line);
   }
-  return result.join('').replace(/\x0b+$/, '');
+  return result.join('').replace(/\x0B+$/, '');
 }
