@@ -2,28 +2,20 @@ package kata
 
 func SplitAndAdd(arr []int, n int) []int {
 	for i := 0; i < n && len(arr) > 1; i++ {
-		arr = fold(arr)
+		mid := len(arr) / 2
+		left := arr[:mid]
+		right := arr[mid:]
+
+		// right is always >= left in length; pad left by prepending zeros
+		result := make([]int, len(right))
+		copy(result, right)
+
+		offset := len(right) - len(left)
+		for j := 0; j < len(left); j++ {
+			result[offset+j] += left[j]
+		}
+
+		arr = result
 	}
 	return arr
-}
-
-func fold(arr []int) []int {
-	length := len(arr)
-	mid := length / 2
-	
-	// Split: left gets fewer elements when odd length
-	left := arr[:mid]
-	right := arr[mid:]
-	
-	// Right is always >= left in length
-	result := make([]int, len(right))
-	copy(result, right)
-	
-	// Add left to right, aligned to the right side
-	offset := len(right) - len(left)
-	for i := 0; i < len(left); i++ {
-		result[offset+i] += left[i]
-	}
-	
-	return result
 }
