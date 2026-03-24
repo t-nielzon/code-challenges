@@ -4,10 +4,9 @@ func IsValidWalk(walk []rune) bool {
 	if len(walk) != 10 {
 		return false
 	}
-
 	x, y := 0, 0
-	for _, dir := range walk {
-		switch dir {
+	for _, d := range walk {
+		switch d {
 		case 'n':
 			y++
 		case 's':
@@ -18,6 +17,5 @@ func IsValidWalk(walk []rune) bool {
 			x--
 		}
 	}
-
 	return x == 0 && y == 0
 }
