@@ -1,16 +1,19 @@
 /*
 Cat Kata, Part 1
 
-Determine whether the distances between any visiting cats in a yard grid
-are large enough to make for a peaceful afternoon.
+Our cat, Balor, sadly died of cancer in 2015. After he died, the three
+neighborhood cats Lou, Mustache Cat, and Raoul began trying to claim his
+territory as their own.
+
+Your Mission: Determine whether the distances between any visiting cats are
+large enough to make for a peaceful afternoon, or whether there is about to
+be an altercation.
 
 Input: a list of strings representing the yard as a grid, and an integer
-representing the minimum distance needed to prevent problems.
+representing the minimum distance needed to prevent problems. Cats are
+represented by L, M, R. Empty spots by "-".
 
-'-' = empty, 'L' = Lou, 'M' = Mustache Cat, 'R' = Raoul
-
-Return true if 0-1 cats or all cat distances >= minimum distance.
-Return false if any two cats are closer than the minimum distance.
+Return true if 0-1 cats or all distances >= minimum distance, false otherwise.
 */
 package kata
 
