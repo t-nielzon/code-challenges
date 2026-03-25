@@ -1,4 +1,6 @@
 /*
+Weight for weight
+
 My friend John and I are members of the "Fat to Fit Club (FFC)". John is worried because
 each month a list with the weights of members is published and each month he is the last on the list
 which means he is the heaviest.
@@ -12,8 +14,8 @@ For example 99 will have "weight" 18, 100 will have "weight" 1 so in the list 10
 Given a string with the weights of FFC members in normal order can you give this string ordered by "weights" of these numbers?
 
 Example:
-  "56 65 74 100 99 68 86 180 90" ordered by numbers weights becomes:
-  "100 180 90 56 65 74 68 86 99"
+"56 65 74 100 99 68 86 180 90" ordered by numbers weights becomes:
+"100 180 90 56 65 74 68 86 99"
 
 When two numbers have the same "weight", let us class them as if they were strings (alphabetical ordering) and not numbers:
 180 is before 90 since, having the same "weight" (9), it comes before as a string.
