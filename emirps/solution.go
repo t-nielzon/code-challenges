@@ -15,14 +15,14 @@ func FindEmirp(n int) [3]int {
 		sieveLimit = 1000
 	}
 
-	isPrime := make([]bool, sieveLimit+1)
+	sieve := make([]bool, sieveLimit+1)
 	for i := 2; i <= sieveLimit; i++ {
-		isPrime[i] = true
+		sieve[i] = true
 	}
 	for i := 2; i*i <= sieveLimit; i++ {
-		if isPrime[i] {
+		if sieve[i] {
 			for j := i * i; j <= sieveLimit; j += i {
-				isPrime[j] = false
+				sieve[j] = false
 			}
 		}
 	}
@@ -30,14 +30,11 @@ func FindEmirp(n int) [3]int {
 	count, largest, sum := 0, 0, 0
 
 	for i := 13; i < n; i++ {
-		if !isPrime[i] {
+		if !sieve[i] {
 			continue
 		}
 		rev := reverse(i)
-		if rev == i {
-			continue
-		}
-		if rev <= sieveLimit && isPrime[rev] {
+		if rev != i && rev <= sieveLimit && sieve[rev] {
 			count++
 			largest = i
 			sum += i
