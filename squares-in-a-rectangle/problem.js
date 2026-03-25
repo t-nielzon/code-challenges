@@ -15,5 +15,3 @@
 
 function squares(x, y) {
 }
-
-module.exports = { squares };

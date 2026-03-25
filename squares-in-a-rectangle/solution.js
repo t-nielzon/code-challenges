@@ -5,5 +5,3 @@ function squares(x, y) {
   }
   return total;
 }
-
-module.exports = { squares };
