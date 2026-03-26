@@ -14,5 +14,6 @@
  *    Average score rounded to 1 decimal place.
  * 4. No sorting needed.
  */
+
 function formatScoreList(list) {
 }
