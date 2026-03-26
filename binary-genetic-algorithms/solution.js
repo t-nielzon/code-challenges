@@ -1,11 +1,11 @@
 var GeneticAlgorithm = function () {};
 
 GeneticAlgorithm.prototype.generate = function(length) {
-  let s = '';
+  let result = '';
   for (let i = 0; i < length; i++) {
-    s += Math.random() < 0.5 ? '0' : '1';
+    result += Math.random() < 0.5 ? '0' : '1';
   }
-  return s;
+  return result;
 };
 
 GeneticAlgorithm.prototype.select = function(population, fitnesses) {
@@ -21,59 +21,61 @@ GeneticAlgorithm.prototype.select = function(population, fitnesses) {
   return [pick(), pick()];
 };
 
-GeneticAlgorithm.prototype.crossover = function(pair) {
-  const point = Math.floor(Math.random() * pair[0].length);
+GeneticAlgorithm.prototype.crossover = function(chromosome1, chromosome2) {
+  const point = Math.floor(Math.random() * chromosome1.length);
   return [
-    pair[0].slice(0, point) + pair[1].slice(point),
-    pair[1].slice(0, point) + pair[0].slice(point)
+    chromosome1.slice(0, point) + chromosome2.slice(point),
+    chromosome2.slice(0, point) + chromosome1.slice(point)
   ];
 };
 
 GeneticAlgorithm.prototype.mutate = function(chromosome, p) {
-  let s = '';
+  let result = '';
   for (let i = 0; i < chromosome.length; i++) {
     if (Math.random() < p) {
-      s += chromosome[i] === '0' ? '1' : '0';
+      result += chromosome[i] === '0' ? '1' : '0';
     } else {
-      s += chromosome[i];
+      result += chromosome[i];
     }
   }
-  return s;
+  return result;
 };
 
 GeneticAlgorithm.prototype.run = function(fitness, length, p_c, p_m, iterations) {
-  iterations = iterations || 100;
-  const popSize = 100;
+  if (iterations === undefined) iterations = 100;
+  const popSize = 200;
 
   let population = [];
   for (let i = 0; i < popSize; i++) {
     population.push(this.generate(length));
   }
 
-  for (let gen = 0; gen < iterations; gen++) {
+  for (let iter = 0; iter < iterations; iter++) {
     const fitnesses = population.map(c => fitness(c));
-    const newPop = [];
+    const newPopulation = [];
 
     for (let i = 0; i < popSize / 2; i++) {
-      let pair = this.select(population, fitnesses);
+      let [c1, c2] = this.select(population, fitnesses);
 
       if (Math.random() < p_c) {
-        pair = this.crossover(pair);
+        [c1, c2] = this.crossover(c1, c2);
       }
 
-      newPop.push(this.mutate(pair[0], p_m));
-      newPop.push(this.mutate(pair[1], p_m));
+      c1 = this.mutate(c1, p_m);
+      c2 = this.mutate(c2, p_m);
+
+      newPopulation.push(c1, c2);
     }
 
-    population = newPop;
+    population = newPopulation;
   }
 
-  let bestFit = -1;
+  let bestFitness = -1;
   let best = population[0];
   for (let i = 0; i < population.length; i++) {
     const f = fitness(population[i]);
-    if (f > bestFit) {
-      bestFit = f;
+    if (f > bestFitness) {
+      bestFitness = f;
       best = population[i];
     }
   }
