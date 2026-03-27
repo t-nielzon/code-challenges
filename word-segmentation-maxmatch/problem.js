@@ -14,9 +14,9 @@
  * on all of the remaining characters until no characters remain. A list of all
  * of the words that were found is returned.
  *
- * Write maxMatch, which takes an alphanumeric, spaceless, lowercased String as
- * input and returns an Array of all the words found, in the order they were
- * found. All valid words are in the Set VALID_WORDS.
+ * Write maxMatch, which takes an alphanumeric, spaceless, lowercased String
+ * as input and returns an Array of all the words found, in the order they
+ * were found. All valid words are in the Set VALID_WORDS.
  */
 
 function maxMatch(sentence) {
