@@ -12,7 +12,7 @@
  * - Input is guaranteed well-formed and balanced.
  * - Multipliers are single digits 1–9, and are optional.
  * - Every multiplier is immediately followed by a parenthesised group.
- * - Lowercase letters and digits are the only characters that appear.
+ * - Lowercase letters and digits are the only characters.
  */
 
 function stringExpansion(s) {

@@ -1,23 +1,22 @@
 function stringExpansion(s) {
-  const stack = [{ multiplier: 1, content: '' }];
+  const stack = [{ mult: 1, str: '' }];
 
   for (let i = 0; i < s.length; i++) {
     const ch = s[i];
-
-    if (ch >= '1' && ch <= '9' && i + 1 < s.length && s[i + 1] === '(') {
-      stack.push({ multiplier: Number(ch), content: '' });
-      i++; // skip the '('
+    if (ch >= '1' && ch <= '9' && s[i + 1] === '(') {
+      stack.push({ mult: +ch, str: '' });
+      i++; // skip '('
     } else if (ch === '(') {
-      stack.push({ multiplier: 1, content: '' });
+      stack.push({ mult: 1, str: '' });
     } else if (ch === ')') {
-      const { multiplier, content } = stack.pop();
-      stack[stack.length - 1].content += content.repeat(multiplier);
+      const { mult, str } = stack.pop();
+      stack[stack.length - 1].str += str.repeat(mult);
     } else {
-      stack[stack.length - 1].content += ch;
+      stack[stack.length - 1].str += ch;
     }
   }
 
-  return stack[0].content;
+  return stack[0].str;
 }
 
 module.exports = { stringExpansion };
