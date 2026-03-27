@@ -15,8 +15,8 @@ func SimpleAssembler(program []string) map[string]int {
 		return regs[s]
 	}
 
-	for pc := 0; pc < len(program); pc++ {
-		parts := strings.Fields(program[pc])
+	for i := 0; i < len(program); {
+		parts := strings.Fields(program[i])
 		switch parts[0] {
 		case "mov":
 			regs[parts[1]] = resolve(parts[2])
@@ -26,9 +26,11 @@ func SimpleAssembler(program []string) map[string]int {
 			regs[parts[1]]--
 		case "jnz":
 			if resolve(parts[1]) != 0 {
-				pc += resolve(parts[2]) - 1
+				i += resolve(parts[2])
+				continue
 			}
 		}
+		i++
 	}
 
 	return regs
