@@ -1,4 +1,6 @@
 /*
+Pentabonacci
+
 We have the following sequence:
 
 f(0) = 0
@@ -16,5 +18,5 @@ should be counted only once.
 */
 package kata
 
-func CountOddPentafib(n int) int {
+func CountOddPentaFib(n int) int {
 }
