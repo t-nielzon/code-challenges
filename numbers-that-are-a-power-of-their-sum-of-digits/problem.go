@@ -8,7 +8,7 @@ in having this property (not considering numbers of one digit).
 The next one, is 512.
 
 8 + 1 = 9 and 9^2 = 81
-512 = 5 + 1 + 2 = 8 and 8^3 = 512
+5 + 1 + 2 = 8 and 8^3 = 512
 
 We need to make a function that receives a number as argument n and returns
 the n-th term of this sequence of numbers.

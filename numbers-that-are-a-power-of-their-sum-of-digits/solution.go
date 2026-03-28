@@ -13,12 +13,13 @@ func digitSum(n int) int {
 }
 
 func PowerSumDigTerm(n int) int {
-	seen := make(map[int]bool)
+	seen := map[int]bool{}
 
+	// iterate over possible digit sums and exponents
 	for base := 2; base <= 200; base++ {
-		power := base * base
+		power := base * base // start at exponent 2
 		for power > 0 && power < 1e12 {
-			if digitSum(power) == base {
+			if power >= 10 && digitSum(power) == base {
 				seen[power] = true
 			}
 			power *= base
