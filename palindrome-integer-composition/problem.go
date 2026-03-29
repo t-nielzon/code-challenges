@@ -10,8 +10,6 @@ Given an input n, find the count of all the numbers less than n that are
 both palindromic and can be written as the sum of consecutive squares.
 
 For instance: values(1000) = 11.
-
-This Kata is borrowed from Project Euler #125.
 */
 package kata
 
