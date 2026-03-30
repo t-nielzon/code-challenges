@@ -11,5 +11,6 @@
  *
  * Moves are in the form: [{x, y, color}, ...]
  */
-function floodFillGame(board, moves) {
+
+function floodFillPlayer(board, moves) {
 }
