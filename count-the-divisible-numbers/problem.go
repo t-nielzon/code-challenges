@@ -14,6 +14,6 @@ or better to pass. (A constant time solution is possible.)
 */
 package kata
 
-func DivisibleCount(x, y, k uint64) uint64 {
+func Divisors(x, y, k int) int {
 
 }
