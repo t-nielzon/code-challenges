@@ -7,6 +7,8 @@
  * badge number of this person.
  *
  * Can you find the Secret badge number of Alex Mack's dad?
+ *
+ * Note: This is a puzzle. The initial solution is intentionally vague.
  */
 
 function findSecret(employees) {
