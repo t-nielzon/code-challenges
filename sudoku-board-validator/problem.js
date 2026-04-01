@@ -11,6 +11,7 @@
  * board may also contain 0's, which will represent empty cells. Boards
  * containing one or more zeroes are considered to be invalid solutions.
  *
+ * Details:
  * - All inputs are guaranteed to be 2D boards of size 9x9 with possible
  *   values in range 0-9.
  * - Rows, columns and blocks (3x3 small squares) must contain each number
