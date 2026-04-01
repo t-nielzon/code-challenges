@@ -1,7 +1,18 @@
-// solution.go
 package kata
 
-import "sort"
+func PowerSumDigTerm(n int) int {
+	count := 0
+	num := 10
+	for {
+		if isPowerOfDigitSum(num) {
+			count++
+			if count == n {
+				return num
+			}
+		}
+		num++
+	}
+}
 
 func digitSum(n int) int {
 	s := 0
@@ -12,28 +23,17 @@ func digitSum(n int) int {
 	return s
 }
 
-func PowerSumDigTerm(n int) int {
-	seen := map[int]bool{}
-
-	// iterate over possible digit sums and exponents
-	for base := 2; base <= 200; base++ {
-		power := base * base // start at exponent 2
-		for power > 0 && power < 1e12 {
-			if power >= 10 && digitSum(power) == base {
-				seen[power] = true
-			}
-			power *= base
-			if power/base != power/base { // overflow guard
-				break
-			}
+func isPowerOfDigitSum(n int) bool {
+	s := digitSum(n)
+	if s < 2 {
+		return false
+	}
+	power := s * s
+	for power <= n {
+		if power == n {
+			return true
 		}
+		power *= s
 	}
-
-	results := make([]int, 0, len(seen))
-	for v := range seen {
-		results = append(results, v)
-	}
-	sort.Ints(results)
-
-	return results[n-1]
+	return false
 }
