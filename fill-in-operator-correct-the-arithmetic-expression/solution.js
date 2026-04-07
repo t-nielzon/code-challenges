@@ -1,26 +1,27 @@
 function correct(exp) {
-  const [left, right] = exp.split(' = ');
-  const target = Number(right);
-  const ops = ['+', '-', '*', '/'];
+  const [left, right] = exp.split('=').map(s => s.trim());
+  const target = parseFloat(right);
   const slots = (left.match(/\(\)/g) || []).length;
+  const ops = ['+', '-', '*', '/'];
+  const total = Math.pow(4, slots);
 
-  function tryOps(idx, current) {
-    if (idx === slots) {
-      let evalStr = current.replace(/\(([+\-*/])\)/g, ' $1 ');
-      try {
-        if (Math.abs(Function('"use strict"; return (' + evalStr + ')')() - target) < 1e-9) {
-          return current;
-        }
-      } catch (e) {}
-      return null;
+  for (let i = 0; i < total; i++) {
+    const combo = [];
+    let num = i;
+    for (let j = 0; j < slots; j++) {
+      combo.push(ops[num % 4]);
+      num = Math.floor(num / 4);
     }
-    for (const op of ops) {
-      const next = current.replace('()', '(' + op + ')');
-      const result = tryOps(idx + 1, next);
-      if (result) return result;
-    }
-    return null;
+
+    let idx = 0;
+    const filled = left.replace(/\(\)/g, () => `(${combo[idx++]})`);
+    const evalStr = filled.replace(/\(([+\-*/])\)/g, '$1');
+
+    try {
+      const result = Function('"use strict"; return (' + evalStr + ')')();
+      if (Math.abs(result - target) < 1e-9) {
+        return filled + ' = ' + right;
+      }
+    } catch (e) {}
   }
-
-  return tryOps(0, left) + ' = ' + right;
 }
