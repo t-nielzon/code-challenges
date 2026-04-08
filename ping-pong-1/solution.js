@@ -1,45 +1,37 @@
 function pingPong(sounds) {
-  const hits = sounds.split('-');
-  let scores = { ping: 0, pong: 0 };
-  let lastBadPlayer = null;
-
+  const tokens = sounds.split('-');
+  let pingScore = 0;
+  let pongScore = 0;
   let i = 0;
-  while (i < hits.length) {
-    // first hit of a rally is the serve
-    const server = hits[i];
-    let lastGoodHit = server;
 
-    // advance through the rally
-    let j = i + 1;
-    while (j < hits.length && (hits[j] === 'ping' || hits[j] === 'pong')) {
-      lastGoodHit = hits[j];
+  while (i < tokens.length) {
+    const server = tokens[i];
+    let lastHit = tokens[i];
+    let j = i;
+
+    while (j < tokens.length && (tokens[j] === 'ping' || tokens[j] === 'pong')) {
+      lastHit = tokens[j];
       j++;
     }
 
-    // skip over bad noises until we reach the next serve or end
-    while (j < hits.length && hits[j] !== 'ping' && hits[j] !== 'pong') {
+    while (j < tokens.length && tokens[j] !== 'ping' && tokens[j] !== 'pong') {
       j++;
     }
 
-    // lastGoodHit made the bad shot; the other player wins the rally
-    // but only scores if that other player is also the server
-    const badPlayer = lastGoodHit;
-    lastBadPlayer = badPlayer;
-    const winner = badPlayer === 'ping' ? 'pong' : 'ping';
-
-    if (winner === server) {
-      scores[server]++;
+    const winner = lastHit === 'ping' ? 'pong' : 'ping';
+    if (server === winner) {
+      if (winner === 'ping') pingScore++;
+      else pongScore++;
     }
 
     i = j;
   }
 
-  if (scores.ping !== scores.pong) {
-    return scores.ping > scores.pong ? 'ping' : 'pong';
+  if (pingScore !== pongScore) return pingScore > pongScore ? 'ping' : 'pong';
+
+  for (let k = tokens.length - 1; k >= 0; k--) {
+    if (tokens[k] === 'ping' || tokens[k] === 'pong') {
+      return tokens[k] === 'ping' ? 'pong' : 'ping';
+    }
   }
-
-  // tied: winner is whoever did NOT hit the final bad shot
-  return lastBadPlayer === 'ping' ? 'pong' : 'ping';
 }
-
-module.exports = { pingPong };
