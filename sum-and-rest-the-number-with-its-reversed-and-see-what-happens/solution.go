@@ -1,6 +1,7 @@
 package kata
 
-var cache []int
+var sequence []int
+var lastChecked = 9
 
 func reverseNum(n int) int {
 	rev := 0
@@ -11,32 +12,27 @@ func reverseNum(n int) int {
 	return rev
 }
 
-func SumDivRev(n int) int {
-	for len(cache) < n {
-		start := 10
-		if len(cache) > 0 {
-			start = cache[len(cache)-1] + 1
+func SumAndRest(n int) int {
+	for len(sequence) < n {
+		lastChecked++
+		i := lastChecked
+		// skip numbers ending in 0 — reversed would have a leading zero
+		if i%10 == 0 {
+			continue
 		}
-		for i := start; ; i++ {
-			if i%10 == 0 {
-				continue
-			}
-			rev := reverseNum(i)
-			if rev == i {
-				continue
-			}
-			sum := i + rev
-			diff := i - rev
-			if diff < 0 {
-				diff = -diff
-			}
-			if sum%diff == 0 {
-				cache = append(cache, i)
-				if len(cache) >= n {
-					break
-				}
-			}
+		rev := reverseNum(i)
+		// skip palindromes — difference is zero, division undefined
+		if rev == i {
+			continue
+		}
+		sum := i + rev
+		diff := i - rev
+		if diff < 0 {
+			diff = -diff
+		}
+		if sum%diff == 0 {
+			sequence = append(sequence, i)
 		}
 	}
-	return cache[n-1]
+	return sequence[n-1]
 }

@@ -1,4 +1,6 @@
 /*
+Package kata
+
 Sum and Rest the Number with its Reversed and See What Happens
 
 The number 45 is the first integer in having this interesting property:
@@ -18,12 +20,12 @@ The first terms of this special sequence are:
   4    594
 
 Make the function that receives n, the ordinal number of the term and
-may give us the value of the term of the sequence.
+may give us, the value of the term of the sequence.
 
 Important: Do not include numbers which, when reversed, have a leading
 zero, e.g.: 1890 reversed is 0981, so 1890 should not be included.
 */
 package kata
 
-func SumDivRev(n int) int {
+func SumAndRest(n int) int {
 }
