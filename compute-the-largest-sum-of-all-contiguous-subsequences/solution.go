@@ -1,8 +1,9 @@
 package kata
 
-func LargestSum(array []int) int {
-	maxSum, currentSum := 0, 0
-	for _, v := range array {
+func LargestSum(arr []int) int {
+	maxSum := 0
+	currentSum := 0
+	for _, v := range arr {
 		currentSum += v
 		if currentSum < 0 {
 			currentSum = 0
