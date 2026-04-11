@@ -31,15 +31,11 @@ func divisorSum(n int) int {
 func DsMultofPfs(nMin, nMax int) []int {
 	var result []int
 	for n := nMin; n <= nMax; n++ {
-		if n < 2 {
-			continue
-		}
 		pfs := primeFactorSum(n)
-		if pfs == 0 {
+		if pfs <= 1 {
 			continue
 		}
-		ds := divisorSum(n)
-		if ds%pfs == 0 {
+		if divisorSum(n)%pfs == 0 {
 			result = append(result, n)
 		}
 	}

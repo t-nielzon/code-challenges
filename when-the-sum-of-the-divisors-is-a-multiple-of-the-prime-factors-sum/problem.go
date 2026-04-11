@@ -14,7 +14,7 @@ There is an obvious property: the sum of the divisors of a number is
 divisible by the sum of its prime factors.
 
 ds_multof_pfs(nMin, nMax) returns a sorted list of numbers in [nMin, nMax]
-that fulfill the property described above.
+that fulfill this property.
 */
 
 func DsMultofPfs(nMin, nMax int) []int {
