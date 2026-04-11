@@ -1,37 +1,29 @@
 function pingPong(sounds) {
-  const tokens = sounds.split('-');
-  let pingScore = 0;
-  let pongScore = 0;
-  let i = 0;
+  const hits = sounds.split('-');
+  let server = null;
+  let lastGoodHit = null;
+  let inBadNoises = false;
+  let finalBadShotBy = null;
+  const scores = { ping: 0, pong: 0 };
 
-  while (i < tokens.length) {
-    const server = tokens[i];
-    let lastHit = tokens[i];
-    let j = i;
-
-    while (j < tokens.length && (tokens[j] === 'ping' || tokens[j] === 'pong')) {
-      lastHit = tokens[j];
-      j++;
-    }
-
-    while (j < tokens.length && tokens[j] !== 'ping' && tokens[j] !== 'pong') {
-      j++;
-    }
-
-    const winner = lastHit === 'ping' ? 'pong' : 'ping';
-    if (server === winner) {
-      if (winner === 'ping') pingScore++;
-      else pongScore++;
-    }
-
-    i = j;
-  }
-
-  if (pingScore !== pongScore) return pingScore > pongScore ? 'ping' : 'pong';
-
-  for (let k = tokens.length - 1; k >= 0; k--) {
-    if (tokens[k] === 'ping' || tokens[k] === 'pong') {
-      return tokens[k] === 'ping' ? 'pong' : 'ping';
+  for (const hit of hits) {
+    if (hit === 'ping' || hit === 'pong') {
+      if (inBadNoises || server === null) {
+        server = hit;
+        inBadNoises = false;
+      }
+      lastGoodHit = hit;
+    } else {
+      if (!inBadNoises) {
+        const badShotBy = lastGoodHit;
+        const winner = badShotBy === 'ping' ? 'pong' : 'ping';
+        if (winner === server) scores[winner]++;
+        finalBadShotBy = badShotBy;
+      }
+      inBadNoises = true;
     }
   }
+
+  if (scores.ping !== scores.pong) return scores.ping > scores.pong ? 'ping' : 'pong';
+  return finalBadShotBy === 'ping' ? 'pong' : 'ping';
 }
