@@ -1,25 +1,27 @@
-function deepestNest(arr) {
+function treeDepth(arr) {
   const depths = [];
 
-  function traverse(node, depth) {
-    for (const el of node) {
-      if (Array.isArray(el)) {
-        traverse(el, depth + 1);
+  function collect(node, depth) {
+    for (const item of node) {
+      if (Array.isArray(item)) {
+        collect(item, depth + 1);
       } else {
         depths.push(depth);
       }
     }
   }
 
-  traverse(arr, 0);
+  collect(arr, 1);
 
-  if (depths.length === 0) return { min: 0, max: 0, mean: 0 };
+  if (depths.length === 0) {
+    return { min: 0, max: 0, mean: 0 };
+  }
 
-  const min = Math.min(...depths);
-  const max = Math.max(...depths);
-  const mean = depths.reduce((a, b) => a + b, 0) / depths.length;
-
-  return { min, max, mean };
+  return {
+    min: Math.min(...depths),
+    max: Math.max(...depths),
+    mean: depths.reduce((sum, d) => sum + d, 0) / depths.length
+  };
 }
 
-module.exports = { deepestNest };
+module.exports = { treeDepth };
