@@ -1,9 +1,6 @@
 package kata
 
 func buildSequence(n int) []int {
-	if n < 1 {
-		return []int{}
-	}
 	u := make([]int, n+1)
 	if n >= 1 {
 		u[1] = 1
