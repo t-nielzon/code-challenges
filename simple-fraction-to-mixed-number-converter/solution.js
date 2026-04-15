@@ -1,7 +1,7 @@
 function mixedFraction(s) {
   const [numStr, denStr] = s.split('/');
-  let num = parseInt(numStr, 10);
-  let den = parseInt(denStr, 10);
+  let num = Number(numStr);
+  let den = Number(denStr);
 
   if (den === 0) throw new Error('Zero division error');
 
@@ -13,17 +13,28 @@ function mixedFraction(s) {
   let remainder = num % den;
 
   const g = gcd(remainder, den);
-  remainder /= g;
+  remainder = remainder / g;
   const reducedDen = den / g;
 
-  const sign = negative && (whole > 0 || remainder > 0) ? '-' : '';
+  let result = '';
+  if (whole > 0 && remainder > 0) {
+    result = `${whole} ${remainder}/${reducedDen}`;
+  } else if (remainder > 0) {
+    result = `${remainder}/${reducedDen}`;
+  } else {
+    result = `${whole}`;
+  }
 
-  if (remainder === 0) return sign + String(whole);
-  if (whole === 0) return `${sign}${remainder}/${reducedDen}`;
-  return `${sign}${whole} ${remainder}/${reducedDen}`;
+  if (negative && (whole > 0 || remainder > 0)) {
+    result = '-' + result;
+  }
+
+  return result;
 }
 
 function gcd(a, b) {
-  while (b) { [a, b] = [b, a % b]; }
+  while (b) {
+    [a, b] = [b, a % b];
+  }
   return a;
 }
