@@ -7,11 +7,8 @@ function iterPi(epsilon) {
     pi4 += sign / (2 * i + 1);
     sign = -sign;
     i++;
-    const pi = pi4 * 4;
-    if (Math.abs(pi - Math.PI) < epsilon) {
-      return [i, Math.round(pi * 1e10) / 1e10];
+    if (Math.abs(4 * pi4 - Math.PI) < epsilon) {
+      return [i, Math.round(4 * pi4 * 1e10) / 1e10];
     }
   }
 }
-
-module.exports = { iterPi };

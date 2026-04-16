@@ -1,5 +1,5 @@
 /*
- * PI approximation
+ * PI Approximation
  *
  * The aim of the kata is to try to show how difficult it can be to calculate
  * decimals of an irrational number with a certain precision. We have chosen
@@ -8,17 +8,19 @@
  *
  * PI / 4 = 1 - 1/3 + 1/5 - 1/7 + ...
  *
- * Given as input a precision of epsilon, we stop the iterative process when
- * the absolute value of the difference between our calculation using the
- * Leibniz series and Math.PI is less than epsilon.
+ * which gives an approximation of PI / 4.
  *
- * Returns an array with:
- * - the number of iterations
- * - the approximation of PI with 10 decimals
+ * Given as input a precision of epsilon we will stop the iterative process
+ * when the absolute value of the difference between our calculation using
+ * the Leibniz series and Math.PI is less than epsilon.
  *
- * Example: iterPi(0.001) --> [1000, 3.1405926538]
+ * Your function returns an array with:
+ * - your number of iterations
+ * - your approximation of PI with 10 decimals
+ *
+ * Example:
+ * iterPi(0.001) --> [1000, 3.1405926538]
  */
+
 function iterPi(epsilon) {
 }
-
-module.exports = { iterPi };
