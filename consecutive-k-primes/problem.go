@@ -10,8 +10,8 @@ k = 5 -> 32, 48, 72, 80, 108, 112, …
 
 Task:
 Given an integer k and a list arr of positive integers the function
-consec_kprimes returns how many times in the sequence arr numbers
-come up twice in a row with exactly k prime factors.
+ConsecKprimes returns how many times in the sequence arr numbers come
+up twice in a row with exactly k prime factors.
 */
 package kata
 
