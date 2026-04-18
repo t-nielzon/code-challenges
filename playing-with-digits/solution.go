@@ -3,13 +3,11 @@ package kata
 import "math"
 
 func DigPow(n, p int) int {
-	sum := 0
-	tmp := n
 	digits := []int{}
-	for tmp > 0 {
-		digits = append([]int{tmp % 10}, digits...)
-		tmp /= 10
+	for x := n; x > 0; x /= 10 {
+		digits = append([]int{x % 10}, digits...)
 	}
+	sum := 0
 	for i, d := range digits {
 		sum += int(math.Pow(float64(d), float64(p+i)))
 	}
