@@ -1,16 +1,12 @@
-function atwoodMachines(masses) {
+function atwood(masses) {
   const g = 9.80665;
-
-  // reduce from the bottom up: combine the last two masses into an effective mass
-  // until only two masses remain, then compute acceleration of the first mass
-  let effective = masses[masses.length - 1];
-
-  for (let i = masses.length - 2; i >= 1; i--) {
-    effective = (4 * masses[i] * effective) / (masses[i] + effective);
-  }
-
-  // two-mass acceleration formula for masses[0] vs the effective mass
-  return g * (effective - masses[0]) / (masses[0] + effective);
+  const reduce = (arr) => {
+    if (arr.length === 2) return arr[1];
+    const [m2, ...rest] = arr;
+    const m3 = reduce(rest);
+    return (4 * m2 * m3) / (m2 + m3);
+  };
+  const m1 = masses[0];
+  const m2eff = reduce(masses);
+  return g * (m2eff - m1) / (m1 + m2eff);
 }
-
-module.exports = atwoodMachines;
