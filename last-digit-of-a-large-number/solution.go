@@ -2,24 +2,25 @@ package kata
 
 import "math/big"
 
-func LastDigit(n1, n2 *big.Int) int {
-	// 0^0 = 1 by convention
-	if n2.Sign() == 0 {
+func LastDigit(a, b *big.Int) int {
+	zero := big.NewInt(0)
+	if b.Cmp(zero) == 0 {
 		return 1
 	}
+	ten := big.NewInt(10)
+	four := big.NewInt(4)
 
-	base := new(big.Int).Mod(n1, big.NewInt(10)).Int64()
+	aMod := new(big.Int).Mod(a, ten).Int64()
+	bMod := new(big.Int).Mod(b, four).Int64()
 
-	// any cycle of last digits repeats with period dividing 4
-	mod4 := new(big.Int).Mod(n2, big.NewInt(4)).Int64()
-
-	// map mod4==0 to exponent 4 so we never compute x^0 incorrectly
-	if mod4 == 0 {
-		mod4 = 4
+	exp := bMod
+	if b.Cmp(four) >= 0 {
+		exp += 4
 	}
 
 	result := int64(1)
-	for i := int64(0); i < mod4; i++ {
+	base := aMod
+	for i := int64(0); i < exp; i++ {
 		result = (result * base) % 10
 	}
 	return int(result)
