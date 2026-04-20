@@ -1,37 +1,24 @@
 package kata
 
 func F(n int) int {
-	if n <= 1 {
-		return 1
-	}
-
 	result := 1
-	temp := n
-
-	// Find prime factors and their exponents
-	for p := 2; p*p <= temp; p++ {
-		if temp%p == 0 {
+	x := n
+	for p := 2; p*p <= x; p++ {
+		if x%p == 0 {
 			k := 0
-			for temp%p == 0 {
+			for x%p == 0 {
+				x /= p
 				k++
-				temp /= p
 			}
-			// Contribute k * p^(k-1) to result
-			result *= k * pow(p, k-1)
+			factor := k
+			for i := 0; i < k-1; i++ {
+				factor *= p
+			}
+			result *= factor
 		}
 	}
-
-	// If temp > 1, then it's a prime factor with exponent 1
-	// In that case, contribute 1 * temp^0 = 1 (no change to result)
-
-	return result
-}
-
-func pow(base, exp int) int {
-	result := 1
-	for exp > 0 {
-		result *= base
-		exp--
+	if x > 1 {
+		result *= 1
 	}
 	return result
 }
