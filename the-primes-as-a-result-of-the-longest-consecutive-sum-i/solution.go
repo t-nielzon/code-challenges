@@ -1,56 +1,61 @@
 package kata
 
-func LongestConsecPrimeSum(n int) []int {
-	// sieve of eratosthenes up to n
-	isPrime := make([]bool, n)
+import "sort"
+
+func PrimesLongestSum(n int) []int {
+	result := []int{}
+	if n <= 2 {
+		return result
+	}
+
+	sieve := make([]bool, n)
 	for i := 2; i < n; i++ {
-		isPrime[i] = true
+		sieve[i] = true
 	}
 	for i := 2; i*i < n; i++ {
-		if isPrime[i] {
+		if sieve[i] {
 			for j := i * i; j < n; j += i {
-				isPrime[j] = false
+				sieve[j] = false
 			}
 		}
 	}
 
-	// collect primes below n
-	var primes []int
+	primes := []int{}
 	for i := 2; i < n; i++ {
-		if isPrime[i] {
+		if sieve[i] {
 			primes = append(primes, i)
 		}
 	}
 
-	// prefix sums for sliding window
-	prefix := make([]int, len(primes)+1)
-	for i, p := range primes {
-		prefix[i+1] = prefix[i] + p
-	}
-
-	bestLen := 0
-	var result []int
-
-	// try all window lengths from largest down
-	for length := len(primes); length >= 1; length-- {
-		if length < bestLen {
-			break
-		}
-		for start := 0; start+length <= len(primes); start++ {
-			sum := prefix[start+length] - prefix[start]
+	bestLen := make(map[int]int)
+	for i := 0; i < len(primes); i++ {
+		sum := 0
+		for j := i; j < len(primes); j++ {
+			sum += primes[j]
 			if sum >= n {
 				break
 			}
-			if isPrime[sum] {
-				if length > bestLen {
-					bestLen = length
-					result = []int{sum}
-				} else if length == bestLen {
-					result = append(result, sum)
+			if sieve[sum] {
+				length := j - i + 1
+				if length > bestLen[sum] {
+					bestLen[sum] = length
 				}
 			}
 		}
 	}
 
+	maxLen := 0
+	for _, l := range bestLen {
+		if l > maxLen {
+			maxLen = l
+		}
+	}
+
+	for p, l := range bestLen {
+		if l == maxLen {
+			result = append(result, p)
+		}
+	}
+	sort.Ints(result)
 	return result
 }
