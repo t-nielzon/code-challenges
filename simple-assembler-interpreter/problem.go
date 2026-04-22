@@ -11,11 +11,19 @@ We want to create a simple interpreter of assembler which will support the follo
 
 Register names are alphabetical (letters only). Constants are always integers (positive or negative).
 
-The function will take an input list with the sequence of the program instructions and will execute them.
-The program ends when there are no more instructions to execute, then it returns a map with the contents
-of the registers.
+Note: the jnz instruction moves relative to itself. For example, an offset of -1 would continue
+at the previous instruction, while an offset of 2 would skip over the next instruction.
+
+The function will take an input list with the sequence of the program instructions and will
+execute them. The program ends when there are no more instructions to execute, then it returns
+a dictionary with the contents of the registers.
+
+Also, every inc/dec/jnz on a register will always be preceeded by a mov on the register first,
+so you don't need to worry about uninitialized registers.
 */
+
 package kata
 
 func SimpleAssembler(program []string) map[string]int {
+
 }

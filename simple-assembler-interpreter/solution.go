@@ -6,32 +6,30 @@ import (
 )
 
 func SimpleAssembler(program []string) map[string]int {
-	regs := map[string]int{}
+	registers := make(map[string]int)
 
-	resolve := func(s string) int {
-		if v, err := strconv.Atoi(s); err == nil {
-			return v
+	value := func(token string) int {
+		if n, err := strconv.Atoi(token); err == nil {
+			return n
 		}
-		return regs[s]
+		return registers[token]
 	}
 
-	for i := 0; i < len(program); {
+	for i := 0; i < len(program); i++ {
 		parts := strings.Fields(program[i])
 		switch parts[0] {
 		case "mov":
-			regs[parts[1]] = resolve(parts[2])
+			registers[parts[1]] = value(parts[2])
 		case "inc":
-			regs[parts[1]]++
+			registers[parts[1]]++
 		case "dec":
-			regs[parts[1]]--
+			registers[parts[1]]--
 		case "jnz":
-			if resolve(parts[1]) != 0 {
-				i += resolve(parts[2])
-				continue
+			if value(parts[1]) != 0 {
+				i += value(parts[2]) - 1
 			}
 		}
-		i++
 	}
 
-	return regs
+	return registers
 }
