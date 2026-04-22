@@ -1,6 +1,4 @@
 /*
- * Free Pizza
- *
  * In an attempt to boost sales, the manager of the pizzeria you work at has
  * devised a pizza rewards system: if you already made at least 5 orders of
  * at least 20 dollars, you get a free 12 inch pizza with 3 toppings of your
@@ -15,7 +13,6 @@
  *   { 'customerName' : [list_of_order_values_as_integers] }
  */
 
-function pizzaRewards(customers, minOrders, minPrice) {
+function freePizza(customers, minOrders, minValue) {
+  
 }
-
-module.exports = { pizzaRewards };
