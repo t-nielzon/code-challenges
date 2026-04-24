@@ -1,56 +1,44 @@
 function underpromote(start, target) {
   if (start === target) return 0;
 
-  const parse = (s) => [s.charCodeAt(0) - 96, parseInt(s[1])];
-  const [sf, sr] = parse(start);
-  const [tf, tr] = parse(target);
+  const sf = start.charCodeAt(0) - 97;
+  const sr = parseInt(start[1], 10) - 1;
+  const tf = target.charCodeAt(0) - 97;
+  const tr = parseInt(target[1], 10) - 1;
 
-  // bfs over states: [file, rank, piece] where piece: 0=pawn, 1=queen, 2=knight
-  const key = (f, r, p) => f * 100 + r * 10 + p;
-  const visited = new Set([key(sf, sr, 0)]);
-  const queue = [[sf, sr, 0, 0]];
+  if (sf === tf && tr >= sr) {
+    return tr - sr;
+  }
 
+  const movesToRank8 = 7 - sr;
+  const pf = sf, pr = 7;
+
+  let queen;
+  if (pf === tf && pr === tr) queen = 0;
+  else if (pf === tf || pr === tr || Math.abs(pf - tf) === Math.abs(pr - tr)) queen = 1;
+  else queen = 2;
+
+  const knight = knightDist(pf, pr, tf, tr);
+
+  return movesToRank8 + Math.min(queen, knight);
+}
+
+function knightDist(sf, sr, tf, tr) {
+  if (sf === tf && sr === tr) return 0;
+  const visited = Array.from({ length: 8 }, () => Array(8).fill(false));
+  const queue = [[sf, sr, 0]];
+  visited[sf][sr] = true;
+  const deltas = [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]];
   while (queue.length) {
-    const [f, r, piece, moves] = queue.shift();
-    const nextStates = [];
-
-    if (piece === 0) {
-      const nr = r + 1;
-      if (nr <= 8) {
-        if (nr === 8) {
-          // pawn arrives at 8th rank: can stay as pawn (only useful if target), or promote
-          nextStates.push([f, nr, 0], [f, nr, 1], [f, nr, 2]);
-        } else {
-          nextStates.push([f, nr, 0]);
-        }
-      }
-    } else if (piece === 1) {
-      // queen: slides in 8 directions
-      for (const [df, dr] of [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]) {
-        let nf = f + df, nr = r + dr;
-        while (nf >= 1 && nf <= 8 && nr >= 1 && nr <= 8) {
-          nextStates.push([nf, nr, 1]);
-          nf += df;
-          nr += dr;
-        }
-      }
-    } else {
-      // knight: 8 L-shaped moves
-      for (const [df, dr] of [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]) {
-        const nf = f + df, nr = r + dr;
-        if (nf >= 1 && nf <= 8 && nr >= 1 && nr <= 8) {
-          nextStates.push([nf, nr, 2]);
-        }
-      }
-    }
-
-    for (const [nf, nr, np] of nextStates) {
-      if (nf === tf && nr === tr) return moves + 1;
-      const k = key(nf, nr, np);
-      if (!visited.has(k)) {
-        visited.add(k);
-        queue.push([nf, nr, np, moves + 1]);
+    const [f, r, d] = queue.shift();
+    for (const [df, dr] of deltas) {
+      const nf = f + df, nr = r + dr;
+      if (nf >= 0 && nf < 8 && nr >= 0 && nr < 8 && !visited[nf][nr]) {
+        if (nf === tf && nr === tr) return d + 1;
+        visited[nf][nr] = true;
+        queue.push([nf, nr, d + 1]);
       }
     }
   }
+  return Infinity;
 }
