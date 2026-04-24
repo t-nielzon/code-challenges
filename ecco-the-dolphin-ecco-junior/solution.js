@@ -1,85 +1,97 @@
-function solve(maze) {
-  const grid = maze.split('\n').map(r => r.split(''));
-  const rows = grid.length;
-  const cols = grid[0].length;
+function findPath(maze) {
+  const grid = maze.split('\n');
+  const h = grid.length;
+  if (h === 0) return null;
+  const w = grid[0].length;
 
-  let start, end;
-  const sharks = [], jellyfish = [], urchins = [];
+  let ecco = null, tara = null;
+  const sharks = [], jellies = [], urchins = [];
 
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
       const c = grid[y][x];
-      if (c === 'e') start = [y, x];
-      else if (c === 't') end = [y, x];
+      if (c === 'e') ecco = [y, x];
+      else if (c === 't') tara = [y, x];
       else if (c === 'S') sharks.push([y, x]);
-      else if (c === 'Y') jellyfish.push([y, x]);
+      else if (c === 'Y') jellies.push([y, x]);
       else if (c === 'O') urchins.push([y, x]);
     }
   }
 
-  const dangerous = Array.from({ length: rows }, () => Array(cols).fill(false));
+  if (!ecco || !tara) return null;
 
-  // sharks patrol horizontally between rocks
+  const danger = Array.from({ length: h }, () => new Array(w).fill(false));
+
   for (const [sy, sx] of sharks) {
-    dangerous[sy][sx] = true;
-    for (let x = sx - 1; x >= 0 && grid[sy][x] !== '#'; x--) dangerous[sy][x] = true;
-    for (let x = sx + 1; x < cols && grid[sy][x] !== '#'; x++) dangerous[sy][x] = true;
+    let left = sx;
+    while (left - 1 >= 0 && grid[sy][left - 1] !== '#') left--;
+    let right = sx;
+    while (right + 1 < w && grid[sy][right + 1] !== '#') right++;
+    for (let x = left; x <= right; x++) danger[sy][x] = true;
   }
 
-  // jellyfish patrol vertically between rocks and air
-  for (const [jy, jx] of jellyfish) {
-    dangerous[jy][jx] = true;
-    for (let y = jy - 1; y >= 0 && grid[y][jx] !== '#' && grid[y][jx] !== '.'; y--) dangerous[y][jx] = true;
-    for (let y = jy + 1; y < rows && grid[y][jx] !== '#' && grid[y][jx] !== '.'; y++) dangerous[y][jx] = true;
+  for (const [jy, jx] of jellies) {
+    let top = jy;
+    while (top - 1 >= 0 && grid[top - 1][jx] !== '#' && grid[top - 1][jx] !== '.') top--;
+    let bottom = jy;
+    while (bottom + 1 < h && grid[bottom + 1][jx] !== '#' && grid[bottom + 1][jx] !== '.') bottom++;
+    for (let y = top; y <= bottom; y++) danger[y][jx] = true;
   }
 
-  // urchins expand to all 8 adjacent tiles
   for (const [uy, ux] of urchins) {
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {
         const ny = uy + dy, nx = ux + dx;
-        if (ny >= 0 && ny < rows && nx >= 0 && nx < cols) dangerous[ny][nx] = true;
+        if (ny >= 0 && ny < h && nx >= 0 && nx < w) {
+          danger[ny][nx] = true;
+        }
       }
     }
   }
 
-  const isPassable = (y, x) =>
-    y >= 0 && y < rows && x >= 0 && x < cols &&
-    grid[y][x] !== '#' && grid[y][x] !== '.' &&
-    !dangerous[y][x];
+  danger[ecco[0]][ecco[1]] = false;
+  danger[tara[0]][tara[1]] = false;
 
-  // bfs
-  const visited = Array.from({ length: rows }, () => Array(cols).fill(false));
-  const parent = Array.from({ length: rows }, () => Array(cols).fill(null));
-  const queue = [start];
-  visited[start[0]][start[1]] = true;
+  const passable = (y, x) => {
+    if (y < 0 || y >= h || x < 0 || x >= w) return false;
+    const c = grid[y][x];
+    if (c === '#' || c === '.') return false;
+    if (danger[y][x]) return false;
+    return true;
+  };
 
-  const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
-  let found = false;
+  const visited = Array.from({ length: h }, () => new Array(w).fill(false));
+  const parent = Array.from({ length: h }, () => new Array(w).fill(null));
+  const queue = [ecco];
+  let head = 0;
+  visited[ecco[0]][ecco[1]] = true;
 
-  while (queue.length > 0) {
-    const [cy, cx] = queue.shift();
-    if (cy === end[0] && cx === end[1]) { found = true; break; }
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+  while (head < queue.length) {
+    const [y, x] = queue[head++];
+    if (y === tara[0] && x === tara[1]) {
+      const path = [];
+      let cur = [y, x];
+      while (cur) {
+        path.push(cur);
+        cur = parent[cur[0]][cur[1]];
+      }
+      path.reverse();
+      return path;
+    }
     for (const [dy, dx] of dirs) {
-      const ny = cy + dy, nx = cx + dx;
-      if (isPassable(ny, nx) && !visited[ny][nx]) {
+      const ny = y + dy, nx = x + dx;
+      if (!visited[ny] || visited[ny][nx]) {
+        if (ny >= 0 && ny < h && nx >= 0 && nx < w && visited[ny][nx]) continue;
+      }
+      if (passable(ny, nx) && !visited[ny][nx]) {
         visited[ny][nx] = true;
-        parent[ny][nx] = [cy, cx];
+        parent[ny][nx] = [y, x];
         queue.push([ny, nx]);
       }
     }
   }
 
-  if (!found) return null;
-
-  const path = [];
-  let cur = end;
-  while (cur) {
-    path.push(cur);
-    cur = parent[cur[0]][cur[1]];
-  }
-  path.reverse();
-  return path;
+  return null;
 }
-
-module.exports = { solve };
