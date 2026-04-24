@@ -1,33 +1,31 @@
 /*
 Odd-Even Compositions
 
-Given a number N, return the number of "odd-even compositions" by which it can be expressed.
+Given a natural number N, count the number of ways to express N as an ordered
+sum of natural numbers (a composition) subject to the following rules applied
+left-to-right while a running remainder R (initially N) is decreased:
 
-In a composition, N is expressed as an ordered sum of natural numbers.
-In an odd-even composition, each part (other than 1 or the remaining number itself)
-must share the same parity (odd/even) as the current remainder.
+ - A part equal to 1 is always valid (R becomes R-1).
+ - A part equal to R itself is always valid (R becomes 0).
+ - Any other part k (2 <= k < R) is valid only if k has the same parity as R.
 
-Rules:
-- 1 is always valid (gray)
-- The number itself (remainder) is always valid (gray)
-- A part that shares parity with the current remainder is valid (green)
-- A part that does NOT share parity with the current remainder is invalid (red)
-- If any part is invalid, the entire composition is invalid
+Return the total number of such compositions.
 
-If input is 0, return 1.
-Numbers range from 0 to 10^3 inclusive; solution must be efficient.
+Notes:
+ - If input is 0, return 1.
+ - N ranges from 0 to 10^3 inclusive, so the result may be very large.
 
 Examples:
-  OddEvenCompositions(0)  => 1
-  OddEvenCompositions(3)  => 3
-  OddEvenCompositions(4)  => 6
-  OddEvenCompositions(7)  => 27
-  OddEvenCompositions(28) => 3188646
+ OddEvenCompositions(0)  == 1
+ OddEvenCompositions(7)  == 27
+ OddEvenCompositions(28) == 3188646
 */
+
 package kata
 
 import "math/big"
 
 func OddEvenCompositions(n int) *big.Int {
-
+	// TODO: implement
+	return nil
 }
