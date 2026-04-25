@@ -1,6 +1,6 @@
 package kata
 
-func IsValidWalk(walk []rune) bool {
+func IsValidWalk(walk []byte) bool {
 	if len(walk) != 10 {
 		return false
 	}
