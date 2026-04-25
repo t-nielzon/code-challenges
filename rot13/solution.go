@@ -1,17 +1,15 @@
 package kata
 
-func Rot13(msg string) string {
-	result := make([]byte, len(msg))
-	for i := 0; i < len(msg); i++ {
-		c := msg[i]
+func Rot13(message string) string {
+	out := make([]rune, 0, len(message))
+	for _, r := range message {
 		switch {
-		case c >= 'a' && c <= 'z':
-			result[i] = 'a' + (c-'a'+13)%26
-		case c >= 'A' && c <= 'Z':
-			result[i] = 'A' + (c-'A'+13)%26
-		default:
-			result[i] = c
+		case r >= 'a' && r <= 'z':
+			r = 'a' + (r-'a'+13)%26
+		case r >= 'A' && r <= 'Z':
+			r = 'A' + (r-'A'+13)%26
 		}
+		out = append(out, r)
 	}
-	return string(result)
+	return string(out)
 }
