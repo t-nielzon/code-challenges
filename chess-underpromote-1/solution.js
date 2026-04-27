@@ -1,43 +1,43 @@
-function underpromote(start, target) {
+function chessPawn(start, target) {
   if (start === target) return 0;
+  const sf = start.charCodeAt(0) - 97, sr = +start[1];
+  const tf = target.charCodeAt(0) - 97, tr = +target[1];
 
-  const sf = start.charCodeAt(0) - 97;
-  const sr = parseInt(start[1], 10) - 1;
-  const tf = target.charCodeAt(0) - 97;
-  const tr = parseInt(target[1], 10) - 1;
+  let best = Infinity;
 
   if (sf === tf && tr >= sr) {
-    return tr - sr;
+    best = Math.min(best, tr - sr);
   }
 
-  const movesToRank8 = 7 - sr;
-  const pf = sf, pr = 7;
+  const pushes = 8 - sr;
+  const qd = queenDist(sf, 8, tf, tr);
+  const kd = knightDist(sf, 8, tf, tr);
+  best = Math.min(best, pushes + Math.min(qd, kd));
 
-  let queen;
-  if (pf === tf && pr === tr) queen = 0;
-  else if (pf === tf || pr === tr || Math.abs(pf - tf) === Math.abs(pr - tr)) queen = 1;
-  else queen = 2;
-
-  const knight = knightDist(pf, pr, tf, tr);
-
-  return movesToRank8 + Math.min(queen, knight);
+  return best;
 }
 
-function knightDist(sf, sr, tf, tr) {
-  if (sf === tf && sr === tr) return 0;
-  const visited = Array.from({ length: 8 }, () => Array(8).fill(false));
-  const queue = [[sf, sr, 0]];
-  visited[sf][sr] = true;
-  const deltas = [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]];
-  while (queue.length) {
-    const [f, r, d] = queue.shift();
-    for (const [df, dr] of deltas) {
-      const nf = f + df, nr = r + dr;
-      if (nf >= 0 && nf < 8 && nr >= 0 && nr < 8 && !visited[nf][nr]) {
-        if (nf === tf && nr === tr) return d + 1;
-        visited[nf][nr] = true;
-        queue.push([nf, nr, d + 1]);
-      }
+function queenDist(x1, y1, x2, y2) {
+  if (x1 === x2 && y1 === y2) return 0;
+  if (x1 === x2 || y1 === y2 || Math.abs(x1 - x2) === Math.abs(y1 - y2)) return 1;
+  return 2;
+}
+
+function knightDist(x1, y1, x2, y2) {
+  const moves = [[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]];
+  const visited = new Set();
+  const q = [[x1, y1, 0]];
+  visited.add(x1 * 10 + y1);
+  while (q.length) {
+    const [x, y, d] = q.shift();
+    if (x === x2 && y === y2) return d;
+    for (const [dx, dy] of moves) {
+      const nx = x + dx, ny = y + dy;
+      if (nx < 0 || nx > 7 || ny < 1 || ny > 8) continue;
+      const k = nx * 10 + ny;
+      if (visited.has(k)) continue;
+      visited.add(k);
+      q.push([nx, ny, d + 1]);
     }
   }
   return Infinity;
