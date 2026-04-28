@@ -1,15 +1,20 @@
 package kata
 
 import (
-	"fmt"
+	"strconv"
+	"strings"
 )
 
-func IpsBetween(start, end string) int {
-	return ipToInt(end) - ipToInt(start)
+func ipToUint(ip string) uint32 {
+	parts := strings.Split(ip, ".")
+	var n uint32
+	for _, p := range parts {
+		v, _ := strconv.Atoi(p)
+		n = n<<8 | uint32(v)
+	}
+	return n
 }
 
-func ipToInt(ip string) int {
-	var a, b, c, d int
-	fmt.Sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d)
-	return a<<24 | b<<16 | c<<8 | d
+func IpsBetween(start string, end string) uint32 {
+	return ipToUint(end) - ipToUint(start)
 }
