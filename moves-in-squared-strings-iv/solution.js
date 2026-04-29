@@ -1,38 +1,38 @@
 function diag2Sym(s) {
-    const rows = s.split('\n');
-    const n = rows.length;
-    const result = [];
-    for (let i = n - 1; i >= 0; i--) {
-        let line = '';
-        for (let j = n - 1; j >= 0; j--) {
-            line += rows[j][i];
-        }
-        result.push(line);
+  const a = s.split('\n');
+  const n = a.length;
+  const r = [];
+  for (let i = 0; i < n; i++) {
+    let row = '';
+    for (let j = 0; j < n; j++) {
+      row += a[n - 1 - j][n - 1 - i];
     }
-    return result.join('\n');
+    r.push(row);
+  }
+  return r.join('\n');
 }
 
 function rot90Counter(s) {
-    const rows = s.split('\n');
-    const n = rows.length;
-    const result = [];
-    for (let i = n - 1; i >= 0; i--) {
-        let line = '';
-        for (let j = 0; j < n; j++) {
-            line += rows[j][i];
-        }
-        result.push(line);
+  const a = s.split('\n');
+  const n = a.length;
+  const r = [];
+  for (let i = 0; i < n; i++) {
+    let row = '';
+    for (let j = 0; j < n; j++) {
+      row += a[j][n - 1 - i];
     }
-    return result.join('\n');
+    r.push(row);
+  }
+  return r.join('\n');
 }
 
 function selfieDiag2Counterclock(s) {
-    const orig = s.split('\n');
-    const d = diag2Sym(s).split('\n');
-    const r = rot90Counter(s).split('\n');
-    return orig.map((row, i) => row + '|' + d[i] + '|' + r[i]).join('\n');
+  const a = s.split('\n');
+  const b = diag2Sym(s).split('\n');
+  const c = rot90Counter(s).split('\n');
+  return a.map((row, i) => `${row}|${b[i]}|${c[i]}`).join('\n');
 }
 
 function oper(fct, s) {
-    return fct(s);
+  return fct(s);
 }
