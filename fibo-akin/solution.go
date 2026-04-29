@@ -1,6 +1,6 @@
 package kata
 
-func buildSequence(n int) []int {
+func buildU(n int) []int {
 	u := make([]int, n+1)
 	if n >= 1 {
 		u[1] = 1
@@ -15,7 +15,7 @@ func buildSequence(n int) []int {
 }
 
 func LengthSupUK(n, k int) int {
-	u := buildSequence(n)
+	u := buildU(n)
 	count := 0
 	for i := 1; i <= n; i++ {
 		if u[i] >= k {
@@ -26,7 +26,7 @@ func LengthSupUK(n, k int) int {
 }
 
 func Comp(n int) int {
-	u := buildSequence(n)
+	u := buildU(n)
 	count := 0
 	for i := 2; i <= n; i++ {
 		if u[i] < u[i-1] {
