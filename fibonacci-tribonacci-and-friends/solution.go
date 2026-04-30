@@ -1,14 +1,19 @@
 package kata
 
-func Xbonacci(signature []float64, n int) []float64 {
-	x := len(signature)
+func Xbonacci(signature []int, n int) []int {
 	if n <= 0 {
-		return []float64{}
+		return []int{}
 	}
-	result := make([]float64, n)
+	x := len(signature)
+	if n <= x {
+		out := make([]int, n)
+		copy(out, signature)
+		return out
+	}
+	result := make([]int, n)
 	copy(result, signature)
 	for i := x; i < n; i++ {
-		sum := 0.0
+		sum := 0
 		for j := i - x; j < i; j++ {
 			sum += result[j]
 		}
