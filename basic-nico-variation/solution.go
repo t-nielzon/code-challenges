@@ -1,39 +1,47 @@
 package kata
 
-import "sort"
+import (
+	"sort"
+	"strings"
+)
 
 func Nico(key, message string) string {
-	k := len(key)
-
-	// pad message to a multiple of key length
-	for len(message)%k != 0 {
-		message += " "
+	n := len(key)
+	if n == 0 {
+		return message
 	}
+	sorted := []byte(key)
+	sort.Slice(sorted, func(i, j int) bool { return sorted[i] < sorted[j] })
 
-	// build numeric key: rank each character by its sorted position
-	type pair struct {
-		ch  byte
-		idx int
-	}
-	pairs := make([]pair, k)
-	for i := 0; i < k; i++ {
-		pairs[i] = pair{key[i], i}
-	}
-	sort.Slice(pairs, func(i, j int) bool {
-		return pairs[i].ch < pairs[j].ch
-	})
-
-	order := make([]int, k)
-	for rank, p := range pairs {
-		order[p.idx] = rank
-	}
-
-	result := make([]byte, len(message))
-	for i := 0; i < len(message); i += k {
-		for j := 0; j < k; j++ {
-			result[i+order[j]] = message[i+j]
+	labels := make([]int, n)
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			if sorted[j] == key[i] {
+				labels[i] = j + 1
+				break
+			}
 		}
 	}
 
-	return string(result)
+	pad := (n - len(message)%n) % n
+	msg := message + strings.Repeat(" ", pad)
+	rows := len(msg) / n
+
+	order := make([]int, n)
+	for k := 1; k <= n; k++ {
+		for idx := 0; idx < n; idx++ {
+			if labels[idx] == k {
+				order[k-1] = idx
+				break
+			}
+		}
+	}
+
+	out := make([]byte, 0, len(msg))
+	for r := 0; r < rows; r++ {
+		for k := 0; k < n; k++ {
+			out = append(out, msg[r*n+order[k]])
+		}
+	}
+	return string(out)
 }
