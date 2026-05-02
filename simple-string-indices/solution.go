@@ -4,7 +4,7 @@ import "errors"
 
 func Solve(s string, idx int) (int, error) {
 	if idx < 0 || idx >= len(s) || s[idx] != '(' {
-		return -1, errors.New("no opening bracket at given index")
+		return -1, errors.New("no opening bracket at the given index")
 	}
 	depth := 0
 	for i := idx; i < len(s); i++ {

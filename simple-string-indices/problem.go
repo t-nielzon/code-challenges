@@ -12,9 +12,8 @@ Examples:
   solve("((1)23(45))(aB)", 2)  = error (no opening bracket at index 2)
   solve("((1)23(45))(aB)", 6)  = 9
   solve("((1)23(45))(aB)", 11) = 14
-  solve("((>)|?(*'))(yZ)", 11) = 14
 
-Input consists of letters, numbers and special characters, but no spaces.
+Input will consist of letters, numbers and special characters, but no spaces.
 The only brackets will be ( and ).
 */
 
