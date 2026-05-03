@@ -9,14 +9,17 @@ Task:
 Find all integers between m and n (m and n are integers with 1 <= m <= n)
 such that the sum of their squared divisors is itself a square.
 
-Return an array of subarrays with two elements: first the number whose
-squared divisors sum to a perfect square, then that sum.
+We will return an array of subarrays or of tuples.
+
+The subarrays will have two elements: first the number the squared divisors
+of which is a square and then the sum of the squared divisors.
 
 Example:
   m =  1, n = 250 --> [[1, 1], [42, 2500], [246, 84100]]
   m = 42, n = 250 --> [[42, 2500], [246, 84100]]
 */
+
 package kata
 
-func ListSquared(m, n int) [][]int {
+func ListSquared(m, n uint64) [][2]uint64 {
 }
