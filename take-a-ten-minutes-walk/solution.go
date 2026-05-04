@@ -1,19 +1,19 @@
 package kata
 
-func IsValidWalk(walk []byte) bool {
+func IsValidWalk(walk []string) bool {
 	if len(walk) != 10 {
 		return false
 	}
 	x, y := 0, 0
 	for _, d := range walk {
 		switch d {
-		case 'n':
+		case "n":
 			y++
-		case 's':
+		case "s":
 			y--
-		case 'e':
+		case "e":
 			x++
-		case 'w':
+		case "w":
 			x--
 		}
 	}
