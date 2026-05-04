@@ -1,37 +1,29 @@
-function belowN(n) {
-  if (n <= 1) return '\\b\\B';
-
-  const s = n.toString();
-  const len = s.length;
-  const digits = s.split('').map(Number);
+function regexBelowN(n) {
+  const s = String(n);
+  const L = s.length;
   const parts = [];
 
-  // match all positive numbers with fewer digits than n
-  if (len === 2) {
-    parts.push('[1-9]');
-  } else if (len > 2) {
-    parts.push('[1-9][0-9]{0,' + (len - 2) + '}');
+  for (let d = 1; d < L; d++) {
+    if (d === 1) parts.push('[1-9]');
+    else parts.push('[1-9]\\d{' + (d - 1) + '}');
   }
 
-  // match numbers with exactly len digits but numerically < n
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < L; i++) {
+    const prefix = s.slice(0, i);
+    const di = parseInt(s[i], 10);
     const lo = i === 0 ? 1 : 0;
-    const hi = digits[i] - 1;
-
+    const hi = di - 1;
     if (lo > hi) continue;
 
-    let part = '';
-    for (let j = 0; j < i; j++) part += digits[j];
+    const charClass = lo === hi ? String(lo) : '[' + lo + '-' + hi + ']';
+    const suffixLen = L - 1 - i;
+    let suffix = '';
+    if (suffixLen === 1) suffix = '\\d';
+    else if (suffixLen > 1) suffix = '\\d{' + suffixLen + '}';
 
-    if (lo === hi) part += lo;
-    else part += '[' + lo + '-' + hi + ']';
-
-    const remaining = len - i - 1;
-    if (remaining === 1) part += '[0-9]';
-    else if (remaining > 1) part += '[0-9]{' + remaining + '}';
-
-    parts.push(part);
+    parts.push(prefix + charClass + suffix);
   }
 
-  return '^(' + parts.join('|') + ')$';
+  if (parts.length === 0) return '^(?!)$';
+  return '^(?:' + parts.join('|') + ')$';
 }
