@@ -1,70 +1,54 @@
-function decompose(nOverd) {
+function decompose(n) {
+  const s = String(n);
   let num, den;
-
-  if (nOverd.includes("/")) {
-    [num, den] = nOverd.split("/").map(BigInt);
+  if (s.includes('/')) {
+    const [a, b] = s.split('/');
+    num = BigInt(a);
+    den = BigInt(b);
+  } else if (s.includes('.')) {
+    const [intPart, fracPart] = s.split('.');
+    den = 10n ** BigInt(fracPart.length);
+    num = BigInt(intPart) * den + BigInt(fracPart);
   } else {
-    // decimal input
-    const parts = nOverd.split(".");
-    if (parts.length === 1 || !parts[1]) {
-      num = BigInt(parts[0]);
-      den = 1n;
-    } else {
-      const decimals = parts[1].length;
-      den = 10n ** BigInt(decimals);
-      num = BigInt(parts[0]) * den + BigInt(parts[1]);
-    }
+    num = BigInt(s);
+    den = 1n;
   }
-
-  // simplify with gcd
-  function gcd(a, b) {
-    a = a < 0n ? -a : a;
-    b = b < 0n ? -b : b;
-    while (b) {
-      [a, b] = [b, a % b];
-    }
-    return a;
-  }
-
-  let g = gcd(num, den);
-  num /= g;
-  den /= g;
 
   if (num === 0n) return [];
 
+  const gcd = (a, b) => {
+    a = a < 0n ? -a : a;
+    b = b < 0n ? -b : b;
+    while (b) { [a, b] = [b, a % b]; }
+    return a;
+  };
+
   const result = [];
 
-  // greedy algorithm (Sylvester-Fibonacci)
-  while (num > 0n) {
-    if (num === 1n) {
-      result.push(`1/${den}`);
-      break;
-    }
+  // handle integer part
+  if (num >= den) {
+    const intPart = num / den;
+    result.push(intPart.toString() + "/1");
+    num = num - intPart * den;
+    if (num === 0n) return result;
+  }
 
-    // ceiling of den/num
-    let d = den / num;
-    if (den % num !== 0n) d += 1n;
+  // reduce
+  let g = gcd(num, den);
+  num /= g; den /= g;
 
-    if (d === 1n) {
-      // integer part
-      const intPart = num / den;
-      result.push(`${intPart}`);
-      num = num - intPart * den;
-    } else {
-      result.push(`1/${d}`);
-      // num/den - 1/d = (num*d - den) / (den*d)
-      num = num * d - den;
-      den = den * d;
-    }
-
-    g = gcd(num, den);
-    if (g > 1n) {
-      num /= g;
-      den /= g;
-    }
+  while (num !== 0n) {
+    // ceil(den / num)
+    let k = (den + num - 1n) / num;
+    result.push("1/" + k.toString());
+    // num/den - 1/k = (num*k - den) / (den*k)
+    let newNum = num * k - den;
+    let newDen = den * k;
+    g = gcd(newNum, newDen);
+    if (g !== 0n) { newNum /= g; newDen /= g; }
+    num = newNum;
+    den = newDen;
   }
 
   return result;
 }
-
-module.exports = { decompose };
