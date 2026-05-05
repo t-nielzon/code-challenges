@@ -1,38 +1,37 @@
 package kata
 
-var sequence []int
-var lastChecked = 9
+var sumRestCache []int
+var sumRestNext int = 10
 
-func reverseNum(n int) int {
-	rev := 0
+func sumRestReverse(n int) int {
+	r := 0
 	for n > 0 {
-		rev = rev*10 + n%10
+		r = r*10 + n%10
 		n /= 10
 	}
-	return rev
+	return r
 }
 
-func SumAndRest(n int) int {
-	for len(sequence) < n {
-		lastChecked++
-		i := lastChecked
-		// skip numbers ending in 0 — reversed would have a leading zero
-		if i%10 == 0 {
-			continue
+func sumRestGenerate(upTo int) {
+	for len(sumRestCache) < upTo {
+		i := sumRestNext
+		if i%10 != 0 {
+			r := sumRestReverse(i)
+			if r != i {
+				d := i - r
+				if d < 0 {
+					d = -d
+				}
+				if (i+r)%d == 0 {
+					sumRestCache = append(sumRestCache, i)
+				}
+			}
 		}
-		rev := reverseNum(i)
-		// skip palindromes — difference is zero, division undefined
-		if rev == i {
-			continue
-		}
-		sum := i + rev
-		diff := i - rev
-		if diff < 0 {
-			diff = -diff
-		}
-		if sum%diff == 0 {
-			sequence = append(sequence, i)
-		}
+		sumRestNext++
 	}
-	return sequence[n-1]
+}
+
+func SumRest(n int) int {
+	sumRestGenerate(n)
+	return sumRestCache[n-1]
 }
