@@ -1,29 +1,36 @@
 function correct(exp) {
-  const [left, right] = exp.split('=').map(s => s.trim());
-  const target = parseFloat(right);
-  const placeholders = (left.match(/\(\)/g) || []).length;
+  const [lhs, rhs] = exp.split('=').map(s => s.trim());
+  const target = Number(rhs);
   const ops = ['+', '-', '*', '/'];
-  const total = 4 ** placeholders;
-
-  for (let i = 0; i < total; i++) {
-    const combo = [];
-    let num = i;
-    for (let j = 0; j < placeholders; j++) {
-      combo.push(ops[num % 4]);
-      num = num >> 2;
+  const slots = [];
+  for (let i = 0; i < lhs.length; i++) {
+    if (lhs[i] === '(' && lhs[i + 1] === ')') slots.push(i);
+  }
+  const n = slots.length;
+  const total = Math.pow(4, n);
+  for (let m = 0; m < total; m++) {
+    const chosen = [];
+    let k = m;
+    for (let i = 0; i < n; i++) {
+      chosen.push(ops[k % 4]);
+      k = Math.floor(k / 4);
     }
-
-    let idx = 0;
-    const filled = left.replace(/\(\)/g, () => `(${combo[idx++]})`);
-    const evalExpr = filled.replace(/\(([+\-*/])\)/g, '$1');
-
+    let candidate = '';
+    let last = 0;
+    for (let i = 0; i < n; i++) {
+      candidate += lhs.slice(last, slots[i]) + '(' + chosen[i] + ')';
+      last = slots[i] + 2;
+    }
+    candidate += lhs.slice(last);
+    let val;
     try {
-      const result = Function('"use strict"; return (' + evalExpr + ')')();
-      if (Math.abs(result - target) < 1e-9) {
-        return filled + ' = ' + right;
-      }
+      val = eval(candidate.replace(/\(([+\-*/])\)/g, '$1'));
     } catch (e) {
       continue;
     }
+    if (Math.abs(val - target) < 1e-9) {
+      return candidate + ' = ' + rhs;
+    }
   }
+  return exp;
 }
