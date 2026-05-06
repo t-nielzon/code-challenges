@@ -1,19 +1,18 @@
 package kata
 
-func DirReduc(arr []string) []string {
+func dirReduc(arr []string) []string {
 	opposite := map[string]string{
 		"NORTH": "SOUTH",
 		"SOUTH": "NORTH",
 		"EAST":  "WEST",
 		"WEST":  "EAST",
 	}
-
-	stack := []string{}
-	for _, dir := range arr {
-		if len(stack) > 0 && opposite[stack[len(stack)-1]] == dir {
-			stack = stack[:len(stack)-1]
+	stack := make([]string, 0, len(arr))
+	for _, d := range arr {
+		if n := len(stack); n > 0 && stack[n-1] == opposite[d] {
+			stack = stack[:n-1]
 		} else {
-			stack = append(stack, dir)
+			stack = append(stack, d)
 		}
 	}
 	return stack
