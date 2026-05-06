@@ -1,49 +1,48 @@
 package kata
 
-import "math/big"
+import (
+	"math/big"
+	"strings"
+)
 
-const digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const factAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-func Dec2FactString(nb int64) string {
-	n := big.NewInt(nb)
-	i := 1
-	var result []byte
-	for n.Sign() > 0 {
-		mod := new(big.Int)
-		n.DivMod(n, big.NewInt(int64(i)), mod)
-		result = append(result, digits[int(mod.Int64())])
-		i++
-	}
-	if len(result) == 0 {
+func Dec2FactString(nb *big.Int) string {
+	n := new(big.Int).Set(nb)
+	if n.Sign() == 0 {
 		return "0"
 	}
-	// reverse
-	for l, r := 0, len(result)-1; l < r; l, r = l+1, r-1 {
-		result[l], result[r] = result[r], result[l]
+	var digits []byte
+	divisor := big.NewInt(1)
+	one := big.NewInt(1)
+	rem := new(big.Int)
+	for n.Sign() > 0 {
+		n.DivMod(n, divisor, rem)
+		digits = append(digits, factAlphabet[rem.Int64()])
+		divisor = new(big.Int).Add(divisor, one)
 	}
-	return string(result)
+	var sb strings.Builder
+	for i := len(digits) - 1; i >= 0; i-- {
+		sb.WriteByte(digits[i])
+	}
+	return sb.String()
 }
 
-func FactString2Dec(s string) int64 {
+func FactString2Dec(s string) *big.Int {
 	result := big.NewInt(0)
-	n := len(s) - 1
 	fact := big.NewInt(1)
-	for i := 1; i <= n; i++ {
-		fact.Mul(fact, big.NewInt(int64(i)))
-	}
-	for i, c := range s {
-		var val int64
-		if c >= '0' && c <= '9' {
-			val = int64(c - '0')
-		} else {
-			val = int64(c-'A') + 10
+	for p := 0; p < len(s); p++ {
+		c := s[len(s)-1-p]
+		var d int64
+		switch {
+		case c >= '0' && c <= '9':
+			d = int64(c - '0')
+		case c >= 'A' && c <= 'Z':
+			d = int64(c-'A') + 10
 		}
-		term := new(big.Int).Mul(big.NewInt(val), fact)
+		term := new(big.Int).Mul(fact, big.NewInt(d))
 		result.Add(result, term)
-		base := int64(n - i)
-		if base > 0 {
-			fact.Div(fact, big.NewInt(base))
-		}
+		fact = new(big.Int).Mul(fact, big.NewInt(int64(p+1)))
 	}
-	return result.Int64()
+	return result
 }
