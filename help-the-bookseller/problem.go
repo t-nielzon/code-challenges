@@ -6,17 +6,18 @@ capital letter which defines the book category.
 In the bookseller's stocklist each code is followed by a space and by a positive
 integer, which indicates the quantity of books of this code in stock.
 
-You will receive the bookseller's stocklist and a list of categories. Your task is
-to find the total number of books in the bookseller's stocklist, with the category
-codes in the list of categories.
+Task:
+You will receive the bookseller's stocklist and a list of categories. Your task
+is to find the total number of books in the bookseller's stocklist, with the
+category codes in the list of categories. Note: the codes are in the same order
+in both lists.
 
-Return the result as a string. If any of the input lists is empty, return an empty string.
+Return the result as a string like:
+"(A : 20) - (B : 114) - (C : 50) - (W : 0)"
 
-Example:
-  stocklist: "ABART 20", "CDXEF 50", "BKWRK 25", "BTSQZ 89", "DRTYM 60"
-  categories: "A", "B", "C", "W"
-  result: "(A : 20) - (B : 114) - (C : 50) - (W : 0)"
+If any of the input lists is empty, return an empty string.
 */
+
 package kata
 
 func StockList(listOfArt []string, listOfCat []string) string {

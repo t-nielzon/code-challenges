@@ -10,17 +10,22 @@ func StockList(listOfArt []string, listOfCat []string) string {
 	if len(listOfArt) == 0 || len(listOfCat) == 0 {
 		return ""
 	}
-
-	totals := make(map[byte]int)
-	for _, art := range listOfArt {
-		parts := strings.SplitN(art, " ", 2)
-		qty, _ := strconv.Atoi(parts[1])
-		totals[parts[0][0]] += qty
+	parts := make([]string, 0, len(listOfCat))
+	for _, cat := range listOfCat {
+		total := 0
+		for _, art := range listOfArt {
+			fields := strings.Fields(art)
+			if len(fields) < 2 || len(fields[0]) == 0 {
+				continue
+			}
+			if string(fields[0][0]) == cat {
+				n, err := strconv.Atoi(fields[1])
+				if err == nil {
+					total += n
+				}
+			}
+		}
+		parts = append(parts, fmt.Sprintf("(%s : %d)", cat, total))
 	}
-
-	result := make([]string, len(listOfCat))
-	for i, cat := range listOfCat {
-		result[i] = fmt.Sprintf("(%s : %d)", cat, totals[cat[0]])
-	}
-	return strings.Join(result, " - ")
+	return strings.Join(parts, " - ")
 }
