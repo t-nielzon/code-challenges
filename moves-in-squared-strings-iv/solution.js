@@ -1,29 +1,29 @@
 function diag2Sym(s) {
-  const a = s.split('\n');
-  const n = a.length;
-  const r = [];
+  const lines = s.split('\n');
+  const n = lines.length;
+  const result = [];
   for (let i = 0; i < n; i++) {
     let row = '';
     for (let j = 0; j < n; j++) {
-      row += a[n - 1 - j][n - 1 - i];
+      row += lines[n - 1 - j][n - 1 - i];
     }
-    r.push(row);
+    result.push(row);
   }
-  return r.join('\n');
+  return result.join('\n');
 }
 
 function rot90Counter(s) {
-  const a = s.split('\n');
-  const n = a.length;
-  const r = [];
+  const lines = s.split('\n');
+  const n = lines.length;
+  const result = [];
   for (let i = 0; i < n; i++) {
     let row = '';
     for (let j = 0; j < n; j++) {
-      row += a[j][n - 1 - i];
+      row += lines[j][n - 1 - i];
     }
-    r.push(row);
+    result.push(row);
   }
-  return r.join('\n');
+  return result.join('\n');
 }
 
 function selfieDiag2Counterclock(s) {
