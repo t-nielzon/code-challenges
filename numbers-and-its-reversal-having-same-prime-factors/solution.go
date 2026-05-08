@@ -1,52 +1,52 @@
 package kata
 
-func SameFactRev(nMax int) []int {
-	var result []int
-	for n := 10; n < nMax; n++ {
-		rev := reverseNum(n)
-		if rev == n || rev >= nMax {
-			continue
-		}
-		if samePrimeFactors(n, rev) {
-			result = append(result, n)
-		}
-	}
-	return result
-}
-
-func reverseNum(n int) int {
-	rev := 0
+func reverseInt(n int) int {
+	r := 0
 	for n > 0 {
-		rev = rev*10 + n%10
+		r = r*10 + n%10
 		n /= 10
 	}
-	return rev
+	return r
 }
 
-func primeFactors(n int) map[int]bool {
-	factors := make(map[int]bool)
-	for d := 2; d*d <= n; d++ {
-		for n%d == 0 {
-			factors[d] = true
-			n /= d
+func distinctPrimeFactors(n int) []int {
+	var factors []int
+	for p := 2; p*p <= n; p++ {
+		if n%p == 0 {
+			factors = append(factors, p)
+			for n%p == 0 {
+				n /= p
+			}
 		}
 	}
 	if n > 1 {
-		factors[n] = true
+		factors = append(factors, n)
 	}
 	return factors
 }
 
-func samePrimeFactors(a, b int) bool {
-	fa := primeFactors(a)
-	fb := primeFactors(b)
-	if len(fa) != len(fb) {
+func sameFactors(a, b []int) bool {
+	if len(a) != len(b) {
 		return false
 	}
-	for k := range fa {
-		if !fb[k] {
+	for i := range a {
+		if a[i] != b[i] {
 			return false
 		}
 	}
 	return true
+}
+
+func SameFactRev(nMax int) []int {
+	result := []int{}
+	for n := 2; n < nMax; n++ {
+		rev := reverseInt(n)
+		if rev == n {
+			continue
+		}
+		if sameFactors(distinctPrimeFactors(n), distinctPrimeFactors(rev)) {
+			result = append(result, n)
+		}
+	}
+	return result
 }
