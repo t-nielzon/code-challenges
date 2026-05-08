@@ -1,13 +1,16 @@
 package kata
 
 func IsPrime(n int) bool {
-	if n <= 1 {
+	if n < 2 {
 		return false
 	}
-	if n <= 3 {
+	if n < 4 {
 		return true
 	}
-	if n%2 == 0 || n%3 == 0 {
+	if n%2 == 0 {
+		return false
+	}
+	if n%3 == 0 {
 		return false
 	}
 	for i := 5; i*i <= n; i += 6 {
