@@ -1,73 +1,41 @@
-function anagrams(subjects, memories, players) {
-  const ORDER = [
+function anagramsGame(subjects, memories, players) {
+  const order = [
     [0, 2], [2, 1], [1, 3], [3, 0],
     [0, 3], [2, 0], [1, 2], [3, 1]
   ];
+  const start = order.findIndex(p => p[0] === players[0] && p[1] === players[1]);
+  const sets = memories.map(m => new Set(m));
+  const sortKey = w => w.split('').sort().join('');
+  const team = p => (p === 0 || p === 1) ? 0 : 1;
 
-  // find starting index in ORDER
-  let startIdx = ORDER.findIndex(
-    ([a, b]) => a === players[0] && b === players[1]
-  );
-
-  // build memory sets for fast lookup
-  const memSets = memories.map(m => new Set(m));
-
-  // helper: sort letters to get canonical anagram key
-  const sortWord = w => w.split('').sort().join('');
-
-  // precompute anagram groups per player: for each canonical key, which words does the player know
-  const playerAnagrams = memSets.map(memSet => {
-    const map = new Map();
-    for (const word of memSet) {
-      const key = sortWord(word);
-      if (!map.has(key)) map.set(key, []);
-      map.get(key).push(word);
-    }
-    return map;
-  });
-
-  const teamScore = [0, 0];
-
-  // which team does a player belong to
-  const teamOf = p => (p === 0 || p === 1) ? 0 : 1;
+  const finals = [0, 0];
 
   for (let i = 0; i < subjects.length; i++) {
-    const roundIdx = (startIdx + i) % 8;
-    const [p1, p2] = ORDER[roundIdx];
     const subject = subjects[i];
-    const key = sortWord(subject);
+    const [p1, p2] = order[(start + i) % order.length];
+    const key = sortKey(subject);
 
-    let p1Score = 0;
-    let p2Score = 0;
+    let s1 = sets[p1].has(subject) ? 1 : 0;
+    let s2 = sets[p2].has(subject) ? 1 : 0;
 
-    // step 1: both get 1 point if they know the subject word
-    if (memSets[p1].has(subject)) p1Score += 1;
-    if (memSets[p2].has(subject)) p2Score += 1;
-
-    // get anagrams each player knows (excluding the subject word itself)
-    const p1Anagrams = (playerAnagrams[p1].get(key) || []).filter(w => w !== subject);
-    const p2Anagrams = (playerAnagrams[p2].get(key) || []).filter(w => w !== subject);
-
-    // step 2: player one recalls anagrams for 2 points each
-    const p1Set = new Set(p1Anagrams);
-    p1Score += p1Anagrams.length * 2;
-
-    // step 3: player two recalls anagrams NOT already recalled by player one, for 3 points each
-    for (const w of p2Anagrams) {
-      if (!p1Set.has(w)) {
-        p2Score += 3;
+    const p1Anagrams = new Set();
+    for (const w of sets[p1]) {
+      if (w !== subject && sortKey(w) === key) {
+        p1Anagrams.add(w);
+        s1 += 2;
+      }
+    }
+    for (const w of sets[p2]) {
+      if (w !== subject && sortKey(w) === key && !p1Anagrams.has(w)) {
+        s2 += 3;
       }
     }
 
-    // round winner gets 1 final point for their team
-    if (p1Score > p2Score) {
-      teamScore[teamOf(p1)] += 1;
-    } else if (p2Score > p1Score) {
-      teamScore[teamOf(p2)] += 1;
-    }
+    if (s1 > s2) finals[team(p1)]++;
+    else if (s2 > s1) finals[team(p2)]++;
   }
 
-  if (teamScore[0] > teamScore[1]) return 0;
-  if (teamScore[1] > teamScore[0]) return 1;
+  if (finals[0] > finals[1]) return 0;
+  if (finals[1] > finals[0]) return 1;
   return -1;
 }
