@@ -1,74 +1,57 @@
 package kata
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
-	"unicode"
 )
 
 func IsSumOfCubes(s string) string {
-	// Find all cubic numbers (0-999 where sum of cubes of digits equals number)
-	isCubic := func(n int) bool {
-		sum := 0
-		temp := n
-		for temp > 0 {
-			d := temp % 10
-			sum += d * d * d
-			temp /= 10
-		}
-		// Special case: 0 is cubic (0^3 = 0)
-		if n == 0 {
-			return true
-		}
-		return sum == n
-	}
-
-	// Extract groups of digits from the string
 	var groups []string
-	var current strings.Builder
-
-	for _, ch := range s {
-		if unicode.IsDigit(ch) {
-			current.WriteRune(ch)
-			if current.Len() == 3 {
-				groups = append(groups, current.String())
-				current.Reset()
+	i := 0
+	for i < len(s) {
+		if s[i] >= '0' && s[i] <= '9' {
+			j := i
+			for j < len(s) && s[j] >= '0' && s[j] <= '9' {
+				j++
 			}
+			run := s[i:j]
+			for k := 0; k < len(run); k += 3 {
+				end := k + 3
+				if end > len(run) {
+					end = len(run)
+				}
+				groups = append(groups, run[k:end])
+			}
+			i = j
 		} else {
-			if current.Len() > 0 {
-				groups = append(groups, current.String())
-				current.Reset()
-			}
+			i++
 		}
 	}
-	if current.Len() > 0 {
-		groups = append(groups, current.String())
-	}
 
-	// Find cubic numbers and calculate sum
-	var cubicNumbers []int
+	var cubics []int
 	sum := 0
-
 	for _, g := range groups {
 		n, _ := strconv.Atoi(g)
-		if isCubic(n) {
-			cubicNumbers = append(cubicNumbers, n)
+		c := 0
+		for _, d := range g {
+			v := int(d - '0')
+			c += v * v * v
+		}
+		if c == n {
+			cubics = append(cubics, n)
 			sum += n
 		}
 	}
 
-	if len(cubicNumbers) == 0 {
+	if len(cubics) == 0 {
 		return "Unlucky"
 	}
 
-	// Build result string
-	var result strings.Builder
-	for _, n := range cubicNumbers {
-		result.WriteString(strconv.Itoa(n))
-		result.WriteString(" ")
+	parts := make([]string, 0, len(cubics)+1)
+	for _, n := range cubics {
+		parts = append(parts, strconv.Itoa(n))
 	}
-	result.WriteString(strconv.Itoa(sum))
-	result.WriteString(" Lucky")
-
-	return result.String()
+	parts = append(parts, strconv.Itoa(sum))
+	return fmt.Sprintf("%s Lucky", strings.Join(parts, " "))
 }
