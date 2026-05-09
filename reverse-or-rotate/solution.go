@@ -1,28 +1,24 @@
 package kata
 
-func Revrot(s string, sz int) string {
-	if sz <= 0 || s == "" || sz > len(s) {
+func RevRot(s string, n int) string {
+	if n <= 0 || s == "" || n > len(s) {
 		return ""
 	}
-	result := ""
-	for i := 0; i+sz <= len(s); i += sz {
-		chunk := s[i : i+sz]
+	result := make([]byte, 0, len(s))
+	for i := 0; i+n <= len(s); i += n {
+		chunk := s[i : i+n]
 		sum := 0
-		for _, c := range chunk {
-			d := int(c - '0')
-			sum += d * d
+		for j := 0; j < n; j++ {
+			sum += int(chunk[j] - '0')
 		}
 		if sum%2 == 0 {
-			// reverse
-			b := []byte(chunk)
-			for l, r := 0, len(b)-1; l < r; l, r = l+1, r-1 {
-				b[l], b[r] = b[r], b[l]
+			for j := n - 1; j >= 0; j-- {
+				result = append(result, chunk[j])
 			}
-			result += string(b)
 		} else {
-			// rotate left by one
-			result += chunk[1:] + chunk[:1]
+			result = append(result, chunk[1:]...)
+			result = append(result, chunk[0])
 		}
 	}
-	return result
+	return string(result)
 }
