@@ -1,5 +1,3 @@
-function inArray(array1, array2) {
-  return [...new Set(array1.filter(s => array2.some(w => w.includes(s))))].sort();
+function inArray(a1, a2) {
+  return [...new Set(a1.filter(s => a2.some(t => t.includes(s))))].sort();
 }
-
-module.exports = { inArray };
