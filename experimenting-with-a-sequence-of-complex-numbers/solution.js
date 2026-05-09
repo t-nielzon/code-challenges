@@ -1,6 +1,8 @@
 function f(x, y, eps) {
-  const mod = Math.sqrt(x * x + y * y);
-  if (mod >= 1) return -1;
-  // |S(n,z) - z| = |z|^(n+1) < eps
-  return Math.ceil(Math.log(eps) / Math.log(mod)) - 1;
+    const r = Math.hypot(x, y);
+    if (r >= 1) return -1;
+    const v = Math.log(eps) / Math.log(r);
+    let np1 = Math.floor(v) + 1;
+    if (np1 <= v) np1 += 1;
+    return np1 - 1;
 }
