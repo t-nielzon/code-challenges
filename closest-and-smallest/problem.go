@@ -1,31 +1,34 @@
 /*
-Closest and Smallest
+#### Input
 
-Input: a string strng of n positive numbers (n = 0 or n >= 2)
+- a string `strng` of n positive numbers (n = 0 or n >= 2)
 
 Let us call weight of a number the sum of its digits.
-For example 99 will have "weight" 18, 100 will have "weight" 1.
+For example `99` will have "weight" `18`, `100` will have "weight" `1`.
 
 Two numbers are "close" if the difference of their weights is small.
 
-Task:
-For each number in strng calculate its "weight" and then find two numbers
-of strng that have:
+#### Task:
+For each number in `strng` calculate its "weight" and then find *two* numbers
+of `strng` that have:
+
 - the smallest difference of weights ie that are the closest
 - with the smallest weights
-- and with the smallest indices (or ranks, numbered from 0) in strng
+- and with the smallest indices (or ranks, numbered from 0) in `strng`
 
-Output:
-an array of two arrays, each subarray in the following format:
-[number-weight, index in strng of the corresponding number, original corresponding number in strng]
+#### Output:
 
-The two subarrays are sorted in ascending order by their number weights if these weights are different,
-by their indexes in the string if they have the same weights.
+- a string in Go mimicking an array of two subarrays:
+  "[(weight, index, number), (weight, index, number)]"
+  or "[(), ()]" if n == 0.
 
-Notes:
-If n == 0 closest("") should return "[(), ()]" in Go.
+The two subarrays are sorted in ascending order by their number weights if
+these weights are different, by their indexes in the string if they have the
+same weights.
 */
+
 package kata
 
 func Closest(strng string) string {
+	return ""
 }

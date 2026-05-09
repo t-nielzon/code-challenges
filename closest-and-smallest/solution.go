@@ -7,58 +7,46 @@ import (
 )
 
 func Closest(strng string) string {
-	if strng == "" {
-		return "[(), ()]"
-	}
-	parts := strings.Fields(strng)
-	n := len(parts)
-	if n < 2 {
+	if strings.TrimSpace(strng) == "" {
 		return "[(), ()]"
 	}
 
-	type entry struct {
+	parts := strings.Fields(strng)
+	type item struct {
 		weight int
 		index  int
-		num    string
+		number string
 	}
-
-	entries := make([]entry, n)
+	items := make([]item, len(parts))
 	for i, p := range parts {
 		w := 0
 		for _, c := range p {
-			w += int(c - '0')
+			if c >= '0' && c <= '9' {
+				w += int(c - '0')
+			}
 		}
-		entries[i] = entry{w, i, p}
+		items[i] = item{w, i, p}
 	}
 
-	// sort by weight, then by index
-	sorted := make([]entry, n)
-	copy(sorted, entries)
-	sort.SliceStable(sorted, func(i, j int) bool {
-		if sorted[i].weight != sorted[j].weight {
-			return sorted[i].weight < sorted[j].weight
+	sort.SliceStable(items, func(i, j int) bool {
+		if items[i].weight != items[j].weight {
+			return items[i].weight < items[j].weight
 		}
-		return sorted[i].index < sorted[j].index
+		return items[i].index < items[j].index
 	})
 
-	// find the closest pair among consecutive elements in sorted order
-	bestDiff := int(^uint(0) >> 1)
-	var bestA, bestB entry
-
-	for i := 0; i < len(sorted)-1; i++ {
-		a, b := sorted[i], sorted[i+1]
-		diff := b.weight - a.weight
-		if diff < bestDiff ||
-			(diff == bestDiff && a.weight < bestA.weight) ||
-			(diff == bestDiff && a.weight == bestA.weight && a.index < bestA.index) ||
-			(diff == bestDiff && a.weight == bestA.weight && a.index == bestA.index && b.index < bestB.index) {
-			bestDiff = diff
-			bestA = a
-			bestB = b
+	bestDiff := -1
+	bestA, bestB := 0, 1
+	for i := 0; i < len(items)-1; i++ {
+		d := items[i+1].weight - items[i].weight
+		if bestDiff == -1 || d < bestDiff {
+			bestDiff = d
+			bestA, bestB = i, i+1
 		}
 	}
 
+	a, b := items[bestA], items[bestB]
 	return fmt.Sprintf("[(%d, %d, %s), (%d, %d, %s)]",
-		bestA.weight, bestA.index, bestA.num,
-		bestB.weight, bestB.index, bestB.num)
+		a.weight, a.index, a.number,
+		b.weight, b.index, b.number)
 }
