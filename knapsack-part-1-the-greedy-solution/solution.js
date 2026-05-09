@@ -4,11 +4,9 @@ function knapsack(capacity, items) {
   const quantities = new Array(items.length).fill(0);
   let remaining = capacity;
   for (const { size, i } of indexed) {
-    const count = Math.floor(remaining / size);
-    if (count > 0) {
-      quantities[i] = count;
-      remaining -= count * size;
-    }
+    const qty = Math.floor(remaining / size);
+    quantities[i] = qty;
+    remaining -= qty * size;
   }
   return quantities;
 }

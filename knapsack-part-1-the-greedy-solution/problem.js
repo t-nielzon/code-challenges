@@ -26,10 +26,7 @@ For example, if a "greedy thief" with a 10-Liter knapsack sees two types of item
 - a 6-Liter item worth $9 (1.5 $/L)
 - a 5-Liter item worth $5 (1.0 $/L)
 
-the thief will take 1 of the 6-Liter items instead of 2 of the 5-Liter items. Although this means the thief will only profit $9 instead of $10, the decision algorithm is much simpler. Maybe the thief is bad at math.
-
-Now, go be bad at math!
-
+the thief will take 1 of the 6-Liter items instead of 2 of the 5-Liter items.
 
 The Kata
 ===
@@ -37,12 +34,10 @@ The Kata
 Write the function `knapsack` that takes two parameters, `capacity` and `items`, and returns a list of quantities.
 
 `capacity` will be a positive number
-
-`items` will be an array of arrays of positive numbers that gives the items' sizes and values in the form `[[size 1, value 1], [size 2, value 2], ...]`
-
-`knapsack` will return an array of integers that specifies the quantity of each item to take according to the greedy solution (the order of the quantities must match the order of `items`)
+`items` will be an array of arrays of positive numbers in the form [[size, value], ...]
+`knapsack` will return an array of integers specifying the quantity of each item.
 */
 
 function knapsack(capacity, items) {
-  
+
 }
