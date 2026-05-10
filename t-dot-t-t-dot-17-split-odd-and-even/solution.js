@@ -3,7 +3,6 @@ function splitOddAndEven(n) {
   const groups = [];
   let current = '';
   let currentParity = null;
-
   for (const d of digits) {
     const parity = Number(d) % 2;
     if (parity === currentParity) {
@@ -15,6 +14,5 @@ function splitOddAndEven(n) {
     }
   }
   if (current !== '') groups.push(current);
-
   return groups.map(Number);
 }
