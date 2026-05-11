@@ -17,9 +17,11 @@ A "good" answer is 4.99999999999999875... * 1e-16.
 Can you modify f(x) to give a good approximation of f(x) in the neighborhood of 0?
 
 Note:
-Don't round or truncate your results. See the testing function in Sample Tests.
+Don't round or truncate your results. See the testing function in Sample Tests:.
 */
+
 package kata
 
 func F(x float64) float64 {
+
 }
