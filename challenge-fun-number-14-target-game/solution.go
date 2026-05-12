@@ -1,13 +1,16 @@
 package kata
 
-func MaxPoints(vals []int) int {
+func TargetGame(vals []int) int {
 	prev, curr := 0, 0
 	for _, v := range vals {
-		next := curr
-		if prev+v > next {
-			next = prev + v
-		}
-		prev, curr = curr, next
+		prev, curr = curr, max(curr, prev+v)
 	}
 	return curr
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
