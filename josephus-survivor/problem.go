@@ -13,9 +13,7 @@ one every 3 is eliminated until one remains
 [1,4] => 5 is counted out
 [4] => 1 counted out, 4 is the last element - the survivor!
 
-Notes and tips: using the solution to the other kata to check your function may be helpful,
-but as much larger numbers will be used, using an array/list to compute the number of the survivor may be too slow;
-you may assume that both n and k will always be >=1.
+Notes and tips: using the solution to the other kata to check your function may be helpful, but as much larger numbers will be used, using an array/list to compute the number of the survivor may be too slow; you may assume that both n and k will always be >=1.
 */
 
 package kata
