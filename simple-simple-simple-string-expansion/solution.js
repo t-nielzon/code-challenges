@@ -1,6 +1,6 @@
 function stringExpansion(s) {
   let count = 1;
-  let result = '';
+  let result = "";
   for (const ch of s) {
     if (/\d/.test(ch)) {
       count = Number(ch);
