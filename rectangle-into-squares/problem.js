@@ -1,6 +1,6 @@
 /*
  * Rectangle into Squares
- * 
+ *
  * The drawing gives an idea of how to cut a given "true" rectangle into squares
  * ("true" rectangle meaning that the two dimensions are different).
  *
@@ -15,10 +15,9 @@
  *   sqInRect(3, 5) should return [3, 2, 1, 1]
  *
  * Notes:
- *   - When lng == wdth, return null.
+ * - If lng == wdth as a starting case, return null.
  */
 
 function sqInRect(lng, wdth) {
+  
 }
-
-module.exports = { sqInRect };
