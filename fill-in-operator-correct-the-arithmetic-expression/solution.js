@@ -1,36 +1,25 @@
 function correct(exp) {
-  const [lhs, rhs] = exp.split('=').map(s => s.trim());
-  const target = Number(rhs);
+  const [lhs, rhsStr] = exp.split('=').map(s => s.trim());
+  const target = parseFloat(rhsStr);
   const ops = ['+', '-', '*', '/'];
-  const slots = [];
-  for (let i = 0; i < lhs.length; i++) {
-    if (lhs[i] === '(' && lhs[i + 1] === ')') slots.push(i);
-  }
-  const n = slots.length;
-  const total = Math.pow(4, n);
-  for (let m = 0; m < total; m++) {
-    const chosen = [];
-    let k = m;
-    for (let i = 0; i < n; i++) {
-      chosen.push(ops[k % 4]);
-      k = Math.floor(k / 4);
+  const slots = (lhs.match(/\(\)/g) || []).length;
+
+  const tryCombo = (idx, current) => {
+    if (idx === slots) {
+      try {
+        const val = eval(current);
+        if (Math.abs(val - target) < 1e-9) return current;
+      } catch (e) {}
+      return null;
     }
-    let candidate = '';
-    let last = 0;
-    for (let i = 0; i < n; i++) {
-      candidate += lhs.slice(last, slots[i]) + '(' + chosen[i] + ')';
-      last = slots[i] + 2;
+    for (const op of ops) {
+      const next = current.replace('()', `(${op})`);
+      const result = tryCombo(idx + 1, next);
+      if (result !== null) return result;
     }
-    candidate += lhs.slice(last);
-    let val;
-    try {
-      val = eval(candidate.replace(/\(([+\-*/])\)/g, '$1'));
-    } catch (e) {
-      continue;
-    }
-    if (Math.abs(val - target) < 1e-9) {
-      return candidate + ' = ' + rhs;
-    }
-  }
-  return exp;
+    return null;
+  };
+
+  const solvedLhs = tryCombo(0, lhs);
+  return `${solvedLhs} = ${rhsStr}`;
 }
