@@ -1,37 +1,40 @@
-function teknonymize(tree) {
-  if (!tree) return;
-
-  function getDeepestEldest(node, depth) {
-    if (node.children.length === 0) {
-      return { name: node.name, depth, dob: node.dateOfBirth };
+function teknonymy(person) {
+  function deepest(node) {
+    if (!node.children || node.children.length === 0) {
+      return { depth: 0, elder: null };
     }
-    let best = null;
+    let bestDepth = 0;
+    let bestElder = null;
     for (const child of node.children) {
-      const candidate = getDeepestEldest(child, depth + 1);
-      if (!best || candidate.depth > best.depth ||
-          (candidate.depth === best.depth && candidate.dob < best.dob)) {
-        best = candidate;
+      const sub = deepest(child);
+      const candidateDepth = sub.depth + 1;
+      const candidateElder = sub.elder || child;
+      if (candidateDepth > bestDepth) {
+        bestDepth = candidateDepth;
+        bestElder = candidateElder;
+      } else if (candidateDepth === bestDepth) {
+        if (candidateElder.dateOfBirth < bestElder.dateOfBirth) {
+          bestElder = candidateElder;
+        }
       }
     }
-    return best;
+    return { depth: bestDepth, elder: bestElder };
   }
 
-  function buildTeknonym(sex, distance, descendantName) {
-    const base = sex === 'm' ? 'father' : 'mother';
-    if (distance === 1) return `${base} of ${descendantName}`;
-    if (distance === 2) return `grand${base} of ${descendantName}`;
-    return 'great-'.repeat(distance - 2) + `grand${base} of ${descendantName}`;
-  }
-
-  function process(node) {
-    if (node.children.length > 0) {
-      const best = getDeepestEldest(node, 0);
-      node.teknonym = buildTeknonym(node.sex, best.depth, best.name);
+  function assign(node) {
+    const { depth, elder } = deepest(node);
+    if (depth > 0 && elder) {
+      const parentWord = node.sex === 'm' ? 'father' : 'mother';
+      let prefix;
+      if (depth === 1) prefix = '';
+      else if (depth === 2) prefix = 'grand';
+      else prefix = 'great-'.repeat(depth - 2) + 'grand';
+      node.teknonym = prefix + parentWord + ' of ' + elder.name;
     }
-    for (const child of node.children) {
-      process(child);
+    if (node.children) {
+      for (const child of node.children) assign(child);
     }
   }
 
-  process(tree);
+  assign(person);
 }
