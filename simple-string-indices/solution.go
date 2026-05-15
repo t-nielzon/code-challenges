@@ -1,10 +1,10 @@
 package kata
 
-import "errors"
+import "fmt"
 
 func Solve(s string, idx int) (int, error) {
 	if idx < 0 || idx >= len(s) || s[idx] != '(' {
-		return -1, errors.New("no opening bracket at the given index")
+		return -1, fmt.Errorf("no opening bracket at index %d", idx)
 	}
 	depth := 0
 	for i := idx; i < len(s); i++ {
@@ -18,5 +18,5 @@ func Solve(s string, idx int) (int, error) {
 			}
 		}
 	}
-	return -1, errors.New("no matching closing bracket")
+	return -1, fmt.Errorf("no matching closing bracket")
 }
