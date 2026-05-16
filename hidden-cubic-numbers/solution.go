@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func IsSumOfCubes(s string) string {
+func HiddenCubic(s string) string {
 	var groups []string
 	i := 0
 	for i < len(s) {
@@ -30,16 +30,18 @@ func IsSumOfCubes(s string) string {
 	}
 
 	var cubics []int
+	var parts []string
 	sum := 0
 	for _, g := range groups {
 		n, _ := strconv.Atoi(g)
-		c := 0
-		for _, d := range g {
-			v := int(d - '0')
-			c += v * v * v
+		cubeSum := 0
+		for _, c := range g {
+			d := int(c - '0')
+			cubeSum += d * d * d
 		}
-		if c == n {
+		if cubeSum == n {
 			cubics = append(cubics, n)
+			parts = append(parts, fmt.Sprintf("%d", n))
 			sum += n
 		}
 	}
@@ -47,11 +49,6 @@ func IsSumOfCubes(s string) string {
 	if len(cubics) == 0 {
 		return "Unlucky"
 	}
-
-	parts := make([]string, 0, len(cubics)+1)
-	for _, n := range cubics {
-		parts = append(parts, strconv.Itoa(n))
-	}
-	parts = append(parts, strconv.Itoa(sum))
-	return fmt.Sprintf("%s Lucky", strings.Join(parts, " "))
+	parts = append(parts, fmt.Sprintf("%d", sum))
+	return strings.Join(parts, " ") + " Lucky"
 }
