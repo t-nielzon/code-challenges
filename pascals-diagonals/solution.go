@@ -1,19 +1,23 @@
 package kata
 
-import "math/big"
-
-func GenerateDiagonal(n, l int) []*big.Int {
-	result := make([]*big.Int, l)
+func Generate(n, l int) []uint64 {
+	result := make([]uint64, 0, l)
 	if l == 0 {
 		return result
 	}
-	result[0] = big.NewInt(1)
-	for k := 1; k < l; k++ {
-		// each element is C(n+k, n), derived from the previous via the
-		// recurrence C(n+k, n) = C(n+k-1, n) * (n+k) / k
-		val := new(big.Int).Mul(result[k-1], big.NewInt(int64(n+k)))
-		val.Div(val, big.NewInt(int64(k)))
-		result[k] = val
+	for i := 0; i < l; i++ {
+		result = append(result, binomial(n+i, n))
 	}
 	return result
+}
+
+func binomial(n, k int) uint64 {
+	if k > n-k {
+		k = n - k
+	}
+	var c uint64 = 1
+	for i := 0; i < k; i++ {
+		c = c * uint64(n-i) / uint64(i+1)
+	}
+	return c
 }
