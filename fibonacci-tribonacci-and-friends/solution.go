@@ -6,9 +6,9 @@ func Xbonacci(signature []int, n int) []int {
 	}
 	x := len(signature)
 	if n <= x {
-		out := make([]int, n)
-		copy(out, signature)
-		return out
+		result := make([]int, n)
+		copy(result, signature)
+		return result
 	}
 	result := make([]int, n)
 	copy(result, signature)
