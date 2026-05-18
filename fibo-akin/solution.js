@@ -1,5 +1,7 @@
 function buildU(n) {
-  const u = [0, 1, 1];
+  const u = new Array(n + 1);
+  u[1] = 1;
+  if (n >= 2) u[2] = 1;
   for (let i = 3; i <= n; i++) {
     u[i] = u[i - u[i - 1]] + u[i - u[i - 2]];
   }
@@ -23,5 +25,3 @@ function comp(n) {
   }
   return count;
 }
-
-module.exports = { lengthSupUK, comp };
