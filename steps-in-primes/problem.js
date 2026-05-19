@@ -19,13 +19,12 @@
  * otherwise null.
  *
  * Examples:
- *   step(2, 5, 7) --> [5, 7]
- *   step(2, 5, 5) --> null
- *   step(4, 130, 200) --> [163, 167]
- *   step(6, 100, 110) --> [101, 107]
+ *   step(2, 5, 7)      --> [5, 7]
+ *   step(2, 5, 5)      --> null
+ *   step(4, 130, 200)  --> [163, 167]
+ *   step(6, 100, 110)  --> [101, 107]
  *
- * Note: A "step" is not the same as a "gap". A gap requires no primes in between,
- * while a step only requires the difference between the two primes to equal g.
+ * Note: a "step" is not the same as a "gap" — there may be primes in between.
  */
 
 function step(g, m, n) {

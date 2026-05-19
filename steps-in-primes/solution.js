@@ -1,10 +1,10 @@
 function step(g, m, n) {
-  const isPrime = (k) => {
-    if (k < 2) return false;
-    if (k < 4) return true;
-    if (k % 2 === 0) return false;
-    for (let i = 3; i * i <= k; i += 2) {
-      if (k % i === 0) return false;
+  const isPrime = (num) => {
+    if (num < 2) return false;
+    if (num < 4) return true;
+    if (num % 2 === 0) return false;
+    for (let i = 3, lim = Math.sqrt(num); i <= lim; i += 2) {
+      if (num % i === 0) return false;
     }
     return true;
   };
