@@ -5,7 +5,8 @@ func ValidISBN10(isbn string) bool {
 		return false
 	}
 	sum := 0
-	for i, c := range isbn {
+	for i := 0; i < 10; i++ {
+		c := isbn[i]
 		var v int
 		if c >= '0' && c <= '9' {
 			v = int(c - '0')

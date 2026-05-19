@@ -1,4 +1,6 @@
 /*
+ISBN-10 Validation
+
 ISBN-10 identifiers are ten digits long. The first nine characters are digits 0-9.
 The last digit can be 0-9 or X, to indicate a value of 10.
 
@@ -25,5 +27,4 @@ Examples:
 package kata
 
 func ValidISBN10(isbn string) bool {
-	// your code here
 }
