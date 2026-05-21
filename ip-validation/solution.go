@@ -5,40 +5,27 @@ import (
 	"strings"
 )
 
-func Is_valid_ip(ip string) bool {
-	parts := strings.Split(ip, ".")
-	
+func IsValidIP(str string) bool {
+	parts := strings.Split(str, ".")
 	if len(parts) != 4 {
 		return false
 	}
-	
-	for _, part := range parts {
-		if len(part) == 0 {
+	for _, p := range parts {
+		if len(p) == 0 || len(p) > 3 {
 			return false
 		}
-		
-		// Check for leading zeros (invalid unless the octet is just "0")
-		if len(part) > 1 && part[0] == '0' {
+		if len(p) > 1 && p[0] == '0' {
 			return false
 		}
-		
-		// Check that all characters are digits
-		for _, c := range part {
+		for _, c := range p {
 			if c < '0' || c > '9' {
 				return false
 			}
 		}
-		
-		// Parse the number and check range
-		num, err := strconv.Atoi(part)
-		if err != nil {
-			return false
-		}
-		
-		if num < 0 || num > 255 {
+		n, err := strconv.Atoi(p)
+		if err != nil || n < 0 || n > 255 {
 			return false
 		}
 	}
-	
 	return true
 }
