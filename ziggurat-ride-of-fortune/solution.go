@@ -1,41 +1,45 @@
-package kata
+package solution
 
 func RideOfFortune(artifact []string, explorers []int) [][2]int {
 	n := len(artifact)
 	grid := make([][]byte, n)
-	for i := range artifact {
-		grid[i] = []byte(artifact[i])
+	for i, row := range artifact {
+		grid[i] = []byte(row)
 	}
 
-	results := make([][2]int, len(explorers))
+	dr := [4]int{-1, 0, 1, 0}
+	dc := [4]int{0, 1, 0, -1}
 
-	for ei, door := range explorers {
-		r, c := door, 0
-		dr, dc := 0, 1
+	routeA := [4]int{3, 2, 1, 0}
+	routeB := [4]int{1, 0, 3, 2}
+
+	result := make([][2]int, len(explorers))
+
+	for i, door := range explorers {
+		r, c := door, -1
+		dir := 1
 
 		for {
-			ch := grid[r][c]
-			if ch == 'A' || ch == 'B' {
-				if ch == 'A' {
-					dr, dc = dc, dr
-				} else {
-					dr, dc = -dc, -dr
-				}
-				grid[r][c] ^= 'A' ^ 'B'
+			nr, nc := r+dr[dir], c+dc[dir]
+			if nc < 0 {
+				result[i] = [2]int{-1, -1}
+				break
 			}
-
-			nr, nc := r+dr, c+dc
-			if nr < 0 || nr >= n || nc < 0 || nc >= n {
-				if nc < 0 {
-					results[ei] = [2]int{-1, -1}
-				} else {
-					results[ei] = [2]int{r, c}
-				}
+			if nr < 0 || nr >= n || nc >= n {
+				result[i] = [2]int{r, c}
 				break
 			}
 			r, c = nr, nc
+			cell := grid[r][c]
+			if cell == 'A' {
+				dir = routeA[dir]
+				grid[r][c] = 'B'
+			} else if cell == 'B' {
+				dir = routeB[dir]
+				grid[r][c] = 'A'
+			}
 		}
 	}
 
-	return results
+	return result
 }
