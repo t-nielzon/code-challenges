@@ -1,33 +1,21 @@
 package kata
 
-type PosPeaks struct {
-	Pos   []int
-	Peaks []int
-}
-
-func PickPeaks(array []int) PosPeaks {
-	result := PosPeaks{Pos: []int{}, Peaks: []int{}}
-	
-	if len(array) < 3 {
-		return result
-	}
-	
-	peakStart := -1
-	
-	for i := 1; i < len(array)-1; i++ {
-		if array[i] > array[i-1] {
-			// Start of a potential peak or plateau
-			peakStart = i
-		} else if array[i] < array[i-1] {
-			// End of a potential peak
-			if peakStart != -1 {
-				result.Pos = append(result.Pos, peakStart)
-				result.Peaks = append(result.Peaks, array[peakStart])
-				peakStart = -1
+func PickPeaks(arr []int) map[string][]int {
+	pos := []int{}
+	peaks := []int{}
+	n := len(arr)
+	for i := 1; i < n-1; i++ {
+		if arr[i] > arr[i-1] {
+			j := i
+			for j < n-1 && arr[j+1] == arr[i] {
+				j++
 			}
+			if j < n-1 && arr[j+1] < arr[i] {
+				pos = append(pos, i)
+				peaks = append(peaks, arr[i])
+			}
+			i = j
 		}
-		// If array[i] == array[i-1], we're on a plateau, keep peakStart unchanged
 	}
-	
-	return result
+	return map[string][]int{"pos": pos, "peaks": peaks}
 }
