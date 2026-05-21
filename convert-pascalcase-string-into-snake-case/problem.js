@@ -1,6 +1,5 @@
 /*
  * Convert PascalCase string into snake_case
- * 5 kyu
  *
  * Complete the function/method so that it takes a PascalCase string
  * and returns the string in snake_case notation. Lowercase characters
@@ -13,7 +12,7 @@
  *   "App7Test"        -->  "app7_test"
  *   1                 -->  "1"
  */
-function toUnderscore(string) {
-}
 
-module.exports = toUnderscore;
+function toUnderscore(string) {
+  // your code here
+}
