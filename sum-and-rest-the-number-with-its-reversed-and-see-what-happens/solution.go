@@ -1,9 +1,6 @@
 package kata
 
-var sumRestCache []int
-var sumRestNext int = 10
-
-func sumRestReverse(n int) int {
+func reverseInt(n int) int {
 	r := 0
 	for n > 0 {
 		r = r*10 + n%10
@@ -12,26 +9,41 @@ func sumRestReverse(n int) int {
 	return r
 }
 
-func sumRestGenerate(upTo int) {
-	for len(sumRestCache) < upTo {
-		i := sumRestNext
-		if i%10 != 0 {
-			r := sumRestReverse(i)
-			if r != i {
-				d := i - r
-				if d < 0 {
-					d = -d
-				}
-				if (i+r)%d == 0 {
-					sumRestCache = append(sumRestCache, i)
-				}
-			}
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+var cache []int
+
+func computeUpTo(n int) {
+	start := 10
+	if len(cache) > 0 {
+		start = cache[len(cache)-1] + 1
+	}
+	for k := start; len(cache) < n; k++ {
+		if k%10 == 0 {
+			continue
 		}
-		sumRestNext++
+		r := reverseInt(k)
+		if r == k {
+			continue
+		}
+		diff := abs(k - r)
+		if (k+r)%diff == 0 {
+			cache = append(cache, k)
+		}
 	}
 }
 
-func SumRest(n int) int {
-	sumRestGenerate(n)
-	return sumRestCache[n-1]
+func SumRestReversed(n int) int {
+	if n <= 0 {
+		return 0
+	}
+	if len(cache) < n {
+		computeUpTo(n)
+	}
+	return cache[n-1]
 }
