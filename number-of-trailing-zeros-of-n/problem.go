@@ -11,11 +11,12 @@ For more info, see: http://mathworld.wolfram.com/Factorial.html
 
 |    N | Product                      | N factorial | Trailing zeros
 | ---: | ---------------------------- | ----------: | --------------:
-|  6   | 1*2*3*4*5*6                  | 720         | 1
-| 12   | 1*2*3*4*5*6*7*8*9*10*11*12   | 479001600   | 2
+|  `6` | `1*2*3*4*5*6`                |       `720` |            `1`
+| `12` | `1*2*3*4*5*6*7*8*9*10*11*12` | `479001600` |            `2`
 
 Hint: You're not meant to calculate the factorial. Find another way to find the number of zeros.
 */
+
 package kata
 
 func Zeros(n int) int {
