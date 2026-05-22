@@ -1,4 +1,4 @@
-function map(head, fn) {
+function map(head, mapper) {
   if (head === null) return null;
-  return new Node(fn(head.data), map(head.next, fn));
+  return new Node(mapper(head.data), map(head.next, mapper));
 }
