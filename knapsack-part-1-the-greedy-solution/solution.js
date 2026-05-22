@@ -1,12 +1,27 @@
 function knapsack(capacity, items) {
-  const indexed = items.map(([size, value], i) => ({ size, value, ratio: value / size, i }));
-  indexed.sort((a, b) => b.ratio - a.ratio);
-  const quantities = new Array(items.length).fill(0);
+  const quantities = items.map(() => 0);
   let remaining = capacity;
-  for (const { size, i } of indexed) {
-    const qty = Math.floor(remaining / size);
-    quantities[i] = qty;
-    remaining -= qty * size;
+
+  while (true) {
+    let bestIndex = -1;
+    let bestRatio = 0;
+
+    for (let i = 0; i < items.length; i++) {
+      const [size, value] = items[i];
+      if (size <= remaining) {
+        const ratio = value / size;
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          bestIndex = i;
+        }
+      }
+    }
+
+    if (bestIndex === -1) break;
+
+    quantities[bestIndex]++;
+    remaining -= items[bestIndex][0];
   }
+
   return quantities;
 }
