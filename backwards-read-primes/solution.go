@@ -1,41 +1,48 @@
 package kata
 
-func BackwardsPrime(start, stop int) []int {
-	var result []int
-	for n := start; n <= stop; n++ {
-		if isPrime(n) {
-			rev := reverse(n)
-			if rev != n && isPrime(rev) {
-				result = append(result, n)
-			}
-		}
-	}
-	return result
-}
-
-func isPrime(n int) bool {
+func isPrime(n uint64) bool {
 	if n < 2 {
 		return false
 	}
 	if n < 4 {
 		return true
 	}
-	if n%2 == 0 || n%3 == 0 {
+	if n%2 == 0 {
 		return false
 	}
-	for i := 5; i*i <= n; i += 6 {
-		if n%i == 0 || n%(i+2) == 0 {
+	for i := uint64(3); i*i <= n; i += 2 {
+		if n%i == 0 {
 			return false
 		}
 	}
 	return true
 }
 
-func reverse(n int) int {
-	rev := 0
+func reverseNum(n uint64) uint64 {
+	r := uint64(0)
 	for n > 0 {
-		rev = rev*10 + n%10
+		r = r*10 + n%10
 		n /= 10
 	}
-	return rev
+	return r
+}
+
+func BackwardsPrime(start, stop uint64) []uint64 {
+	result := []uint64{}
+	if start < 2 {
+		start = 2
+	}
+	for n := start; n <= stop; n++ {
+		if n < 10 {
+			continue
+		}
+		r := reverseNum(n)
+		if r == n {
+			continue
+		}
+		if isPrime(n) && isPrime(r) {
+			result = append(result, n)
+		}
+	}
+	return result
 }
