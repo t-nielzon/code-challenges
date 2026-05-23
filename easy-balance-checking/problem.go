@@ -1,3 +1,5 @@
+package kata
+
 /*
 You are given a (small) check book as a - sometimes - cluttered (by non-alphanumeric characters) string:
 
@@ -14,7 +16,8 @@ Each other line (when not blank) gives information: check number, category, chec
 
 First you have to clean the lines keeping only letters, digits, dots and spaces.
 
-Then return a report as a string (underscores show spaces -- don't put them in your solution. They are there so you can see them and how many of them you need to have):
+Then return a report as a string (underscores show spaces -- don't put them in your solution.
+They are there so you can see them and how many of them you need to have):
 
 "Original_Balance:_1000.00
 125_Market_125.45_Balance_874.55
@@ -33,8 +36,6 @@ Notes:
 - It may happen that one (or more) line(s) is (are) blank.
 - Round to 2 decimals your calculated results.
 */
-
-package kata
 
 func Balance(book string) string {
 }

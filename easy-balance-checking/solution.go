@@ -7,19 +7,19 @@ import (
 )
 
 func Balance(book string) string {
-	clean := strings.Map(func(r rune) rune {
+	cleaned := strings.Map(func(r rune) rune {
 		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '.' || r == ' ' || r == '\n' {
 			return r
 		}
 		return -1
 	}, book)
 
-	lines := strings.Split(clean, "\n")
+	lines := strings.Split(cleaned, "\n")
 	var nonBlank []string
 	for _, l := range lines {
-		t := strings.TrimSpace(l)
-		if t != "" {
-			nonBlank = append(nonBlank, strings.Join(strings.Fields(t), " "))
+		trimmed := strings.TrimSpace(l)
+		if trimmed != "" {
+			nonBlank = append(nonBlank, trimmed)
 		}
 	}
 
@@ -34,7 +34,7 @@ func Balance(book string) string {
 		balance -= amount
 		totalExpense += amount
 		count++
-		result = append(result, fmt.Sprintf("%s Balance %.2f", line, balance))
+		result = append(result, fmt.Sprintf("%s Balance %.2f", strings.Join(fields, " "), balance))
 	}
 
 	result = append(result, fmt.Sprintf("Total expense  %.2f", totalExpense))
@@ -44,5 +44,5 @@ func Balance(book string) string {
 	}
 	result = append(result, fmt.Sprintf("Average expense  %.2f", avg))
 
-	return strings.Join(result, "\r\n")
+	return strings.Join(result, "\n")
 }
