@@ -1,5 +1,4 @@
-function ho(str) {
-  return str ? str.replace("!", "") + " Ho!" : "Ho!";
+function ho(s) {
+  if (s === undefined) return "Ho!";
+  return "Ho " + s;
 }
-
-module.exports = { ho };
