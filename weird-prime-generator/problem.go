@@ -7,6 +7,7 @@ Let us take the differences between successive elements of the sequence and
 get a second sequence g: 1, 1, 1, 5, 3, 1, 1, 1, 1, 11, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 23, 3, 1...
 
 For the sake of uniformity of the lengths of sequences we add a 1 at the head of g:
+
 g: 1, 1, 1, 1, 5, 3, 1, 1, 1, 1, 11, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 23, 3, 1...
 
 Removing the 1s gives a third sequence:
@@ -14,21 +15,13 @@ p: 5, 3, 11, 3, 23, 3...
 where you can see prime numbers.
 
 Task:
-- countOnes(n): number of 1s in g(n) (with the 1 added at the head)
-- maxPn(n): biggest prime among the first n distinct primes from p
-- anOverAverage(n): integer average of a(i)/i over the first n indices i with g(i) != 1
+3. countOnes(n): returns the number of 1s in the series gn(n) (with leading 1)
+5. maxPn(n):    returns the biggest prime of the first n terms of pn(n)
+7. anOverAverage(n): returns as an integer the average of anOver(n)
 */
 
 package kata
 
-func countOnes(n int) int {
-	return 0
-}
-
-func maxPn(n int) int {
-	return 0
-}
-
-func anOverAverage(n int) int {
-	return 0
-}
+func CountOnes(n int) int
+func MaxPn(n int) int
+func AnOverAverage(n int) int

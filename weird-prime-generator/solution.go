@@ -1,76 +1,67 @@
 package kata
 
-func gcd(a, b uint64) uint64 {
+func gcd(a, b int) int {
 	for b != 0 {
 		a, b = b, a%b
 	}
 	return a
 }
 
-func gSequence(n int) []uint64 {
-	g := make([]uint64, n+1)
-	g[0] = 0
-	if n >= 1 {
-		g[1] = 1
+func CountOnes(n int) int {
+	if n <= 0 {
+		return 0
 	}
-	var prev uint64 = 7
+	count := 1
+	a := 7
 	for i := 2; i <= n; i++ {
-		d := gcd(uint64(i), prev)
-		cur := prev + d
-		g[i] = cur - prev
-		prev = cur
-	}
-	return g
-}
-
-func countOnes(n int) int {
-	g := gSequence(n)
-	c := 0
-	for i := 1; i <= n; i++ {
-		if g[i] == 1 {
-			c++
-		}
-	}
-	return c
-}
-
-func maxPn(n int) int {
-	seen := map[uint64]bool{}
-	var primes []uint64
-	var prev uint64 = 7
-	for i := 2; len(primes) < n; i++ {
-		d := gcd(uint64(i), prev)
-		cur := prev + d
-		diff := cur - prev
-		if diff != 1 {
-			if !seen[diff] {
-				seen[diff] = true
-				primes = append(primes, diff)
-			}
-		}
-		prev = cur
-	}
-	var mx uint64 = 0
-	for _, p := range primes {
-		if p > mx {
-			mx = p
-		}
-	}
-	return int(mx)
-}
-
-func anOverAverage(n int) int {
-	var sum uint64 = 0
-	count := 0
-	var prev uint64 = 7
-	for i := 2; count < n; i++ {
-		d := gcd(uint64(i), prev)
-		cur := prev + d
-		if cur-prev != 1 {
-			sum += cur / uint64(i)
+		next := a + gcd(i, a)
+		if next-a == 1 {
 			count++
 		}
-		prev = cur
+		a = next
 	}
-	return int(sum / uint64(n))
+	return count
+}
+
+func MaxPn(n int) int {
+	if n <= 0 {
+		return 0
+	}
+	seen := make(map[int]bool)
+	primes := []int{}
+	a := 7
+	for i := 2; len(primes) < n; i++ {
+		next := a + gcd(i, a)
+		d := next - a
+		if d != 1 && !seen[d] {
+			seen[d] = true
+			primes = append(primes, d)
+		}
+		a = next
+	}
+	max := primes[0]
+	for _, p := range primes {
+		if p > max {
+			max = p
+		}
+	}
+	return max
+}
+
+func AnOverAverage(n int) int {
+	if n <= 0 {
+		return 0
+	}
+	sum := 0
+	count := 0
+	a := 7
+	for i := 2; count < n; i++ {
+		next := a + gcd(i, a)
+		if next-a != 1 {
+			sum += next / i
+			count++
+		}
+		a = next
+	}
+	return sum / n
 }
