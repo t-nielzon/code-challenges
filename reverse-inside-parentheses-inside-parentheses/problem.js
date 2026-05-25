@@ -3,26 +3,24 @@
  *
  * You must return the string, with only the text inside parentheses reversed, so "h(el)lo"
  * becomes "h(le)lo". However, if said parenthesized text contains parenthesized text itself,
- * then that too must be reversed back, so it faces the original direction. When parentheses
- * are reversed, they should switch directions, so they remain syntactically correct
+ * then that too must reversed back, so it faces the original direction. When parentheses are
+ * reversed, they should switch directions, so they remain syntactically correct
  * (i.e. "h((el)l)o" becomes "h(l(el))o").
  *
  * This pattern should repeat for however many layers of parentheses. There may be multiple
  * groups of parentheses at any level (i.e. "(1) (2 (3) (4))"), so be sure to account for these.
  *
- * Input parentheses will always be valid. Strings without any parentheses are possible and
- * should be returned as-is.
+ * Input parentheses will always be valid (e.g.. you will never get "(()" or ")"). String
+ * without any parentheses are possible and should be returned as-is.
  *
  * Examples:
- *   "h(el)lo"               => "h(le)lo"
- *   "a ((d e) c b)"         => "a (b c (d e))"
- *   "one (two (three) four)" => "one (ruof (three) owt)"
- *   "one (ruof ((rht)ee) owt)" => "one (two ((thr)ee) four)"
- *   "no parentheses"        => "no parentheses"
+ *   "h(el)lo"                      ==> "h(le)lo"
+ *   "a ((d e) c b)"                ==> "a (b c (d e))"
+ *   "one (two (three) four)"       ==> "one (ruof (three) owt)"
+ *   "one (ruof ((rht)ee) owt)"     ==> "one (two ((thr)ee) four)"
+ *   "no parentheses"               ==> "no parentheses"
  */
 
 function reverseInParentheses(str) {
-
+  // your code here
 }
-
-module.exports = reverseInParentheses;
