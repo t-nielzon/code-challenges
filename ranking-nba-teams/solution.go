@@ -12,68 +12,67 @@ func NbaCup(resultSheet string, toFind string) string {
 		return ""
 	}
 
+	floatRe := regexp.MustCompile(`\d+\.\d+`)
 	intRe := regexp.MustCompile(`^\d+$`)
-	floatRe := regexp.MustCompile(`^\d+\.\d+$`)
 
-	rawMatches := strings.Split(resultSheet, ",")
-	cleaned := make([]string, 0, len(rawMatches))
-	for _, m := range rawMatches {
+	matches := strings.Split(resultSheet, ",")
+	wins, draws, losses := 0, 0, 0
+	scored, conceded := 0, 0
+	found := false
+
+	for _, m := range matches {
 		m = strings.TrimSpace(m)
 		if m == "" {
 			continue
 		}
-		cleaned = append(cleaned, m)
-	}
 
-	for _, m := range cleaned {
-		for _, tok := range strings.Fields(m) {
-			if floatRe.MatchString(tok) {
-				return "Error(float number):" + m
-			}
+		if floatRe.MatchString(m) {
+			return "Error(float number):" + m
 		}
-	}
 
-	wins, draws, losses, scored, conceded := 0, 0, 0, 0, 0
-	found := false
-
-	for _, m := range cleaned {
 		tokens := strings.Fields(m)
-		var idx []int
+		intPositions := []int{}
 		for i, t := range tokens {
 			if intRe.MatchString(t) {
-				idx = append(idx, i)
+				intPositions = append(intPositions, i)
 			}
 		}
-		if len(idx) < 2 {
+
+		if len(intPositions) != 2 {
 			continue
 		}
 
-		i1, i2 := idx[0], idx[len(idx)-1]
-		team1 := strings.Join(tokens[:i1], " ")
-		team2 := strings.Join(tokens[i1+1:i2], " ")
-		score1, _ := strconv.Atoi(tokens[i1])
-		score2, _ := strconv.Atoi(tokens[i2])
+		p1, p2 := intPositions[0], intPositions[1]
+		teamA := strings.Join(tokens[:p1], " ")
+		scoreA, _ := strconv.Atoi(tokens[p1])
+		teamB := strings.Join(tokens[p1+1:p2], " ")
+		scoreB, _ := strconv.Atoi(tokens[p2])
 
-		var ts, os int
-		switch toFind {
-		case team1:
-			ts, os = score1, score2
-		case team2:
-			ts, os = score2, score1
-		default:
-			continue
+		if teamA == toFind {
+			found = true
+			scored += scoreA
+			conceded += scoreB
+			switch {
+			case scoreA > scoreB:
+				wins++
+			case scoreA == scoreB:
+				draws++
+			default:
+				losses++
+			}
 		}
-
-		found = true
-		scored += ts
-		conceded += os
-		switch {
-		case ts > os:
-			wins++
-		case ts == os:
-			draws++
-		default:
-			losses++
+		if teamB == toFind {
+			found = true
+			scored += scoreB
+			conceded += scoreA
+			switch {
+			case scoreB > scoreA:
+				wins++
+			case scoreA == scoreB:
+				draws++
+			default:
+				losses++
+			}
 		}
 	}
 
