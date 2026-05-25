@@ -2,7 +2,7 @@ package kata
 
 import "strings"
 
-func WhoEatsWho(zoo string) []string {
+func ZooDisaster(zoo string) []string {
 	diet := map[string]map[string]bool{
 		"antelope": {"grass": true},
 		"big-fish": {"little-fish": true},
@@ -17,28 +17,26 @@ func WhoEatsWho(zoo string) []string {
 		"sheep":    {"grass": true},
 	}
 
-	animals := strings.Split(zoo, ",")
+	items := strings.Split(zoo, ",")
 	result := []string{zoo}
 
 	for {
 		ate := false
-		for i := 0; i < len(animals); i++ {
-			predator := animals[i]
-			prey, ok := diet[predator]
+		for i := 0; i < len(items); i++ {
+			eater := items[i]
+			menu, ok := diet[eater]
 			if !ok {
 				continue
 			}
-			// check left first
-			if i > 0 && prey[animals[i-1]] {
-				result = append(result, predator+" eats "+animals[i-1])
-				animals = append(animals[:i-1], animals[i:]...)
+			if i > 0 && menu[items[i-1]] {
+				result = append(result, eater+" eats "+items[i-1])
+				items = append(items[:i-1], items[i:]...)
 				ate = true
 				break
 			}
-			// then check right
-			if i < len(animals)-1 && prey[animals[i+1]] {
-				result = append(result, predator+" eats "+animals[i+1])
-				animals = append(animals[:i+1], animals[i+2:]...)
+			if i < len(items)-1 && menu[items[i+1]] {
+				result = append(result, eater+" eats "+items[i+1])
+				items = append(items[:i+1], items[i+2:]...)
 				ate = true
 				break
 			}
@@ -48,6 +46,6 @@ func WhoEatsWho(zoo string) []string {
 		}
 	}
 
-	result = append(result, strings.Join(animals, ","))
+	result = append(result, strings.Join(items, ","))
 	return result
 }
