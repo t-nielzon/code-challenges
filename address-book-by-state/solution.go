@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func TravelInfos(r string) string {
+func AddressBook(s string) string {
 	states := map[string]string{
 		"AZ": "Arizona",
 		"CA": "California",
@@ -17,44 +17,39 @@ func TravelInfos(r string) string {
 		"VA": "Virginia",
 	}
 
-	grouped := map[string][]string{}
-	for _, line := range strings.Split(r, "\n") {
-		line = strings.TrimSpace(line)
+	groups := map[string][]string{}
+	for _, raw := range strings.Split(s, "\n") {
+		line := strings.TrimSpace(raw)
 		if line == "" {
 			continue
 		}
-		parts := strings.Split(line, ", ")
-		if len(parts) < 3 {
-			continue
-		}
-		name := parts[0]
-		street := parts[1]
-		cityState := parts[2]
-		idx := strings.LastIndex(cityState, " ")
-		if idx < 0 {
-			continue
-		}
-		city := cityState[:idx]
-		code := cityState[idx+1:]
-		fullState, ok := states[code]
+		code := line[len(line)-2:]
+		full, ok := states[code]
 		if !ok {
 			continue
 		}
-		entry := "..... " + name + " " + street + " " + city + " " + fullState
-		grouped[fullState] = append(grouped[fullState], entry)
+		entry := strings.ReplaceAll(line, ",", "")
+		entry = entry[:len(entry)-2] + full
+		groups[full] = append(groups[full], entry)
 	}
 
-	stateNames := make([]string, 0, len(grouped))
-	for s := range grouped {
-		stateNames = append(stateNames, s)
+	names := make([]string, 0, len(groups))
+	for k := range groups {
+		names = append(names, k)
 	}
-	sort.Strings(stateNames)
+	sort.Strings(names)
 
-	blocks := make([]string, 0, len(stateNames))
-	for _, s := range stateNames {
-		entries := grouped[s]
-		sort.Strings(entries)
-		blocks = append(blocks, s+"\n"+strings.Join(entries, "\n"))
+	var parts []string
+	for i, st := range names {
+		header := st
+		if i > 0 {
+			header = " " + st
+		}
+		parts = append(parts, header)
+		sort.Strings(groups[st])
+		for _, e := range groups[st] {
+			parts = append(parts, "..... "+e)
+		}
 	}
-	return strings.Join(blocks, "\n ")
+	return strings.Join(parts, "\n")
 }
