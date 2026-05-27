@@ -2,9 +2,9 @@
  * As a historian, you wonder how many people ever lived in a specific area.
  *
  * Given an amount of records as an array of arrays representing the year of
- * arrival/birth and departure/death from a given area, your task is to write
- * a function that returns the maximum for that area and the year in which
- * said maximum was achieved.
+ * arrival/birth and departure/death from a given area, write a function that
+ * returns the maximum for that area and the year in which said maximum was
+ * achieved.
  *
  * If more years have that maximum, just return the first one of them.
  *
@@ -19,6 +19,7 @@
  * Examples:
  *   yearMaxPeople([[1978, 1978], [1969, 1998]]) === [2, 1978]
  *   yearMaxPeople([[1980, 2010], [1979, 1985], [1986, 1995], [1987, 2008]]) === [3, 1987]
+ *   yearMaxPeople([[1980, 2010], [1979, 1986], [1986, 1995], [1987, 2008]]) === [3, 1986]
  */
 
 function yearMaxPeople(people) {
