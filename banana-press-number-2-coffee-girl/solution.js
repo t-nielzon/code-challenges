@@ -1,56 +1,55 @@
 function minCoffeeSwaps(tray, deliverList) {
-    function rotate(m) {
-        const r = m.length, c = m[0].length;
-        const result = [];
-        for (let i = 0; i < c; i++) {
-            const row = [];
-            for (let j = 0; j < r; j++) row.push(m[r - 1 - j][i]);
-            result.push(row);
-        }
-        return result;
+  // rotate the tray 90 degrees clockwise (works for non-square trays too)
+  const rotate = (m) => {
+    const rows = m.length, cols = m[0].length, res = [];
+    for (let j = 0; j < cols; j++) {
+      const row = [];
+      for (let i = rows - 1; i >= 0; i--) row.push(m[i][j]);
+      res.push(row);
     }
+    return res;
+  };
 
-    function mirror(m) {
-        return m.map(row => [...row].reverse());
-    }
+  // mirror horizontally; this also models picking coffees right-to-left
+  const flip = (m) => m.map((r) => [...r].reverse());
 
-    function flatten(m) {
-        const out = [];
-        for (const row of m) for (const x of row) out.push(x);
-        return out;
-    }
+  // read the tray row by row into a single sequence
+  const flatten = (m) => m.reduce((acc, r) => acc.concat(r), []);
 
-    function minSwaps(arr, target) {
-        const pos = new Map();
-        target.forEach((v, i) => pos.set(v, i));
-        const n = arr.length;
-        const visited = new Array(n).fill(false);
-        let cycles = 0;
-        for (let i = 0; i < n; i++) {
-            if (visited[i]) continue;
-            cycles++;
-            let j = i;
-            while (!visited[j]) {
-                visited[j] = true;
-                j = pos.get(arr[j]);
-            }
-        }
-        return n - cycles;
-    }
+  // target index of every coffee in the deliverList
+  const pos = new Map();
+  deliverList.forEach((v, i) => pos.set(v, i));
 
-    const orientations = [];
-    let cur = tray;
-    for (let i = 0; i < 4; i++) {
-        orientations.push(cur);
-        orientations.push(mirror(cur));
-        cur = rotate(cur);
+  // minimum swaps to sort a sequence = n - (number of permutation cycles)
+  const swapsFor = (arr) => {
+    const n = arr.length;
+    const target = arr.map((v) => pos.get(v));
+    const seen = new Array(n).fill(false);
+    let cycles = 0;
+    for (let i = 0; i < n; i++) {
+      if (seen[i]) continue;
+      cycles++;
+      let j = i;
+      while (!seen[j]) {
+        seen[j] = true;
+        j = target[j];
+      }
     }
+    return n - cycles;
+  };
 
-    let best = Infinity;
-    for (const o of orientations) {
-        const flat = flatten(o);
-        const swaps = minSwaps(flat, deliverList);
-        if (swaps < best) best = swaps;
-    }
-    return best;
+  // generate the 8 dihedral orientations (4 rotations, each with/without mirror)
+  const orientations = [];
+  let cur = tray;
+  for (let r = 0; r < 4; r++) {
+    orientations.push(cur);
+    orientations.push(flip(cur));
+    cur = rotate(cur);
+  }
+
+  let best = Infinity;
+  for (const o of orientations) {
+    best = Math.min(best, swapsFor(flatten(o)));
+  }
+  return best;
 }
