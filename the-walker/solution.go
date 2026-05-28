@@ -3,25 +3,26 @@ package kata
 import "math"
 
 func Solve(a, b, c, alpha, beta, gamma int) []int {
-	toRad := math.Pi / 180.0
-	d1 := float64(alpha) * toRad
-	d2 := (90.0 + float64(beta)) * toRad
-	d3 := (180.0 + float64(gamma)) * toRad
+	const pi = 3.14159265358979323846
 
-	cx := float64(a)*math.Cos(d1) + float64(b)*math.Cos(d2) + float64(c)*math.Cos(d3)
-	cy := float64(a)*math.Sin(d1) + float64(b)*math.Sin(d2) + float64(c)*math.Sin(d3)
+	aR := float64(alpha) * pi / 180
+	bR := float64(beta) * pi / 180
+	gR := float64(gamma) * pi / 180
+
+	cx := float64(a)*math.Cos(aR) - float64(b)*math.Sin(bR) - float64(c)*math.Cos(gR)
+	cy := float64(a)*math.Sin(aR) + float64(b)*math.Cos(bR) - float64(c)*math.Sin(gR)
 
 	dist := math.Sqrt(cx*cx + cy*cy)
-	angle := math.Atan2(cy, cx) * 180.0 / math.Pi
+	angle := math.Atan2(cy, cx) * 180 / pi
 	if angle < 0 {
 		angle += 360
 	}
 
-	distRound := int(math.Round(dist))
+	distInt := int(math.Round(dist))
 	deg := int(math.Floor(angle))
-	minF := (angle - float64(deg)) * 60.0
-	minI := int(math.Floor(minF))
-	secI := int(math.Floor((minF - float64(minI)) * 60.0))
+	minF := (angle - float64(deg)) * 60
+	minInt := int(math.Floor(minF))
+	sec := int(math.Floor((minF - float64(minInt)) * 60))
 
-	return []int{distRound, deg, minI, secI}
+	return []int{distInt, deg, minInt, sec}
 }
