@@ -6,30 +6,24 @@ import (
 	"strings"
 )
 
-func phone(strng string, num string) string {
-	lines := strings.Split(strng, "\n")
-	phoneRe := regexp.MustCompile(`\+\d{1,2}-\d{3}-\d{3}-\d{4}`)
-	nameRe := regexp.MustCompile(`<([^>]+)>`)
+var (
+	nameRe    = regexp.MustCompile(`<(.+?)>`)
+	cleanRe   = regexp.MustCompile(`[^a-zA-Z0-9 .]`)
+	spacesRe  = regexp.MustCompile(`\s+`)
+	dotSpaceR = regexp.MustCompile(`\s+\.`)
+)
 
+func phone(strng string, num string) string {
 	var matches []string
-	target := "+" + num
-	for _, line := range lines {
-		if !strings.Contains(line, target) {
-			continue
+	for _, line := range strings.Split(strng, "\n") {
+		if strings.Contains(line, "+"+num+" ") ||
+			strings.Contains(line, "+"+num+"\t") ||
+			strings.HasSuffix(strings.TrimRight(line, "!;., \t"), "+"+num) ||
+			strings.Contains(line, "+"+num+"!") ||
+			strings.Contains(line, "+"+num+";") ||
+			strings.Contains(line, "+"+num+",") {
+			matches = append(matches, line)
 		}
-		// confirm it's a full phone match, not partial
-		phones := phoneRe.FindAllString(line, -1)
-		found := false
-		for _, p := range phones {
-			if p == target {
-				found = true
-				break
-			}
-		}
-		if !found {
-			continue
-		}
-		matches = append(matches, line)
 	}
 
 	if len(matches) == 0 {
@@ -40,33 +34,20 @@ func phone(strng string, num string) string {
 	}
 
 	line := matches[0]
-	nameMatch := nameRe.FindStringSubmatch(line)
+
 	name := ""
-	if len(nameMatch) > 1 {
-		name = nameMatch[1]
+	if m := nameRe.FindStringSubmatch(line); m != nil {
+		name = m[1]
 	}
 
-	// remove phone and name from line to get address
-	addr := phoneRe.ReplaceAllString(line, "")
-	addr = nameRe.ReplaceAllString(addr, "")
+	// strip the phone number and the <name> block, leaving only the address.
+	addr := line
+	addr = strings.Replace(addr, "+"+num, " ", 1)
+	addr = nameRe.ReplaceAllString(addr, " ")
 
-	// replace non-alphanumeric (except space, dot, comma maybe) with space
-	// keep letters, digits, spaces, and basic punctuation? Looking at example:
-	// "/+1-541-754-3010 156 Alphand_St. <J Steeve>" -> "156 Alphand St."
-	// so underscore becomes space, slash removed
-	var b strings.Builder
-	for _, r := range addr {
-		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '.' || r == ' ' {
-			b.WriteRune(r)
-		} else {
-			b.WriteRune(' ')
-		}
-	}
-	addr = b.String()
-
-	// collapse multiple spaces
-	spaceRe := regexp.MustCompile(`\s+`)
-	addr = spaceRe.ReplaceAllString(addr, " ")
+	addr = cleanRe.ReplaceAllString(addr, " ")
+	addr = spacesRe.ReplaceAllString(addr, " ")
+	addr = dotSpaceR.ReplaceAllString(addr, ".")
 	addr = strings.TrimSpace(addr)
 
 	return fmt.Sprintf("Phone => %s, Name => %s, Address => %s", num, name, addr)
