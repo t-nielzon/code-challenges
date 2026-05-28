@@ -1,28 +1,26 @@
-/*
-Well met with Fibonacci bigger brother, AKA Tribonacci.
-
-As the name may already reveal, it works basically like a Fibonacci, but summing
-the last 3 (instead of 2) numbers of the sequence to generate the next.
-
-So, if we are to start our Tribonacci sequence with [1, 1, 1] as a starting
-input (AKA signature), we have this sequence:
-
-[1, 1, 1, 3, 5, 9, 17, 31, ...]
-
-But what if we started with [0, 0, 1] as a signature?
-
-[0, 0, 1, 1, 2, 4, 7, 13, 24, ...]
-
-You need to create a fibonacci function that given a signature array/list,
-returns the first n elements - signature included - of the so seeded sequence.
-
-Signature will always contain 3 numbers; n will always be a non-negative number;
-if n == 0, then return an empty array and be ready for anything else which is
-not clearly specified ;)
-*/
+// Well met with Fibonacci bigger brother, AKA Tribonacci.
+//
+// As the name may already reveal, it works basically like a Fibonacci, but
+// summing the last 3 (instead of 2) numbers of the sequence to generate the
+// next.
+//
+// So, if we are to start our Tribonacci sequence with [1, 1, 1] as a starting
+// input (AKA signature), we have this sequence:
+//
+//	[1, 1, 1, 3, 5, 9, 17, 31, ...]
+//
+// But what if we started with [0, 0, 1] as a signature? We would get:
+//
+//	[0, 0, 1, 1, 2, 4, 7, 13, 24, ...]
+//
+// You need to create a function that given a signature array/list, returns the
+// first n elements - signature included - of the so seeded sequence.
+//
+// Signature will always contain 3 numbers; n will always be a non-negative
+// number; if n == 0, then return an empty array.
 
 package kata
 
-func Tribonacci(signature [3]float64, n int) []float64 {
-
+func Tribonacci(signature [3]int, n int) []int {
+	return nil
 }
