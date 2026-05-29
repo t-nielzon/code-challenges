@@ -17,5 +17,5 @@
  */
 
 function missingAngle(h, o, a) {
-  
+
 }
