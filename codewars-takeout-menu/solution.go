@@ -5,10 +5,9 @@ import (
 	"strings"
 )
 
-func Solution(hear <-chan string, speak chan<- string, done <-chan bool) {
+func TakeOrders(hear <-chan string, say chan<- string, done <-chan bool) {
 	menu := GetMenu()
-	var total float32
-
+	var total float64
 	for {
 		select {
 		case <-done:
@@ -17,35 +16,27 @@ func Solution(hear <-chan string, speak chan<- string, done <-chan bool) {
 			switch {
 			case msg == "place an order":
 				total = 0
-				speak <- "ok"
-
+				say <- "ok"
+			case msg == "that is all":
+				say <- fmt.Sprintf("%.2f", total)
+			case msg == "goodbye":
+				say <- "goodbye"
 			case strings.HasPrefix(msg, "price "):
 				item := strings.TrimPrefix(msg, "price ")
-				if price, ok := menu[item]; ok {
-					speak <- formatPrice(price)
+				if p, ok := menu[item]; ok {
+					say <- fmt.Sprintf("%.2f", p)
 				} else {
-					speak <- "unavailable"
+					say <- "unavailable"
 				}
-
 			case strings.HasPrefix(msg, "order "):
 				item := strings.TrimPrefix(msg, "order ")
-				if price, ok := menu[item]; ok {
-					total += price
-					speak <- "ok"
+				if p, ok := menu[item]; ok {
+					total += float64(p)
+					say <- "ok"
 				} else {
-					speak <- "unavailable"
+					say <- "unavailable"
 				}
-
-			case msg == "that is all":
-				speak <- formatPrice(total)
-
-			case msg == "goodbye":
-				speak <- "goodbye"
 			}
 		}
 	}
-}
-
-func formatPrice(price float32) string {
-	return fmt.Sprintf("%.2f", price)
 }

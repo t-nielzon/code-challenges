@@ -1,6 +1,11 @@
 /*
 ## CodeWars Takeout Menu
 
+Your task at the CodeWars restaurant is to answer phone calls and take customer
+orders, telling them the final cost at the end of each phone call. The catch
+with this kata though is that it uses channels to communicate with your
+Solution rather than the typical single function call and return.
+
 ### Customer Dialogue:
 - The customer will always open the conversation with `place an order`
 - The customer may ask for a `price {item}`
@@ -18,29 +23,13 @@
 - Respond to `goodbye` with `goodbye`
 
 ### When to stop
-You should continue to take orders until you receive on the `done` channel.
+Continue to take orders until you receive on the `done` channel.
 
-### Example Phone Call
-place an order
-    ok
-price chicken bento box
-    12.99
-price spring roll
-    1.99
-order spring roll
-    ok
-order spring roll
-    ok
-order chicken bento box
-    ok
-price pizza
-    unavailable
-that is all
-    16.97
-goodbye
-    goodbye
+There is a preloaded function GetMenu() that returns a map[string]float32
+containing the full menu + pricing.
 */
+
 package kata
 
-func Solution(hear <-chan string, speak chan<- string, done <-chan bool) {
+func TakeOrders(hear <-chan string, say chan<- string, done <-chan bool) {
 }
