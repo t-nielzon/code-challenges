@@ -2,32 +2,30 @@ package kata
 
 import "sort"
 
-func PrimesLongestSum(n int) []int {
-	result := []int{}
-	if n <= 2 {
-		return result
+func LongestConsecutive(n int) []int {
+	if n < 3 {
+		return []int{}
 	}
 
-	sieve := make([]bool, n)
+	// sieve of eratosthenes for all numbers below n
+	isComposite := make([]bool, n)
+	primes := []int{}
 	for i := 2; i < n; i++ {
-		sieve[i] = true
-	}
-	for i := 2; i*i < n; i++ {
-		if sieve[i] {
-			for j := i * i; j < n; j += i {
-				sieve[j] = false
+		if !isComposite[i] {
+			primes = append(primes, i)
+			for j := i * 2; j < n; j += i {
+				isComposite[j] = true
 			}
 		}
 	}
 
-	primes := []int{}
-	for i := 2; i < n; i++ {
-		if sieve[i] {
-			primes = append(primes, i)
-		}
+	isPrime := func(v int) bool {
+		return v >= 2 && v < n && !isComposite[v]
 	}
 
-	bestLen := make(map[int]int)
+	// for every prime reachable as a consecutive sum, keep its longest chain
+	bestLen := map[int]int{}
+	maxLen := 0
 	for i := 0; i < len(primes); i++ {
 		sum := 0
 		for j := i; j < len(primes); j++ {
@@ -35,22 +33,19 @@ func PrimesLongestSum(n int) []int {
 			if sum >= n {
 				break
 			}
-			if sieve[sum] {
+			if isPrime(sum) {
 				length := j - i + 1
 				if length > bestLen[sum] {
 					bestLen[sum] = length
+				}
+				if length > maxLen {
+					maxLen = length
 				}
 			}
 		}
 	}
 
-	maxLen := 0
-	for _, l := range bestLen {
-		if l > maxLen {
-			maxLen = l
-		}
-	}
-
+	result := []int{}
 	for p, l := range bestLen {
 		if l == maxLen {
 			result = append(result, p)
