@@ -5,14 +5,14 @@ import (
 	"strings"
 )
 
-func Catalog(s, article string) string {
-	prodRe := regexp.MustCompile(`<prod><name>(.*?)</name><prx>(.*?)</prx><qty>(.*?)</qty></prod>`)
-	wordRe := regexp.MustCompile(`\b` + regexp.QuoteMeta(article) + `\b`)
+var prodRe = regexp.MustCompile(`<name>(.*?)</name><prx>(.*?)</prx><qty>(.*?)</qty>`)
 
+func Catalog(s, article string) string {
+	matches := prodRe.FindAllStringSubmatch(s, -1)
 	var lines []string
-	for _, m := range prodRe.FindAllStringSubmatch(s, -1) {
+	for _, m := range matches {
 		name, prx, qty := m[1], m[2], m[3]
-		if wordRe.MatchString(name) {
+		if name == article || strings.HasSuffix(name, " "+article) {
 			lines = append(lines, name+" > prx: $"+prx+" qty: "+qty)
 		}
 	}
