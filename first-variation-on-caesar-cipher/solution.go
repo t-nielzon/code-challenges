@@ -1,45 +1,49 @@
 package kata
 
-import "strings"
-
-func shiftChar(c byte, shift int) byte {
+func shiftChar(c byte, k int) byte {
 	switch {
 	case c >= 'a' && c <= 'z':
-		return byte((int(c-'a')+shift%26+26)%26) + 'a'
+		return byte('a' + ((int(c-'a')+k)%26+26)%26)
 	case c >= 'A' && c <= 'Z':
-		return byte((int(c-'A')+shift%26+26)%26) + 'A'
+		return byte('A' + ((int(c-'A')+k)%26+26)%26)
 	default:
 		return c
 	}
 }
 
-func MovingShift(s string, shift int) [5]string {
-	var coded strings.Builder
+func movingShift(s string, shift int) []string {
+	coded := make([]byte, len(s))
 	for i := 0; i < len(s); i++ {
-		coded.WriteByte(shiftChar(s[i], shift+i))
+		coded[i] = shiftChar(s[i], shift+i)
 	}
-	encoded := coded.String()
-	n := len(encoded)
-	base := n / 5
-	rem := n % 5
-	var result [5]string
-	idx := 0
+
+	n := len(coded)
+	size := (n + 4) / 5 // ceil(n/5)
+
+	parts := make([]string, 5)
 	for i := 0; i < 5; i++ {
-		size := base
-		if i < rem {
-			size++
+		start := i * size
+		if start > n {
+			start = n
 		}
-		result[i] = encoded[idx : idx+size]
-		idx += size
+		end := start + size
+		if end > n {
+			end = n
+		}
+		parts[i] = string(coded[start:end])
 	}
-	return result
+	return parts
 }
 
-func DemovingShift(s [5]string, shift int) string {
-	joined := strings.Join(s[:], "")
-	var decoded strings.Builder
-	for i := 0; i < len(joined); i++ {
-		decoded.WriteByte(shiftChar(joined[i], -(shift + i)))
+func demovingShift(s []string, shift int) string {
+	var joined []byte
+	for _, part := range s {
+		joined = append(joined, []byte(part)...)
 	}
-	return decoded.String()
+
+	decoded := make([]byte, len(joined))
+	for i := 0; i < len(joined); i++ {
+		decoded[i] = shiftChar(joined[i], -(shift + i))
+	}
+	return string(decoded)
 }
