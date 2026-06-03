@@ -1,35 +1,35 @@
-function diag1Sym(s) {
+function diag_1_sym(s) {
   const rows = s.split("\n");
   const n = rows.length;
   const result = [];
-  for (let i = 0; i < n; i++) {
+  for (let col = 0; col < n; col++) {
     let line = "";
-    for (let j = 0; j < n; j++) {
-      line += rows[j][i];
+    for (let row = 0; row < n; row++) {
+      line += rows[row][col];
     }
     result.push(line);
   }
   return result.join("\n");
 }
 
-function rot90Clock(s) {
+function rot_90_clock(s) {
   const rows = s.split("\n");
   const n = rows.length;
   const result = [];
-  for (let i = 0; i < n; i++) {
+  for (let col = 0; col < n; col++) {
     let line = "";
-    for (let j = n - 1; j >= 0; j--) {
-      line += rows[j][i];
+    for (let row = n - 1; row >= 0; row--) {
+      line += rows[row][col];
     }
     result.push(line);
   }
   return result.join("\n");
 }
 
-function selfieAndDiag1(s) {
+function selfie_and_diag1(s) {
   const rows = s.split("\n");
-  const sym = diag1Sym(s).split("\n");
-  return rows.map((row, i) => row + "|" + sym[i]).join("\n");
+  const diag = diag_1_sym(s).split("\n");
+  return rows.map((row, i) => row + "|" + diag[i]).join("\n");
 }
 
 function oper(fct, s) {
