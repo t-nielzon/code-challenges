@@ -1,34 +1,37 @@
-function solve(weights, N) {
+/*
+ * Weighing on scales with pans (easy)
+ *
+ * Balance condition: left pan == right pan + N.
+ * Each piece is assigned to the left pan (+1), the right pan (-1), or left
+ * unused (0). We need the signed sum to equal N. With at most 10 pieces, a
+ * full 3^n enumeration is cheap.
+ */
+
+function weighing(weights, N) {
   const n = weights.length;
 
-  function search(i, left, right) {
+  // assign[i] in {1: left, -1: right, 0: unused}
+  function search(i, balance, left, right) {
     if (i === n) {
-      const leftSum = left.reduce((a, b) => a + b, 0);
-      const rightSum = right.reduce((a, b) => a + b, 0) + N;
-      if (leftSum === rightSum && leftSum > 0) {
-        return [left.slice(), right.slice()];
-      }
-      return null;
+      // left total must exceed right total by exactly N
+      return balance === N ? [left, right] : null;
     }
 
-    // skip this weight
-    let result = search(i + 1, left, right);
-    if (result) return result;
+    const w = weights[i];
 
-    // place on left pan
-    left.push(weights[i]);
-    result = search(i + 1, left, right);
-    if (result) return result;
-    left.pop();
+    // put on left pan
+    let res = search(i + 1, balance + w, [...left, w], right);
+    if (res) return res;
 
-    // place on right pan
-    right.push(weights[i]);
-    result = search(i + 1, left, right);
-    if (result) return result;
-    right.pop();
+    // put on right pan
+    res = search(i + 1, balance - w, left, [...right, w]);
+    if (res) return res;
 
-    return null;
+    // leave unused
+    return search(i + 1, balance, left, right);
   }
 
-  return search(0, [], []) || [];
+  return search(0, 0, [], []) || [];
 }
+
+module.exports = weighing;
