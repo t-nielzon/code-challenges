@@ -2,29 +2,35 @@ package kata
 
 import "sort"
 
-func HashRadSeq(nMax, k int) int {
+// rad uses a smallest-prime-factor sieve so radicals are built in a single
+// pass, keeping it fast for the large nMax the tests use.
+func hashRadSeq(nMax int, k int) int {
 	rad := make([]int, nMax+1)
-	for i := 0; i <= nMax; i++ {
+	for i := 1; i <= nMax; i++ {
 		rad[i] = 1
 	}
-	for i := 2; i <= nMax; i++ {
-		if rad[i] == 1 {
-			for j := i; j <= nMax; j += i {
-				rad[j] *= i
+
+	// for every prime p, multiply its radical contribution into all multiples
+	for p := 2; p <= nMax; p++ {
+		if rad[p] == 1 { // p is prime (no smaller factor touched it yet)
+			for m := p; m <= nMax; m += p {
+				rad[m] *= p
 			}
 		}
 	}
 
-	type pair struct{ n, r int }
-	arr := make([]pair, nMax)
+	nums := make([]int, nMax)
 	for i := 1; i <= nMax; i++ {
-		arr[i-1] = pair{i, rad[i]}
+		nums[i-1] = i
 	}
-	sort.Slice(arr, func(a, b int) bool {
-		if arr[a].r != arr[b].r {
-			return arr[a].r < arr[b].r
+
+	sort.Slice(nums, func(a, b int) bool {
+		na, nb := nums[a], nums[b]
+		if rad[na] != rad[nb] {
+			return rad[na] < rad[nb]
 		}
-		return arr[a].n < arr[b].n
+		return na < nb
 	})
-	return arr[k-1].n
+
+	return nums[k-1]
 }
