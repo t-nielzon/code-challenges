@@ -1,22 +1,31 @@
 /*
  * k-Primes
  *
- * A natural number is called k-prime if it has exactly k prime factors,
- * counted with multiplicity.
+ * A natural number is called k-prime if it has exactly `k` prime factors,
+ * counted with multiplicity. For example:
+ *   k = 2  -->  4, 6, 9, 10, 14, 15, 21, 22, ...
+ *   k = 3  -->  8, 12, 18, 20, 27, 28, 30, ...
+ *   k = 5  -->  32, 48, 72, 80, 108, 112, ...
  *
- * Task 1: countKprimes(k, start, end)
- *   Return an array of the k-primes between start (inclusive) and end (inclusive).
+ * A natural number is thus prime if and only if it is 1-prime.
+ *
+ * Task:
+ * Complete the function `countKprimes` which is given parameters k, start, end
+ * and returns an array of the k-primes between start (inclusive) and end
+ * (inclusive).
  *
  * Example:
  *   countKprimes(5, 500, 600) --> [500, 520, 552, 567, 588, 592, 594]
  *
- * Task 2: puzzle(s)
- *   Given a positive integer s, find the total number of solutions of
- *   a + b + c = s where a is 1-prime, b is 3-prime, c is 7-prime.
+ * Second Task: puzzle
+ * Given a positive integer s, find the total number of solutions of the
+ * equation a + b + c = s, where a is 1-prime, b is 3-prime, and c is 7-prime.
+ *
+ * Call this function puzzle(s).
  *
  * Examples:
- *   puzzle(138) --> 1
- *   puzzle(143) --> 2
+ *   puzzle(138)  -->  1  because [2 + 8 + 128] is the only solution
+ *   puzzle(143)  -->  2  because [3 + 12 + 128] and [7 + 8 + 128] are solutions
  */
 
 function countKprimes(k, start, nd) {
