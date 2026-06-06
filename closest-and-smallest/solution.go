@@ -3,50 +3,57 @@ package kata
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 )
 
-func Closest(strng string) string {
-	if strings.TrimSpace(strng) == "" {
+// triple holds the weight, original index, and value of a number.
+type triple struct {
+	weight int
+	index  int
+	value  int
+}
+
+func digitWeight(n int) int {
+	w := 0
+	for n > 0 {
+		w += n % 10
+		n /= 10
+	}
+	return w
+}
+
+func closest(strng string) string {
+	fields := strings.Fields(strng)
+	if len(fields) == 0 {
 		return "[(), ()]"
 	}
 
-	parts := strings.Fields(strng)
-	type item struct {
-		weight int
-		index  int
-		number string
-	}
-	items := make([]item, len(parts))
-	for i, p := range parts {
-		w := 0
-		for _, c := range p {
-			if c >= '0' && c <= '9' {
-				w += int(c - '0')
-			}
-		}
-		items[i] = item{w, i, p}
+	triples := make([]triple, 0, len(fields))
+	for i, f := range fields {
+		v, _ := strconv.Atoi(f)
+		triples = append(triples, triple{digitWeight(v), i, v})
 	}
 
-	sort.SliceStable(items, func(i, j int) bool {
-		if items[i].weight != items[j].weight {
-			return items[i].weight < items[j].weight
+	// sort by weight, then by original index, so adjacent pairs are the
+	// closest candidates and ties resolve to the smallest weights/indices.
+	sort.Slice(triples, func(i, j int) bool {
+		if triples[i].weight != triples[j].weight {
+			return triples[i].weight < triples[j].weight
 		}
-		return items[i].index < items[j].index
+		return triples[i].index < triples[j].index
 	})
 
 	bestDiff := -1
-	bestA, bestB := 0, 1
-	for i := 0; i < len(items)-1; i++ {
-		d := items[i+1].weight - items[i].weight
-		if bestDiff == -1 || d < bestDiff {
-			bestDiff = d
-			bestA, bestB = i, i+1
+	var a, b triple
+	for i := 0; i+1 < len(triples); i++ {
+		diff := triples[i+1].weight - triples[i].weight
+		if bestDiff == -1 || diff < bestDiff {
+			bestDiff = diff
+			a, b = triples[i], triples[i+1]
 		}
 	}
 
-	a, b := items[bestA], items[bestB]
-	return fmt.Sprintf("[(%d, %d, %s), (%d, %d, %s)]",
-		a.weight, a.index, a.number,
-		b.weight, b.index, b.number)
+	return fmt.Sprintf("[(%d, %d, %d), (%d, %d, %d)]",
+		a.weight, a.index, a.value, b.weight, b.index, b.value)
 }
