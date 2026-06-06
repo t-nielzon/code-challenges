@@ -7,42 +7,54 @@ import (
 )
 
 func Balance(book string) string {
+	// keep only letters, digits, dots and spaces
 	cleaned := strings.Map(func(r rune) rune {
-		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '.' || r == ' ' || r == '\n' {
+		switch {
+		case r >= 'a' && r <= 'z',
+			r >= 'A' && r <= 'Z',
+			r >= '0' && r <= '9',
+			r == '.', r == ' ', r == '\n':
 			return r
+		default:
+			return -1
 		}
-		return -1
 	}, book)
 
 	lines := strings.Split(cleaned, "\n")
-	var nonBlank []string
-	for _, l := range lines {
-		trimmed := strings.TrimSpace(l)
-		if trimmed != "" {
-			nonBlank = append(nonBlank, trimmed)
-		}
-	}
 
-	balance, _ := strconv.ParseFloat(strings.Fields(nonBlank[0])[0], 64)
-	result := []string{fmt.Sprintf("Original Balance: %.2f", balance)}
-
-	totalExpense := 0.0
+	var report []string
+	balance := 0.0
+	total := 0.0
 	count := 0
-	for _, line := range nonBlank[1:] {
+
+	for i, line := range lines {
 		fields := strings.Fields(line)
+		if len(fields) == 0 {
+			continue
+		}
+
+		if i == 0 {
+			balance, _ = strconv.ParseFloat(fields[0], 64)
+			report = append(report, fmt.Sprintf("Original Balance: %.2f", balance))
+			continue
+		}
+
+		// last field is the amount, preceding fields are number + category
 		amount, _ := strconv.ParseFloat(fields[len(fields)-1], 64)
 		balance -= amount
-		totalExpense += amount
+		total += amount
 		count++
-		result = append(result, fmt.Sprintf("%s Balance %.2f", strings.Join(fields, " "), balance))
+
+		report = append(report, fmt.Sprintf("%s Balance %.2f", strings.Join(fields, " "), balance))
 	}
 
-	result = append(result, fmt.Sprintf("Total expense  %.2f", totalExpense))
-	avg := 0.0
+	average := 0.0
 	if count > 0 {
-		avg = totalExpense / float64(count)
+		average = total / float64(count)
 	}
-	result = append(result, fmt.Sprintf("Average expense  %.2f", avg))
 
-	return strings.Join(result, "\n")
+	report = append(report, fmt.Sprintf("Total expense  %.2f", total))
+	report = append(report, fmt.Sprintf("Average expense  %.2f", average))
+
+	return strings.Join(report, "\n")
 }
