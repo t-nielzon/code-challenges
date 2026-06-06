@@ -7,13 +7,15 @@ func dirReduc(arr []string) []string {
 		"EAST":  "WEST",
 		"WEST":  "EAST",
 	}
-	stack := make([]string, 0, len(arr))
-	for _, d := range arr {
-		if n := len(stack); n > 0 && stack[n-1] == opposite[d] {
-			stack = stack[:n-1]
+
+	stack := []string{}
+	for _, dir := range arr {
+		if len(stack) > 0 && stack[len(stack)-1] == opposite[dir] {
+			stack = stack[:len(stack)-1]
 		} else {
-			stack = append(stack, d)
+			stack = append(stack, dir)
 		}
 	}
+
 	return stack
 }
