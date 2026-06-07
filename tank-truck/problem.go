@@ -13,12 +13,12 @@
 // of your float calculation.
 //
 // Examples:
-//   tankvol(40,120,3500)  -> 1021
-//   tankvol(60,120,3500)  -> 1750
-//   tankvol(80,120,3500)  -> 2478
+//   tankvol(40,120,3500) should return 1021 (calculation gives about: 1021.26992027)
+//   tankvol(60,120,3500) should return 1750
+//   tankvol(80,120,3500) should return 2478 (calculation gives about: 2478.73007973)
 
 package kata
 
-func Tankvol(h, d, vt int) int {
-
+func tankvol(h, d, vt int) int {
+	return 0
 }
