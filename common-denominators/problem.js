@@ -10,9 +10,14 @@
  * in which D is as small as possible and
  *   N_1/D == numer_1/denom_1 ... N_n/D == numer_n/denom_n.
  *
- * Note: Simplify fractions first to be safe, since some inputs may be reducible.
+ * Example:
+ *   convertFrac([[1, 2], [1, 3], [1, 4]]) === [[6, 12], [4, 12], [3, 12]]
+ *
+ * Note:
+ *   Some fractions may be reducible, so simplify each fraction first
+ *   before computing the common denominator.
  */
 
-function convertFrac(lst) {
+function convertFrac(arr) {
   // your code here
 }

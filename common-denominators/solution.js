@@ -1,14 +1,14 @@
-function convertFrac(lst) {
-  const gcd = (a, b) => b === 0n ? a : gcd(b, a % b);
-  const lcm = (a, b) => a * b / gcd(a, b);
+function convertFrac(arr) {
+  const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b));
+  const lcm = (a, b) => (a / gcd(a, b)) * b;
 
-  const reduced = lst.map(([n, d]) => {
-    const bn = BigInt(n), bd = BigInt(d);
-    const g = gcd(bn, bd);
-    return [bn / g, bd / g];
+  // simplify each fraction first to keep the common denominator minimal
+  const reduced = arr.map(([n, d]) => {
+    const g = gcd(n, d);
+    return [n / g, d / g];
   });
 
-  const D = reduced.reduce((acc, [, d]) => lcm(acc, d), 1n);
+  const D = reduced.reduce((acc, [, d]) => lcm(acc, d), 1);
 
-  return reduced.map(([n, d]) => `(${n * (D / d)},${D})`).join('');
+  return reduced.map(([n, d]) => [(n * D) / d, D]);
 }
