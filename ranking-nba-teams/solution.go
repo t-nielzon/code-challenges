@@ -7,72 +7,58 @@ import (
 	"strings"
 )
 
-func NbaCup(resultSheet string, toFind string) string {
+var matchRe = regexp.MustCompile(`^(.+?)\s+(\d+(?:\.\d+)?)\s+(.+?)\s+(\d+(?:\.\d+)?)$`)
+
+func nbaCup(resultSheet string, toFind string) string {
 	if toFind == "" {
 		return ""
 	}
 
-	floatRe := regexp.MustCompile(`\d+\.\d+`)
-	intRe := regexp.MustCompile(`^\d+$`)
-
-	matches := strings.Split(resultSheet, ",")
-	wins, draws, losses := 0, 0, 0
-	scored, conceded := 0, 0
 	found := false
+	wins, draws, losses, scored, conceded := 0, 0, 0, 0, 0
 
-	for _, m := range matches {
-		m = strings.TrimSpace(m)
-		if m == "" {
+	for _, raw := range strings.Split(resultSheet, ",") {
+		chunk := strings.TrimSpace(raw)
+		if chunk == "" {
 			continue
 		}
 
-		if floatRe.MatchString(m) {
-			return "Error(float number):" + m
-		}
-
-		tokens := strings.Fields(m)
-		intPositions := []int{}
-		for i, t := range tokens {
-			if intRe.MatchString(t) {
-				intPositions = append(intPositions, i)
-			}
-		}
-
-		if len(intPositions) != 2 {
+		m := matchRe.FindStringSubmatch(chunk)
+		if m == nil {
 			continue
 		}
 
-		p1, p2 := intPositions[0], intPositions[1]
-		teamA := strings.Join(tokens[:p1], " ")
-		scoreA, _ := strconv.Atoi(tokens[p1])
-		teamB := strings.Join(tokens[p1+1:p2], " ")
-		scoreB, _ := strconv.Atoi(tokens[p2])
+		homeName, homeScoreStr := m[1], m[2]
+		awayName, awayScoreStr := m[3], m[4]
 
-		if teamA == toFind {
-			found = true
-			scored += scoreA
-			conceded += scoreB
-			switch {
-			case scoreA > scoreB:
-				wins++
-			case scoreA == scoreB:
-				draws++
-			default:
-				losses++
-			}
+		// a float score invalidates the whole reading for the concerned string
+		if strings.Contains(homeScoreStr, ".") || strings.Contains(awayScoreStr, ".") {
+			return "Error(float number):" + chunk
 		}
-		if teamB == toFind {
-			found = true
-			scored += scoreB
-			conceded += scoreA
-			switch {
-			case scoreB > scoreA:
-				wins++
-			case scoreA == scoreB:
-				draws++
-			default:
-				losses++
-			}
+
+		homeScore, _ := strconv.Atoi(homeScoreStr)
+		awayScore, _ := strconv.Atoi(awayScoreStr)
+
+		var teamScore, oppScore int
+		switch toFind {
+		case homeName:
+			teamScore, oppScore = homeScore, awayScore
+		case awayName:
+			teamScore, oppScore = awayScore, homeScore
+		default:
+			continue
+		}
+
+		found = true
+		scored += teamScore
+		conceded += oppScore
+		switch {
+		case teamScore > oppScore:
+			wins++
+		case teamScore == oppScore:
+			draws++
+		default:
+			losses++
 		}
 	}
 
