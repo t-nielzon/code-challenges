@@ -1,7 +1,21 @@
 /*
- * The Desperate Rocket Scientist (6 kyu)
+ * The Desperate Rocket Scientist
  *
- * Jim's countdown function has been burned into ROM and cannot be changed:
+ * Jim, the rocket scientist, has finished the code for the board computer of
+ * his new Mars rocket. Only one last function is missing: the function for
+ * creating the countdown.
+ *
+ * Today is rocket launch day, and the unit test for the countdown suddenly
+ * fails. Jim swears he didn't change anything in the countdown function. He
+ * suspects his assistant Jeff introduced a bug somewhere in the rocket board
+ * computer startup code, but cannot understand how that could affect the
+ * output of his countdown method in such a strange way.
+ *
+ * The countdown function has already been burned into a ROM that cannot be
+ * replaced. Jim has to fix the problem by calling a method in the startup
+ * code that is still accessible.
+ *
+ * Here is Jim's countdown code that he is not able to change any more:
  *
  *   function countdown() {
  *     var ret = "";
@@ -18,13 +32,11 @@
  *     return ret;
  *   }
  *
- * Jim's assistant Jeff introduced a bug elsewhere in the startup code
- * (most likely an enumerable property added to Array.prototype or
- * Object.prototype) that breaks the `for...in` loop above.
+ * Write a function `fix_countdown()` that contains a fix to make `countdown()`
+ * work again.
  *
- * Write a function `fix_countdown()` that, when called, repairs the
- * environment so that `countdown()` produces the expected output:
- *   "10, 9, 8, 7, 6, 5, 4, 3, 2, 1, Zero!"
+ * The bug: Jeff added enumerable properties to Array.prototype, so the
+ * `for...in` loop in countdown() now iterates over those extra properties too.
  */
 
 function fix_countdown() {

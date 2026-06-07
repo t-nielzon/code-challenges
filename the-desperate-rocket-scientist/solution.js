@@ -1,14 +1,8 @@
 function fix_countdown() {
-  // jeff polluted Array.prototype / Object.prototype with enumerable
-  // properties, which leak into the `for...in` loop inside countdown().
-  // making every inherited property non-enumerable restores the loop.
-  [Array.prototype, Object.prototype].forEach(function (proto) {
-    Object.getOwnPropertyNames(proto).forEach(function (prop) {
-      try {
-        Object.defineProperty(proto, prop, { enumerable: false });
-      } catch (e) {
-        // some built-in props are non-configurable; ignore them.
-      }
-    });
+  // jeff polluted Array.prototype with enumerable properties, which a for...in
+  // loop walks alongside the real indices. making every inherited prototype
+  // property non-enumerable restores the original countdown behavior.
+  Object.getOwnPropertyNames(Array.prototype).forEach(function (key) {
+    Object.defineProperty(Array.prototype, key, { enumerable: false });
   });
 }
