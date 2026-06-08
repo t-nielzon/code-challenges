@@ -1,25 +1,30 @@
 package kata
 
-func Score(dice [5]int) int {
-	counts := [7]int{}
+func Score(dice []int) int {
+	counts := make([]int, 7)
 	for _, d := range dice {
 		counts[d]++
 	}
 
 	score := 0
-
-	// triplet scores
-	tripletPoints := [7]int{0, 1000, 200, 300, 400, 500, 600}
 	for face := 1; face <= 6; face++ {
-		if counts[face] >= 3 {
-			score += tripletPoints[face]
-			counts[face] -= 3
+		n := counts[face]
+
+		if n >= 3 {
+			if face == 1 {
+				score += 1000
+			} else {
+				score += face * 100
+			}
+			n -= 3
+		}
+
+		if face == 1 {
+			score += n * 100
+		} else if face == 5 {
+			score += n * 50
 		}
 	}
-
-	// single scoring dice
-	score += counts[1] * 100
-	score += counts[5] * 50
 
 	return score
 }
