@@ -2,9 +2,9 @@
  * The PaperFold sequence
  *
  * The regular paperfolding sequence (a.k.a. the dragon curve sequence) is an
- * infinite automatic sequence of 0s and 1s, defined as the limit of repeatedly
- * inserting an alternating sequence of 1s and 0s around and between the terms
- * of the previous sequence:
+ * infinite automatic sequence of 0s and 1s, defined as the limit of inserting
+ * an alternating sequence of 1s and 0s around and between the terms of the
+ * previous sequence:
  *
  *   1
  *   1 1 0
@@ -12,10 +12,7 @@
  *   1 1 0 1 1 0 0 1 1 1 0 0 1 0 0
  *   ...
  *
- * Each intermediate sequence is a prefix of the next, so the limit is a single
- * well-defined infinite sequence:
- *
- *   1 1 0 1 1 0 0 1 1 1 0 0 1 0 0 1 1 1 0 1 1 0 0 0 1 1 0 0 1 0 0 ...
+ * Each intermediate sequence is a prefix of the next.
  *
  * Define a generator function `paperFold` that sequentially generates the
  * values of this sequence.
@@ -24,5 +21,5 @@
  */
 
 function* paperFold() {
-
+  // your code here
 }
