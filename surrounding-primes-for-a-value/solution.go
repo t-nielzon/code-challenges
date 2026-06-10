@@ -1,40 +1,28 @@
 package kata
 
-func PrimeBefAft(n int) [2]int {
-	return [2]int{primeBefore(n), primeAfter(n)}
-}
-
-func isPrime(n int) bool {
-	if n < 2 {
+func isPrime(num int) bool {
+	if num < 2 {
 		return false
 	}
-	if n == 2 {
-		return true
+	if num%2 == 0 {
+		return num == 2
 	}
-	if n%2 == 0 {
-		return false
-	}
-	for i := 3; i*i <= n; i += 2 {
-		if n%i == 0 {
+	for i := 3; i*i <= num; i += 2 {
+		if num%i == 0 {
 			return false
 		}
 	}
 	return true
 }
 
-func primeBefore(n int) int {
-	for i := n - 1; i >= 2; i-- {
-		if isPrime(i) {
-			return i
-		}
+func PrimeBefAft(n int) [2]int {
+	bef := n - 1
+	for !isPrime(bef) {
+		bef--
 	}
-	return -1
-}
-
-func primeAfter(n int) int {
-	for i := n + 1; ; i++ {
-		if isPrime(i) {
-			return i
-		}
+	aft := n + 1
+	for !isPrime(aft) {
+		aft++
 	}
+	return [2]int{bef, aft}
 }
