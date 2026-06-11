@@ -1,7 +1,13 @@
 function prefill(n, v) {
-  if (!/^\d+$/.test(String(n))) {
-    throw new TypeError(`${n} is invalid`);
+  // n must be a non-negative integer, or a string made purely of digits;
+  // anything else (booleans, null, floats, negatives, "1.5") is rejected
+  const isValid =
+    (typeof n === 'number' && Number.isInteger(n) && n >= 0) ||
+    (typeof n === 'string' && /^\d+$/.test(n));
+
+  if (!isValid) {
+    throw new TypeError(n + ' is invalid');
   }
 
-  return Array(Number(n)).fill(v);
+  return new Array(Number(n)).fill(v);
 }
