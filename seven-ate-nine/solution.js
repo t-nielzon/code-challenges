@@ -1,13 +1,8 @@
 function sevenAte9(arr) {
-  const result = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === 7 && arr[i + 1] === 8 && arr[i + 2] === 9) {
-      // skip the 7 here; it will be placed after the 9
-      result.push(8, 9, 7);
-      i += 2;
-    } else {
-      result.push(arr[i]);
-    }
+  let s = arr.join('');
+  // keep rescuing: moving a 7 past a 9 can expose a new 7,8,9 sequence
+  while (s.includes('789')) {
+    s = s.replace('789', '897');
   }
-  return result;
+  return s.split('').map(Number);
 }
