@@ -6,25 +6,28 @@ import (
 )
 
 func UniqCount(s string) *big.Int {
+	// case insensitive: fold everything to one case before counting
 	s = strings.ToLower(s)
-	n := len(s)
 
-	freq := make(map[rune]int)
-	for _, c := range s {
-		freq[c]++
+	counts := make(map[rune]int)
+	n := 0
+	for _, r := range s {
+		counts[r]++
+		n++
 	}
 
+	// permutations of a multiset: n! / (c1! * c2! * ... * ck!)
 	result := factorial(n)
-	for _, count := range freq {
-		result.Div(result, factorial(count))
+	for _, c := range counts {
+		result.Div(result, factorial(c))
 	}
 	return result
 }
 
 func factorial(n int) *big.Int {
-	r := big.NewInt(1)
+	f := big.NewInt(1)
 	for i := 2; i <= n; i++ {
-		r.Mul(r, big.NewInt(int64(i)))
+		f.Mul(f, big.NewInt(int64(i)))
 	}
-	return r
+	return f
 }
