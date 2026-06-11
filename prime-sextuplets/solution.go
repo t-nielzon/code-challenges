@@ -1,47 +1,40 @@
+// solution.go
+
 package kata
 
-func FindPrimesSextuplet(sumLimit int) [6]int {
-	offsets := [6]int{0, 4, 6, 10, 12, 16}
-
-	isPrime := func(n int) bool {
-		if n < 2 {
-			return false
-		}
-		if n < 4 {
-			return true
-		}
-		if n%2 == 0 || n%3 == 0 {
-			return false
-		}
-		for i := 5; i*i <= n; i += 6 {
-			if n%i == 0 || n%(i+2) == 0 {
-				return false
-			}
-		}
+func isPrime(n int) bool {
+	if n < 2 {
+		return false
+	}
+	if n < 4 {
 		return true
 	}
+	if n%2 == 0 || n%3 == 0 {
+		return false
+	}
+	for i := 5; i*i <= n; i += 6 {
+		if n%i == 0 || n%(i+2) == 0 {
+			return false
+		}
+	}
+	return true
+}
 
-	for p := 7; ; p += 2 {
-		if !isPrime(p) {
-			continue
-		}
-		valid := true
-		for i := 1; i < 6; i++ {
-			if !isPrime(p + offsets[i]) {
-				valid = false
-				break
-			}
-		}
-		if !valid {
-			continue
-		}
-		sum := 6*p + 48
-		if sum > sumLimit {
-			var result [6]int
-			for i, o := range offsets {
-				result[i] = p + o
-			}
-			return result
+func FindPrimesSextuplet(sumLimit int) []int {
+	// the sextuplet sum is 6p + 48, which grows with p, so the first
+	// sextuplet surpassing the limit is the one with the smallest valid p
+	// whose sum exceeds sumLimit — start searching near that bound
+	start := (sumLimit-48)/6 + 1
+	if start < 7 {
+		start = 7
+	}
+	// for p > 5, all six members avoid divisibility by 2, 3 and 5 only
+	// when p ≡ 7 (mod 30), so candidates can step by 30
+	p := start + ((7-start%30)+30)%30
+	for ; ; p += 30 {
+		if isPrime(p) && isPrime(p+4) && isPrime(p+6) &&
+			isPrime(p+10) && isPrime(p+12) && isPrime(p+16) {
+			return []int{p, p + 4, p + 6, p + 10, p + 12, p + 16}
 		}
 	}
 }
