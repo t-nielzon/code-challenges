@@ -3,33 +3,27 @@ package kata
 import "strings"
 
 func Arrange(s string) string {
-	if s == "" {
-		return ""
-	}
 	words := strings.Fields(s)
-	n := len(words)
-
-	for i := 0; i < n-1; i++ {
+	// single left-to-right pass: swapping a violating adjacent pair carries
+	// the moved word along, exactly matching the described process
+	for i := 0; i < len(words)-1; i++ {
+		a, b := len(words[i]), len(words[i+1])
 		if i%2 == 0 {
-			// even index: length should be <= next
-			if len(words[i]) > len(words[i+1]) {
+			if a > b {
 				words[i], words[i+1] = words[i+1], words[i]
 			}
 		} else {
-			// odd index: length should be >= next
-			if len(words[i]) < len(words[i+1]) {
+			if a < b {
 				words[i], words[i+1] = words[i+1], words[i]
 			}
 		}
 	}
-
-	for i := 0; i < n; i++ {
+	for i, w := range words {
 		if i%2 == 0 {
-			words[i] = strings.ToLower(words[i])
+			words[i] = strings.ToLower(w)
 		} else {
-			words[i] = strings.ToUpper(words[i])
+			words[i] = strings.ToUpper(w)
 		}
 	}
-
 	return strings.Join(words, " ")
 }
