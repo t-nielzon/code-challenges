@@ -1,5 +1,6 @@
 function sendMessage(message) {
-  const letterMap = {
+  const PRESS = {
+    '.': '1', ',': '11', '?': '111', '!': '1111',
     a: '2', b: '22', c: '222',
     d: '3', e: '33', f: '333',
     g: '4', h: '44', i: '444',
@@ -7,50 +8,40 @@ function sendMessage(message) {
     m: '6', n: '66', o: '666',
     p: '7', q: '77', r: '777', s: '7777',
     t: '8', u: '88', v: '888',
-    w: '9', x: '99', y: '999', z: '9999'
-  };
-  const specialMap = {
-    '.': '1', ',': '11', '?': '111', '!': '1111',
+    w: '9', x: '99', y: '999', z: '9999',
     "'": '*', '-': '**', '+': '***', '=': '****',
-    ' ': '0'
+    ' ': '0',
   };
-  const holdChars = '0123456789*#';
 
   let result = '';
   let upper = false;
-  let lastKey = null;
-  let lastWasHold = false;
+  let lastKey = '';
 
   for (const ch of message) {
-    let seq;
-    let isHold = false;
-    let caseSwitched = false;
-
-    const lower = ch.toLowerCase();
-    if (letterMap[lower]) {
-      const isUpper = ch !== lower;
-      if (isUpper !== upper) {
-        result += '#';
-        upper = isUpper;
-        caseSwitched = true;
-      }
-      seq = letterMap[lower];
-    } else if (specialMap[ch] !== undefined) {
-      seq = specialMap[ch];
-    } else if (holdChars.includes(ch)) {
-      seq = ch + '-';
-      isHold = true;
+    let token;
+    if (/[0-9*#]/.test(ch)) {
+      // digits and *# are typed by holding: key followed by a dash.
+      // the dash also means the next character never needs a wait.
+      token = ch + '-';
     } else {
-      continue;
+      token = '';
+      const lower = ch.toLowerCase();
+      if (/[a-z]/.test(lower)) {
+        const isUpper = ch !== lower;
+        if (isUpper !== upper) {
+          // toggle case only when an alphabetic character requires it
+          token += '#';
+          upper = isUpper;
+        }
+      }
+      token += PRESS[lower];
     }
-
-    const key = seq[0];
-    if (lastKey === key && !lastWasHold && !caseSwitched) {
-      result += ' ';
-    }
-    result += seq;
-    lastKey = key;
-    lastWasHold = isHold;
+    // wait (space) only when this token starts by pressing the same key
+    // the previous token ended on; a leading '#' (case toggle) or a
+    // previous trailing '-' (hold) breaks the sequence, so no wait.
+    if (lastKey && token[0] === lastKey) result += ' ';
+    result += token;
+    lastKey = token[token.length - 1];
   }
 
   return result;
