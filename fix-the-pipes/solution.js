@@ -3,37 +3,57 @@ function fixThePipes(map, start, end) {
   const cols = map[0].length;
   const grid = map.map(r => r.split(''));
 
-  const colsInfo = [];
+  // each column holds one contiguous vertical run of 'x'; record its endpoints
+  const tops = [];
+  const bottoms = [];
   for (let c = 0; c < cols; c++) {
-    let top = -1, bot = -1;
+    let t = -1, b = -1;
     for (let r = 0; r < rows; r++) {
       if (grid[r][c] === 'x') {
-        if (top === -1) top = r;
-        bot = r;
+        if (t === -1) t = r;
+        b = r;
       }
     }
-    colsInfo.push({ top, bot });
+    tops[c] = t;
+    bottoms[c] = b;
   }
 
+  // pick the box-drawing glyph from the set of connected directions
+  function pipeChar(L, R, U, D) {
+    if (L && R) return '━';
+    if (U && D) return '┃';
+    if (U && R) return '┗';
+    if (D && L) return '┓';
+    if (D && R) return '┏';
+    if (U && L) return '┛';
+  }
+
+  // the path is monotonic across columns: it enters a column at one endpoint
+  // of that column's vertical run and leaves at the other, then connects
+  // horizontally into the next column at the same row
   let entry = start;
   for (let c = 0; c < cols; c++) {
-    const { top, bot } = colsInfo[c];
-    let exit;
-    if (top === bot) {
-      exit = top;
-      grid[top][c] = '━';
-    } else if (entry === top) {
-      exit = bot;
-      grid[top][c] = '┓';
-      for (let r = top + 1; r < bot; r++) grid[r][c] = '┃';
-      grid[bot][c] = '┗';
-    } else {
-      exit = top;
-      grid[bot][c] = '┛';
-      for (let r = top + 1; r < bot; r++) grid[r][c] = '┃';
-      grid[top][c] = '┏';
+    const t = tops[c], b = bottoms[c];
+    const exit = entry === t ? b : t;
+
+    for (let r = t; r <= b; r++) {
+      let L = false, R = false, U = false, D = false;
+
+      if (t === b) {
+        // single cell just passes straight through
+        L = true;
+        R = true;
+      } else {
+        if (r > t) U = true;
+        if (r < b) D = true;
+        if (r === entry) L = true; // connects left (previous column or source)
+        if (r === exit) R = true;  // connects right (next column or end)
+      }
+
+      grid[r][c] = pipeChar(L, R, U, D);
     }
-    entry = exit;
+
+    entry = exit; // next column enters where this one exited
   }
 
   return grid.map(r => r.join(''));
