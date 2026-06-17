@@ -2,19 +2,15 @@ package kata
 
 func Thirt(n int) int {
 	seq := []int{1, 10, 9, 12, 3, 4}
-	prev := -1
-	cur := n
-	for cur != prev {
-		prev = cur
+	for {
 		sum := 0
-		tmp := cur
-		i := 0
-		for tmp > 0 {
-			sum += (tmp % 10) * seq[i%6]
-			tmp /= 10
-			i++
+		for i := 0; n > 0; i++ {
+			sum += (n % 10) * seq[i%len(seq)]
+			n /= 10
 		}
-		cur = sum
+		if sum == n {
+			return sum
+		}
+		n = sum
 	}
-	return cur
 }
