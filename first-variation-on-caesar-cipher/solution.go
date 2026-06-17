@@ -1,11 +1,12 @@
 package kata
 
-func shiftChar(c byte, k int) byte {
+func shiftRune(c byte, amount int) byte {
+	amount = ((amount % 26) + 26) % 26
 	switch {
 	case c >= 'a' && c <= 'z':
-		return byte('a' + ((int(c-'a')+k)%26+26)%26)
+		return 'a' + (c-'a'+byte(amount))%26
 	case c >= 'A' && c <= 'Z':
-		return byte('A' + ((int(c-'A')+k)%26+26)%26)
+		return 'A' + (c-'A'+byte(amount))%26
 	default:
 		return c
 	}
@@ -14,36 +15,35 @@ func shiftChar(c byte, k int) byte {
 func movingShift(s string, shift int) []string {
 	coded := make([]byte, len(s))
 	for i := 0; i < len(s); i++ {
-		coded[i] = shiftChar(s[i], shift+i)
+		coded[i] = shiftRune(s[i], shift+i)
 	}
 
 	n := len(coded)
-	size := (n + 4) / 5 // ceil(n/5)
+	// ceil(n/5) gives the size of the leading, fully-packed parts
+	chunk := (n + 4) / 5
 
 	parts := make([]string, 5)
-	for i := 0; i < 5; i++ {
-		start := i * size
-		if start > n {
-			start = n
-		}
-		end := start + size
+	pos := 0
+	for p := 0; p < 5; p++ {
+		end := pos + chunk
 		if end > n {
 			end = n
 		}
-		parts[i] = string(coded[start:end])
+		parts[p] = string(coded[pos:end])
+		pos = end
 	}
 	return parts
 }
 
 func demovingShift(s []string, shift int) string {
-	var joined []byte
+	joined := ""
 	for _, part := range s {
-		joined = append(joined, []byte(part)...)
+		joined += part
 	}
 
 	decoded := make([]byte, len(joined))
 	for i := 0; i < len(joined); i++ {
-		decoded[i] = shiftChar(joined[i], -(shift + i))
+		decoded[i] = shiftRune(joined[i], -(shift + i))
 	}
 	return string(decoded)
 }
