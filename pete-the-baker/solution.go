@@ -1,15 +1,12 @@
 package kata
 
-func Cakes(recipe, available map[string]int) int {
+func cakes(recipe, available map[string]int) int {
 	min := -1
-	for ingredient, amount := range recipe {
-		have, ok := available[ingredient]
-		if !ok || amount <= 0 {
-			return 0
-		}
-		n := have / amount
-		if min == -1 || n < min {
-			min = n
+	for ingredient, needed := range recipe {
+		have := available[ingredient]
+		possible := have / needed
+		if min == -1 || possible < min {
+			min = possible
 		}
 	}
 	if min == -1 {
