@@ -1,13 +1,16 @@
 package kata
 
+// classic house-robber: at each target keep the best score achievable
+// either by skipping it (prev) or shooting it plus the best from two back.
 func TargetGame(vals []int) int {
-	prev, curr := 0, 0
+	prev, prevPrev := 0, 0
 	for _, v := range vals {
-		next := curr
-		if prev+v > next {
-			next = prev + v
+		take := prevPrev + v
+		if take < prev {
+			take = prev
 		}
-		prev, curr = curr, next
+		prevPrev = prev
+		prev = take
 	}
-	return curr
+	return prev
 }
