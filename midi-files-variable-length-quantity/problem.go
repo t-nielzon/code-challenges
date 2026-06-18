@@ -3,8 +3,8 @@
 // In MIDI files, timestamps are stored as integers representing the number
 // of "ticks" since the previous event in the file.
 //
-// Because these timestamps are relative to one another, most values tend to be
-// fairly small. In order to save space, MIDI files use a special integer
+// Because these timestamps are relative to one another, most values tend to
+// be fairly small. In order to save space, MIDI files use a special integer
 // encoding format called a Variable Length Quantity (VLQ).
 //
 // A MIDI VLQ stores an integer using one or more bytes:
@@ -15,15 +15,13 @@
 //       - 0 means this is the final byte
 //
 // For example:
-//
 //   0x7F -> 01111111
-//
 // Since the highest bit is 0, this is the final byte. Removing the
 // continuation bit leaves 1111111 = 127.
 //
-// Values larger than 127 require multiple bytes. For example [0x81, 0x00] in
-// binary becomes 10000001 00000000. Removing the continuation bits gives
-// 0000001 0000000 which is 00000010000000 = 128. So [0x81, 0x00] is 128.
+// Values larger than 127 require multiple bytes. For example [0x81, 0x00]
+// in binary becomes 10000001 00000000. Removing the continuation bits gives
+// 0000001 0000000 = 128. So [0x81, 0x00] represents 128.
 //
 // # Task
 //
@@ -37,7 +35,7 @@
 //     input. Any additional bytes after the terminating VLQ byte should be
 //     ignored.
 //
-// All test values satisfy: 0 <= n <= 0x0FFFFFFF
+// All test values will satisfy: 0 <= n <= 0x0FFFFFFF
 //
 // # Examples
 //

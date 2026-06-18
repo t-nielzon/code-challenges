@@ -9,12 +9,12 @@ func encode(n int) []byte {
 
 	out := make([]byte, len(groups))
 	for i, j := 0, len(groups)-1; j >= 0; i, j = i+1, j-1 {
+		b := groups[j]
 		// set continuation bit on every byte except the last
-		if i < len(groups)-1 {
-			out[i] = groups[j] | 0x80
-		} else {
-			out[i] = groups[j]
+		if j != 0 {
+			b |= 0x80
 		}
+		out[i] = b
 	}
 	return out
 }
@@ -23,7 +23,7 @@ func decode(data []byte) int {
 	result := 0
 	for _, b := range data {
 		result = (result << 7) | int(b&0x7F)
-		// highest bit clear marks the final byte of the first VLQ
+		// highest bit clear marks the final byte of this VLQ
 		if b&0x80 == 0 {
 			break
 		}
