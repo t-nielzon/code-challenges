@@ -2,27 +2,31 @@ package kata
 
 import "strconv"
 
-func Smallest(n int) [3]int {
-	s := strconv.Itoa(n)
+func Smallest(n int64) [3]int64 {
+	s := []byte(strconv.FormatInt(n, 10))
 	best := n
-	bi, bj := 0, 0
-	first := true
+	bestI, bestJ := int64(0), int64(0)
+
 	for i := 0; i < len(s); i++ {
-		rem := s[:i] + s[i+1:]
-		d := s[i]
+		// build slice without the digit at index i
+		rem := make([]byte, 0, len(s)-1)
+		rem = append(rem, s[:i]...)
+		rem = append(rem, s[i+1:]...)
+
 		for j := 0; j <= len(rem); j++ {
-			cand := rem[:j] + string(d) + rem[j:]
-			v, err := strconv.Atoi(cand)
-			if err != nil {
-				continue
-			}
-			if first || v < best || (v == best && (i < bi || (i == bi && j < bj))) {
-				best = v
-				bi = i
-				bj = j
-				first = false
+			cand := make([]byte, 0, len(s))
+			cand = append(cand, rem[:j]...)
+			cand = append(cand, s[i])
+			cand = append(cand, rem[j:]...)
+
+			val, _ := strconv.ParseInt(string(cand), 10, 64)
+			if val < best {
+				best = val
+				bestI = int64(i)
+				bestJ = int64(j)
 			}
 		}
 	}
-	return [3]int{best, bi, bj}
+
+	return [3]int64{best, bestI, bestJ}
 }
