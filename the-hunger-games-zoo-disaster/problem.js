@@ -2,10 +2,10 @@
  * The Hunger Games - Zoo Disaster!
  *
  * A freak power outage at the zoo has caused all of the electric cage doors
- * to malfunction and swing open. All the animals are out and some of them
+ * to malfunction and swing open... All the animals are out and some of them
  * are eating each other!
  *
- * Food chain:
+ * Here is a list of zoo animals, and what they can eat:
  *   antelope eats grass
  *   big-fish eats little-fish
  *   bug eats leaves
@@ -33,17 +33,25 @@
  *
  * OUTPUT
  *   A list of strings where:
- *   - First element is the initial zoo (same as input)
- *   - Last element is the final zoo as a comma-separated string
- *   - Middle elements are "X eats Y" describing each event
+ *     - The first element is the initial zoo (same as INPUT)
+ *     - The last element is a comma-separated string of what the zoo looks
+ *       like when all the eating has finished
+ *     - All other elements (2nd to last-1) are of the form "X eats Y"
+ *       describing what happened
  *
- * Rules:
+ * Notes
  *   - Animals can only eat things beside them.
  *   - Animals always eat to their LEFT before eating to their RIGHT.
- *   - The LEFTMOST animal capable of eating eats before any others.
- *   - Anything not in the list neither eats nor is eaten.
+ *   - Always the LEFTMOST animal capable of eating will eat before any others.
+ *   - Any other things you may find at the zoo (which are not listed above)
+ *     do not eat anything and are not edible.
+ *
+ * Example
+ *   Input:  "fox,bug,chicken,grass,sheep"
+ *   Output: ["fox,bug,chicken,grass,sheep", "chicken eats bug",
+ *            "fox eats chicken", "sheep eats grass", "fox eats sheep", "fox"]
  */
 
-function zooDisaster(zoo) {
-
+function zooShuffle(zoo) {
+  // your code here
 }
