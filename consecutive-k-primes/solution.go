@@ -18,14 +18,15 @@ func ConsecKprimes(k int, arr []int) int {
 	if len(arr) < 2 {
 		return 0
 	}
+
 	result := 0
-	prev := countPrimeFactors(arr[0]) == k
+	prev := countPrimeFactors(arr[0])
 	for i := 1; i < len(arr); i++ {
-		curr := countPrimeFactors(arr[i]) == k
-		if prev && curr {
+		cur := countPrimeFactors(arr[i])
+		if prev == k && cur == k {
 			result++
 		}
-		prev = curr
+		prev = cur
 	}
 	return result
 }
