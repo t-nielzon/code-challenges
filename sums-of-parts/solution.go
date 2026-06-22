@@ -1,15 +1,14 @@
 package kata
 
-func PartsSums(ls []uint64) []uint64 {
-	result := make([]uint64, len(ls)+1)
-	var total uint64
-	for _, v := range ls {
-		total += v
+func PartsSums(ls []int) []int {
+	n := len(ls)
+	result := make([]int, n+1)
+	sum := 0
+	// build from the end so each entry is the running suffix sum
+	for i := n - 1; i >= 0; i-- {
+		sum += ls[i]
+		result[i] = sum
 	}
-	result[0] = total
-	for i, v := range ls {
-		total -= v
-		result[i+1] = total
-	}
+	result[n] = 0
 	return result
 }
