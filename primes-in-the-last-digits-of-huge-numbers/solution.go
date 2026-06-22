@@ -1,79 +1,50 @@
 package kata
 
+import "math/big"
+
 func KthLastDigPrime(k int) []int {
-	const mod uint64 = 1000000000
-	a, b, c, d, e := uint64(0), uint64(1), uint64(1), uint64(2), uint64(4)
-	n := 4
+	mod := big.NewInt(1000000000)
+	// a term qualifies only when it genuinely has more than nine digits,
+	// so we require the value to be at least 10^9 before taking its tail.
+	threshold := big.NewInt(1000000000)
+
+	// seeds f(0)..f(4)
+	f := []*big.Int{
+		big.NewInt(0),
+		big.NewInt(1),
+		big.NewInt(1),
+		big.NewInt(2),
+		big.NewInt(4),
+	}
+
+	last9 := new(big.Int)
 	count := 0
+	n := 4
+
 	for {
+		val := f[len(f)-1]
+		if val.Cmp(threshold) >= 0 {
+			last9.Mod(val, mod)
+			if last9.ProbablyPrime(20) {
+				count++
+				if count == k {
+					return []int{n, int(last9.Int64())}
+				}
+			}
+		}
+
+		// next = f(n-1) + f(n-2) - f(n-3) + f(n-4) - f(n-5)
+		next := new(big.Int).Set(f[len(f)-1])
+		next.Add(next, f[len(f)-2])
+		next.Sub(next, f[len(f)-3])
+		next.Add(next, f[len(f)-4])
+		next.Sub(next, f[len(f)-5])
+		f = append(f, next)
+
+		// only the last five values feed the recurrence, keep the slice bounded
+		if len(f) > 6 {
+			f = f[len(f)-6:]
+		}
 		n++
-		next := (e + d + b + 2*mod - c - a) % mod
-		a, b, c, d, e = b, c, d, e, next
-		if isPrime(next) {
-			count++
-			if count == k {
-				return []int{n, int(next)}
-			}
-		}
 	}
-}
-
-func mulMod(a, b, m uint64) uint64 {
-	return (a * b) % m
-}
-
-func modPow(base, exp, m uint64) uint64 {
-	result := uint64(1)
-	base %= m
-	for exp > 0 {
-		if exp&1 == 1 {
-			result = mulMod(result, base, m)
-		}
-		exp >>= 1
-		base = mulMod(base, base, m)
-	}
-	return result
-}
-
-func isPrime(n uint64) bool {
-	if n < 2 {
-		return false
-	}
-	smallPrimes := []uint64{2, 3, 5, 7, 11, 13}
-	for _, p := range smallPrimes {
-		if n == p {
-			return true
-		}
-		if n%p == 0 {
-			return false
-		}
-	}
-	d := n - 1
-	s := 0
-	for d%2 == 0 {
-		d /= 2
-		s++
-	}
-	witnesses := []uint64{2, 3, 5, 7, 11, 13}
-	for _, w := range witnesses {
-		if w >= n {
-			continue
-		}
-		x := modPow(w, d, n)
-		if x == 1 || x == n-1 {
-			continue
-		}
-		composite := true
-		for r := 0; r < s-1; r++ {
-			x = mulMod(x, x, n)
-			if x == n-1 {
-				composite = false
-				break
-			}
-		}
-		if composite {
-			return false
-		}
-	}
-	return true
 }
