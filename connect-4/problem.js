@@ -1,19 +1,34 @@
 /*
  * Connect 4
  *
- * Create a Class called Connect4 with a method play(column).
+ * The game consists of a grid (7 columns and 6 rows) and two players
+ * that take turns to drop their discs. The pieces fall straight down,
+ * occupying the next available space within the column. The objective
+ * of the game is to be the first to form a horizontal, vertical, or
+ * diagonal line of four of one's own discs.
  *
- * Grid: 7 columns x 6 rows. Players alternate, Player 1 starts.
+ * Create a Class called Connect4 that has a method called play which
+ * takes one argument for the column where the player is going to place
+ * their disc.
  *
- * Returns:
- * - "Player n wins!" when 4 in a row (horizontal/vertical/diagonal)
- * - "Column full!" when column is full (same player tries again)
- * - "Game has finished!" after a win
- * - "Player n has a turn" otherwise
+ * Rules:
+ * - If a player successfully has 4 discs horizontally, vertically or
+ *   diagonally then return "Player n wins!" where n is the current
+ *   player either 1 or 2.
+ * - If a player attempts to place a disc in a column that is full then
+ *   return "Column full!" and the next move must be taken by the same
+ *   player.
+ * - If the game has been won by a player, any following moves should
+ *   return "Game has finished!".
+ * - Any other move should return "Player n has a turn" where n is the
+ *   current player either 1 or 2.
+ * - Player 1 starts the game every time and alternates with player 2.
+ * - The columns are numbered 0-6 left to right.
  */
 
 class Connect4 {
   constructor() {}
+
   play(column) {}
 }
 
