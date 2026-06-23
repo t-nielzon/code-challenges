@@ -1,17 +1,23 @@
 /*
- * In this kata, you will be given a string of text and valid parentheses, such as "h(el)lo".
+ * Reverse Inside Parentheses (Inside Parentheses)
+ * Difficulty: 5 kyu
  *
- * You must return the string, with only the text inside parentheses reversed, so "h(el)lo"
- * becomes "h(le)lo". However, if said parenthesized text contains parenthesized text itself,
- * then that too must reversed back, so it faces the original direction. When parentheses are
- * reversed, they should switch directions, so they remain syntactically correct
+ * In this kata, you will be given a string of text and valid parentheses,
+ * such as "h(el)lo".
+ *
+ * You must return the string, with only the text inside parentheses reversed,
+ * so "h(el)lo" becomes "h(le)lo". However, if said parenthesized text contains
+ * parenthesized text itself, then that too must reversed back, so it faces the
+ * original direction. When parentheses are reversed, they should switch
+ * directions, so they remain syntactically correct
  * (i.e. "h((el)l)o" becomes "h(l(el))o").
  *
- * This pattern should repeat for however many layers of parentheses. There may be multiple
- * groups of parentheses at any level (i.e. "(1) (2 (3) (4))"), so be sure to account for these.
+ * This pattern should repeat for however many layers of parentheses. There may
+ * be multiple groups of parentheses at any level (i.e. "(1) (2 (3) (4))"), so
+ * be sure to account for these.
  *
- * Input parentheses will always be valid (e.g.. you will never get "(()" or ")"). String
- * without any parentheses are possible and should be returned as-is.
+ * Input parentheses will always be valid (e.g. you will never get "(()" or ")").
+ * Strings without any parentheses are possible and should be returned as-is.
  *
  * Examples:
  *   "h(el)lo"                      ==> "h(le)lo"
@@ -21,6 +27,6 @@
  *   "no parentheses"               ==> "no parentheses"
  */
 
-function reverseInParentheses(str) {
+function reverseInParentheses(text) {
   // your code here
 }
