@@ -2,40 +2,41 @@ package kata
 
 import "sort"
 
-func Prod2Sum(a, b, c, d int) [][2]int {
-	// brahmagupta–fibonacci identity: (a²+b²)(c²+d²) = (ac-bd)²+(ad+bc)² = (ac+bd)²+(ad-bc)²
-	pairs := make(map[[2]int]bool)
-
-	candidates := [][2]int{
-		normalize(a*c+b*d, a*d-b*c),
-		normalize(a*c-b*d, a*d+b*c),
+func prod2sum(a, b, c, d int) [][]int {
+	abs := func(x int) int {
+		if x < 0 {
+			return -x
+		}
+		return x
 	}
 
-	for _, p := range candidates {
-		pairs[p] = true
+	// brahmagupta–fibonacci identity gives the two decompositions
+	pairs := [][]int{
+		{abs(a*c - b*d), abs(a*d + b*c)},
+		{abs(a*c + b*d), abs(a*d - b*c)},
 	}
 
-	result := make([][2]int, 0, len(pairs))
-	for p := range pairs {
-		result = append(result, p)
+	seen := map[[2]int]bool{}
+	var res [][]int
+	for _, p := range pairs {
+		lo, hi := p[0], p[1]
+		if lo > hi {
+			lo, hi = hi, lo
+		}
+		key := [2]int{lo, hi}
+		if seen[key] {
+			continue
+		}
+		seen[key] = true
+		res = append(res, []int{lo, hi})
 	}
 
-	sort.Slice(result, func(i, j int) bool {
-		return result[i][0] < result[j][0]
+	sort.Slice(res, func(i, j int) bool {
+		if res[i][0] != res[j][0] {
+			return res[i][0] < res[j][0]
+		}
+		return res[i][1] < res[j][1]
 	})
 
-	return result
-}
-
-func normalize(x, y int) [2]int {
-	if x < 0 {
-		x = -x
-	}
-	if y < 0 {
-		y = -y
-	}
-	if x > y {
-		x, y = y, x
-	}
-	return [2]int{x, y}
+	return res
 }
