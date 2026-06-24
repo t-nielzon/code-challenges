@@ -1,41 +1,22 @@
 /*
  * Lazy Chain
- * Difficulty: 5 kyu
  *
- * Method chaining is a useful technique in JavaScript, allowing better
- * composability and readability of functions.
+ * Create a function `lazyChain` that accepts any value and allows method
+ * chaining through the use of `invoke`, delaying execution until the
+ * `value` method is called.
  *
- * One problem with standard JavaScript chaining is that chained methods are
- * immediately executed upon creation.
- *
- *   let a = [1, 2, 3].map(x => x * 2).reverse();
- *   // a = [6, 4, 2]
- *
- * The problem with this is that it opens values up to possible mutation before
- * being called.
- *
- *   a = a.join("");      // a = "642"
- *   doSomething(a);      // TypeError - a is not an array
- *
- * To combat this we can create a function `lazyChain` that accepts an argument
- * and allows chaining, but delays execution to when the value method is called.
- *
+ * Example:
  *   let a = lazyChain([1,2,3])
- *                     .invoke('map', x => x * 2)
- *                     .invoke('reverse');
+ *               .invoke('map', x => x * 2)
+ *               .invoke('reverse');
+ *   a.value(); // [6, 4, 2]
  *
- *   console.log(a.value());   // [6, 4, 2]
- *   a.join("");               // TypeError
- *   doSomething(a.value());   // valid function call
- *
- * Your task is to create the function `lazyChain` which accepts any value, and
- * allows method chaining through the use of invoke, and execution with the
- * value method.
- *
- * Keep in mind that invoke is general enough to accept any prototype methods
- * from the standard language.
+ * `invoke` accepts a method name (string) followed by any arguments, and
+ * must be general enough to call any prototype method available on the
+ * value at the time of execution. Calling `value()` runs every queued
+ * method in order and returns the final result.
  */
 
 function lazyChain(value) {
-
+  // your code here
 }
