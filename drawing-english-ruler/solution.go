@@ -6,26 +6,31 @@ import (
 )
 
 func DrawRuler(t, n int) string {
-	if t <= 0 || n < 0 {
-		return ""
+	var lines []string
+
+	drawLine := func(tickLength int, label string) {
+		dashes := strings.Repeat("-", tickLength)
+		if label != "" {
+			lines = append(lines, dashes+" "+label)
+		} else {
+			lines = append(lines, dashes)
+		}
 	}
 
-	var lines []string
-	lines = append(lines, strings.Repeat("-", t)+" "+strconv.Itoa(0))
+	var drawInterval func(centerLength int)
+	drawInterval = func(centerLength int) {
+		if centerLength > 0 {
+			drawInterval(centerLength - 1)
+			drawLine(centerLength, "")
+			drawInterval(centerLength - 1)
+		}
+	}
 
-	for i := 1; i <= n; i++ {
-		drawMiddle(&lines, t-1)
-		lines = append(lines, strings.Repeat("-", t)+" "+strconv.Itoa(i))
+	drawLine(t, "0")
+	for j := 1; j <= n; j++ {
+		drawInterval(t - 1)
+		drawLine(t, strconv.Itoa(j))
 	}
 
 	return strings.Join(lines, "\n")
-}
-
-func drawMiddle(lines *[]string, length int) {
-	if length <= 0 {
-		return
-	}
-	drawMiddle(lines, length-1)
-	*lines = append(*lines, strings.Repeat("-", length))
-	drawMiddle(lines, length-1)
 }
