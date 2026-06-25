@@ -1,46 +1,35 @@
 package kata
 
 import (
-	"fmt"
+	"strconv"
 	"strings"
 )
 
-func Decomp(n int) string {
-	primes := sieve(n)
-	parts := make([]string, 0, len(primes))
-	for _, p := range primes {
-		exp := 0
-		pk := p
-		for pk <= n {
-			exp += n / pk
-			pk *= p
-		}
-		if exp == 1 {
-			parts = append(parts, fmt.Sprintf("%d", p))
-		} else {
-			parts = append(parts, fmt.Sprintf("%d^%d", p, exp))
-		}
-	}
-	return strings.Join(parts, " * ")
-}
+func decomp(n int) string {
+	// sieve of eratosthenes for primes up to n
+	sieve := make([]bool, n+1)
+	var parts []string
 
-func sieve(n int) []int {
-	if n < 2 {
-		return nil
-	}
-	mark := make([]bool, n+1)
-	for i := 2; i*i <= n; i++ {
-		if !mark[i] {
-			for j := i * i; j <= n; j += i {
-				mark[j] = true
-			}
+	for p := 2; p <= n; p++ {
+		if sieve[p] {
+			continue
+		}
+		for m := p * p; m <= n; m += p {
+			sieve[m] = true
+		}
+
+		// legendre's formula: exponent of prime p in n! is sum of floor(n/p^k)
+		exp := 0
+		for pk := p; pk <= n; pk *= p {
+			exp += n / pk
+		}
+
+		if exp == 1 {
+			parts = append(parts, strconv.Itoa(p))
+		} else {
+			parts = append(parts, strconv.Itoa(p)+"^"+strconv.Itoa(exp))
 		}
 	}
-	primes := make([]int, 0)
-	for i := 2; i <= n; i++ {
-		if !mark[i] {
-			primes = append(primes, i)
-		}
-	}
-	return primes
+
+	return strings.Join(parts, " * ")
 }
