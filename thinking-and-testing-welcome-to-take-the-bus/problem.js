@@ -1,16 +1,20 @@
 /*
  * Thinking & Testing : Welcome to take the bus
  *
- * No Story
- * No Description
+ * No Story.
+ * No Description.
+ * Only by Thinking and Testing.
+ * Look at the result of the test cases, and guess the code!
  *
- * Only by Thinking and Testing
- * Look at result of testcase, guess the code!
+ * Sample test cases:
+ *   bus([[10, 0], [3, 5], [5, 8]]) === 5
+ *   bus([[3, 0], [9, 1], [4, 10], [12, 2], [6, 1], [7, 10]]) === 17
+ *   bus([[3, 0], [9, 1], [4, 8], [12, 2], [6, 1], [7, 8]]) === 21
  *
- * Series 11 of the "Thinking and Testing" katas.
- * Deduce the transformation from the visible test results and implement it.
+ * Each element is a bus stop given as [people getting on, people getting off].
+ * Return how many people remain on the bus after the last stop.
  */
 
-function testit(arr) {
+function bus(arr) {
   // your code here
 }
