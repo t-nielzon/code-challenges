@@ -1,6 +1,5 @@
 /*
  * Escaping The Matrix (Reloaded)
- * Difficulty: 6 kyu
  *
  * Help Neo to escape the Matrix by throwing himself out!
  *
@@ -8,14 +7,16 @@
  *
  * This kata was inspired by @idubrov's Java-only kata "Escaping The Matrix".
  * This one is intended to be a tiny bit more of a puzzle.
- * The Submit Tests are NOT as simple as the Example Test.
+ * The Submit Tests are not as simple as the Example Test.
  *
  * Note: This is JavaScript, not Java.
  *
- * A `Neo` exception is provided/expected by the harness. Your job is to make
- * Neo escape the Matrix — by throwing himself out of it.
+ * Implement `escape`, which receives Neo (an Exception/Error) and must
+ * get him out of the Matrix by throwing him.
  */
 
-function escape() {
+function escape(neo) {
   // your code here
 }
+
+module.exports = escape;
