@@ -1,71 +1,39 @@
-function reverseStr(s) {
-  return s.split('').reverse().join('');
-}
+function reverseNumber(n) {
+  const len = n.length;
 
-function smallestS(P) {
-  const len = P.length;
-  if (len === 0) return null;
+  // compare two equal-length numeric strings, return true if a >= b
+  const geq = (a, b) => a >= b;
 
-  let zeros = 0;
-  let currentLen = len;
-  while (currentLen > 1) {
-    let allNines = true;
-    for (let i = 0; i < currentLen - 1; i++) {
-      if (P[i] !== '9') { allNines = false; break; }
+  // build palindrome by mirroring the first half onto the second half
+  const mirror = (s) => {
+    const arr = s.split('');
+    for (let i = 0; i < Math.floor(len / 2); i++) {
+      arr[len - 1 - i] = arr[i];
     }
-    if (allNines) break;
-    zeros++;
-    currentLen--;
+    return arr.join('');
+  };
+
+  // a palindrome of the same digit-length reads the same reversed, so both
+  // m and its reverse equal m itself; we need the smallest palindrome >= n
+  let candidate = mirror(n);
+  if (geq(candidate, n)) {
+    return candidate;
   }
 
-  let tail;
-  if (currentLen === 1) {
-    if (P[0] === '9') return null;
-    tail = String(parseInt(P[0], 10) + 1);
-  } else {
-    if (P[currentLen - 1] === '9') return null;
-    tail = String(parseInt(P[currentLen - 1], 10) + 1) + '9'.repeat(currentLen - 1);
+  // mirror was smaller than n: increment the left half (including middle
+  // digit) and mirror again to get the next larger palindrome
+  const half = Math.ceil(len / 2);
+  let left = n.slice(0, half);
+
+  // increment the left-half integer as a string (no overflow since n < 10^100)
+  const incremented = (BigInt(left) + 1n).toString().padStart(half, '0');
+
+  const arr = n.split('');
+  for (let i = 0; i < half; i++) {
+    arr[i] = incremented[i];
   }
-
-  return '0'.repeat(zeros) + tail;
-}
-
-function doublyNotLess(n) {
-  const L = n.length;
-  if (reverseStr(n) >= n) return n;
-
-  let best = null;
-
-  for (let k = L - 1; k >= 0; k--) {
-    const prefix = n.slice(0, k);
-    const nkChar = n[k];
-    if (nkChar === '9') continue;
-    const nk = parseInt(nkChar, 10);
-
-    const P = n.slice(0, L - 1 - k);
-    const Q = n.slice(L - 1 - k);
-    const revPrefix = reverseStr(prefix);
-
-    const s_ii = smallestS(P);
-    if (s_ii !== null) {
-      const m_ii = prefix + String(nk + 1) + s_ii;
-      if (best === null || m_ii < best) best = m_ii;
-    }
-
-    const s_i = reverseStr(P);
-    for (let c = nk + 1; c <= 9; c++) {
-      const U = String(c) + revPrefix;
-      if (U >= Q) {
-        const m_i = prefix + String(c) + s_i;
-        if (best === null || m_i < best) best = m_i;
-        break;
-      }
-    }
+  for (let i = 0; i < Math.floor(len / 2); i++) {
+    arr[len - 1 - i] = arr[i];
   }
-
-  if (best === null) {
-    best = '1' + '0'.repeat(L - 1) + '1';
-  }
-
-  return best;
+  return arr.join('');
 }
