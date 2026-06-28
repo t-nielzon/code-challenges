@@ -1,25 +1,19 @@
 package kata
 
-func isPrime(x int) bool {
-	if x < 2 {
-		return false
-	}
-	if x < 4 {
-		return true
-	}
-	if x%2 == 0 {
-		return false
-	}
-	for i := 3; i*i <= x; i += 2 {
-		if x%i == 0 {
+func Step(g, m, n int) []int {
+	isPrime := func(num int) bool {
+		if num < 2 {
 			return false
 		}
+		for i := 2; i*i <= num; i++ {
+			if num%i == 0 {
+				return false
+			}
+		}
+		return true
 	}
-	return true
-}
 
-func Step(g, m, n int) []int {
-	for i := m; i+g <= n; i++ {
+	for i := m; i <= n-g; i++ {
 		if isPrime(i) && isPrime(i+g) {
 			return []int{i, i + g}
 		}
