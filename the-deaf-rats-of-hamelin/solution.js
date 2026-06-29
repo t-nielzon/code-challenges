@@ -1,17 +1,14 @@
 function countDeafRats(town) {
-  const s = town.replace(/ /g, '');
-  const piperIndex = s.indexOf('P');
-  let deaf = 0;
+  town = town.replace(/ /g, '');
+  const p = town.indexOf('P');
 
-  for (let i = 0; i < s.length; i += 2) {
-    if (i === piperIndex) {
-      i -= 1;
-      continue;
-    }
-    const rat = s.substr(i, 2);
-    if (i < piperIndex && rat === 'O~') deaf++;
-    if (i > piperIndex && rat === '~O') deaf++;
-  }
+  // rats to the left should head right (~O); to the right should head left (O~)
+  const left = (town.slice(0, p).match(/O~|~O/g) || []);
+  const right = (town.slice(p + 1).match(/O~|~O/g) || []);
+
+  let deaf = 0;
+  for (const r of left) if (r === 'O~') deaf++;
+  for (const r of right) if (r === '~O') deaf++;
 
   return deaf;
 }
