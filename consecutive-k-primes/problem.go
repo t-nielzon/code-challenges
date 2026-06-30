@@ -24,5 +24,5 @@
 package kata
 
 func ConsecKprimes(k int, arr []int) int {
-	return 0
+	// your code here
 }
