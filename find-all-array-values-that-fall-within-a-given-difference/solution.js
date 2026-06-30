@@ -5,18 +5,19 @@ class GroupByDifference {
 
   find(difference) {
     const sorted = [...this.numbers].sort((a, b) => a - b);
-    const keep = new Array(sorted.length).fill(false);
+    const result = [];
+    let group = [];
 
     for (let i = 0; i < sorted.length; i++) {
-      for (let j = 0; j < sorted.length; j++) {
-        if (i === j) continue;
-        if (Math.abs(sorted[i] - sorted[j]) <= difference) {
-          keep[i] = true;
-          keep[j] = true;
-        }
+      if (group.length === 0 || sorted[i] - sorted[i - 1] <= difference) {
+        group.push(sorted[i]);
+      } else {
+        if (group.length > 1) result.push(...group);
+        group = [sorted[i]];
       }
     }
+    if (group.length > 1) result.push(...group);
 
-    return sorted.filter((_, i) => keep[i]);
+    return result;
   }
 }
