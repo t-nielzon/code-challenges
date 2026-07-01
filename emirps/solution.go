@@ -1,54 +1,49 @@
 package kata
 
 func FindEmirp(n int) [3]int {
-	// sieve of eratosthenes up to a limit that covers reversed primes
-	limit := n
-	if limit < 10 {
+	if n < 2 {
 		return [3]int{0, 0, 0}
 	}
 
-	// reversed primes can be larger than n, so we need a bigger sieve
-	// a number below n has at most the same number of digits, so its
-	// reverse is at most 10x larger
-	sieveLimit := n * 10
-	if sieveLimit < 1000 {
-		sieveLimit = 1000
-	}
-
-	sieve := make([]bool, sieveLimit+1)
-	for i := 2; i <= sieveLimit; i++ {
-		sieve[i] = true
-	}
-	for i := 2; i*i <= sieveLimit; i++ {
-		if sieve[i] {
-			for j := i * i; j <= sieveLimit; j += i {
-				sieve[j] = false
+	// sieve of eratosthenes for primes below n (exclusive upper limit)
+	limit := n - 1
+	isComposite := make([]bool, limit+1)
+	for i := 2; i*i <= limit; i++ {
+		if !isComposite[i] {
+			for j := i * i; j <= limit; j += i {
+				isComposite[j] = true
 			}
 		}
 	}
 
-	count, largest, sum := 0, 0, 0
-
-	for i := 13; i < n; i++ {
-		if !sieve[i] {
-			continue
+	primeSet := make(map[int]bool)
+	for i := 2; i <= limit; i++ {
+		if !isComposite[i] {
+			primeSet[i] = true
 		}
-		rev := reverse(i)
-		if rev != i && rev <= sieveLimit && sieve[rev] {
+	}
+
+	count, largest, sum := 0, 0, 0
+	for p := range primeSet {
+		r := reverse(p)
+		// emirp: reversed is a different prime, so palindromes are excluded
+		if r != p && primeSet[r] {
 			count++
-			largest = i
-			sum += i
+			sum += p
+			if p > largest {
+				largest = p
+			}
 		}
 	}
 
 	return [3]int{count, largest, sum}
 }
 
-func reverse(n int) int {
+func reverse(num int) int {
 	rev := 0
-	for n > 0 {
-		rev = rev*10 + n%10
-		n /= 10
+	for num > 0 {
+		rev = rev*10 + num%10
+		num /= 10
 	}
 	return rev
 }
