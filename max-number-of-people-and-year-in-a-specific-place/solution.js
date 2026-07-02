@@ -1,25 +1,23 @@
 function yearMaxPeople(people) {
-  // a person present from arrival through death year inclusive: +1 at arrival,
-  // -1 the year after death so the death year still counts them as present.
-  const events = [];
-  for (let i = 0; i < people.length; i++) {
-    events.push([people[i][0], 1]);
-    events.push([people[i][1] + 1, -1]);
+  // a person present from birth..death counts through the death year, so their
+  // leaving effect lands the year after; +1 at birth, -1 at death + 1
+  const deltas = new Map();
+  for (const [birth, death] of people) {
+    deltas.set(birth, (deltas.get(birth) || 0) + 1);
+    deltas.set(death + 1, (deltas.get(death + 1) || 0) - 1);
   }
 
-  // sort by year; within a year apply arrivals (+1) before departures (-1)
-  // so the same-year peak is captured before anyone leaves.
-  events.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
+  const years = [...deltas.keys()].sort((a, b) => a - b);
 
-  let count = 0;
-  let maxCount = 0;
-  let maxYear = events[0][0];
+  let running = 0;
+  let maxCount = -Infinity;
+  let maxYear = years[0];
 
-  for (let i = 0; i < events.length; i++) {
-    count += events[i][1];
-    if (count > maxCount) {
-      maxCount = count;
-      maxYear = events[i][0];
+  for (const year of years) {
+    running += deltas.get(year);
+    if (running > maxCount) {
+      maxCount = running;
+      maxYear = year;
     }
   }
 
