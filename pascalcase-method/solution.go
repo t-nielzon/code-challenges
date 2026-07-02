@@ -2,8 +2,8 @@ package kata
 
 import "strings"
 
-func PascalCase(s string) string {
-	words := strings.Fields(s)
+func PascalCase(str string) string {
+	words := strings.Fields(str)
 	for i, w := range words {
 		words[i] = strings.ToUpper(w[:1]) + w[1:]
 	}

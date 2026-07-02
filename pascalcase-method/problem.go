@@ -4,14 +4,14 @@
 //
 // Examples (input --> output):
 //
-//   "hello case"       --> "HelloCase"
-//   "pascal case word" --> "PascalCaseWord"
+//   "hello case"        --> "HelloCase"
+//   "pascal case word"  --> "PascalCaseWord"
 //
 // Note: for historical reasons, the function is named camelCase() in some
 // languages, but it should actually perform conversion to PascalCase.
 
 package kata
 
-func PascalCase(s string) string {
+func PascalCase(str string) string {
 	return ""
 }
