@@ -1,10 +1,11 @@
 function Xbonacci(signature, n) {
   const x = signature.length;
   const result = signature.slice(0, n);
-  for (let i = x; i < n; i++) {
-    let sum = 0;
-    for (let j = i - x; j < i; j++) sum += result[j];
-    result.push(sum);
+
+  while (result.length < n) {
+    const next = result.slice(-x).reduce((sum, v) => sum + v, 0);
+    result.push(next);
   }
+
   return result;
 }
