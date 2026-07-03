@@ -1,40 +1,31 @@
-function mixedFraction(s) {
-  const [numStr, denStr] = s.split('/');
-  let num = Number(numStr);
-  let den = Number(denStr);
+function convertToMixedNumber(input) {
+  const [x, y] = input.split('/').map(Number);
 
-  if (den === 0) throw new Error('Zero division error');
+  if (y === 0) {
+    throw new Error('Division by zero');
+  }
 
-  const negative = (num < 0) !== (den < 0);
-  num = Math.abs(num);
-  den = Math.abs(den);
+  const negative = (x < 0) !== (y < 0);
+  let num = Math.abs(x);
+  const den = Math.abs(y);
+
+  const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b));
 
   const whole = Math.floor(num / den);
-  let remainder = num % den;
+  let rem = num % den;
 
-  const g = gcd(remainder, den);
-  remainder = remainder / g;
-  const reducedDen = den / g;
+  const sign = negative && num !== 0 ? '-' : '';
 
-  let result = '';
-  if (whole > 0 && remainder > 0) {
-    result = `${whole} ${remainder}/${reducedDen}`;
-  } else if (remainder > 0) {
-    result = `${remainder}/${reducedDen}`;
-  } else {
-    result = `${whole}`;
+  if (rem === 0) {
+    return sign + whole;
   }
 
-  if (negative && (whole > 0 || remainder > 0)) {
-    result = '-' + result;
+  const g = gcd(rem, den);
+  const frac = `${rem / g}/${den / g}`;
+
+  if (whole === 0) {
+    return sign + frac;
   }
 
-  return result;
-}
-
-function gcd(a, b) {
-  while (b) {
-    [a, b] = [b, a % b];
-  }
-  return a;
+  return `${sign}${whole} ${frac}`;
 }
