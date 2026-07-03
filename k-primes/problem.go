@@ -1,26 +1,34 @@
-/*
-A natural number is called k-prime if it has exactly k prime factors, counted
-with multiplicity. For example:
+// A natural number is called k-prime if it has exactly k prime factors,
+// counted with multiplicity. For example:
+//
+//   k = 2  -->  4, 6, 9, 10, 14, 15, 21, 22, ...
+//   k = 3  -->  8, 12, 18, 20, 27, 28, 30, ...
+//   k = 5  -->  32, 48, 72, 80, 108, 112, ...
+//
+// A natural number is thus prime if and only if it is 1-prime.
+//
+// Task:
+// Complete the function countKprimes which is given parameters k, start, end
+// and returns an array of the k-primes between start (inclusive) and end
+// (inclusive). A nil slice is expected when there are no k-primes in range.
+//
+// Example:
+//   countKprimes(5, 500, 600) --> [500, 520, 552, 567, 588, 592, 594]
+//
+// Second Task: puzzle
+// Given a positive integer s, find the total number of solutions of the
+// equation a + b + c = s, where a is 1-prime, b is 3-prime, and c is 7-prime.
+//
+// Examples:
+//   puzzle(138)  -->  1   because [2 + 8 + 128] is the only solution
+//   puzzle(143)  -->  2   because [3 + 12 + 128] and [7 + 8 + 128]
 
-k = 2  -->  4, 6, 9, 10, 14, 15, 21, 22, ...
-k = 3  -->  8, 12, 18, 20, 27, 28, 30, ...
-k = 5  -->  32, 48, 72, 80, 108, 112, ...
+package kprimes
 
-A natural number is thus prime if and only if it is 1-prime.
-
-Task:
-Complete the function CountKprimes which is given parameters k, start, end
-and returns a slice of the k-primes between start (inclusive) and end (inclusive).
-For Go: nil slice is expected when there are no k-primes between start and end.
-
-Second Task: puzzle
-Given a positive integer s, find the total number of solutions of the equation
-a + b + c = s, where a is 1-prime, b is 3-prime, and c is 7-prime.
-*/
-package kata
-
-func CountKprimes(k, start, nd int) []int {
+func countKprimes(k, start, nd int) []int {
+	return nil
 }
 
-func Puzzle(s int) int {
+func puzzle(s int) int {
+	return 0
 }

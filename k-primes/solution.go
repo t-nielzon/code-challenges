@@ -1,11 +1,13 @@
-package kata
+package kprimes
 
+// countPrimeFactors returns the number of prime factors of n counted with
+// multiplicity.
 func countPrimeFactors(n int) int {
 	count := 0
 	for d := 2; d*d <= n; d++ {
 		for n%d == 0 {
-			count++
 			n /= d
+			count++
 		}
 	}
 	if n > 1 {
@@ -14,35 +16,46 @@ func countPrimeFactors(n int) int {
 	return count
 }
 
-func CountKprimes(k, start, nd int) []int {
-	var result []int
+func countKprimes(k, start, nd int) []int {
+	var res []int
 	for n := start; n <= nd; n++ {
 		if countPrimeFactors(n) == k {
-			result = append(result, n)
+			res = append(res, n)
 		}
 	}
-	return result
+	return res
 }
 
-func Puzzle(s int) int {
-	ones := CountKprimes(1, 2, s)
-	threes := CountKprimes(3, 2, s)
-	sevens := CountKprimes(7, 2, s)
-	count := 0
-	for _, c := range sevens {
-		for _, b := range threes {
-			if b+c >= s {
-				break
-			}
-			rem := s - b - c
-			if rem < 2 {
-				break
-			}
-			if countPrimeFactors(rem) == 1 {
-				count++
+func puzzle(s int) int {
+	// kOf[i] holds the number of prime factors of i (with multiplicity),
+	// so membership in each k-prime set is a single lookup.
+	kOf := make([]int, s+1)
+	for i := 2; i <= s; i++ {
+		if kOf[i] == 0 { // i is prime
+			for j := i; j <= s; j += i {
+				m := j
+				for m%i == 0 {
+					m /= i
+					kOf[j]++
+				}
 			}
 		}
 	}
-	_ = ones
-	return count
+
+	total := 0
+	for a := 2; a <= s; a++ {
+		if kOf[a] != 1 {
+			continue
+		}
+		for b := 2; a+b <= s; b++ {
+			if kOf[b] != 3 {
+				continue
+			}
+			c := s - a - b
+			if c >= 2 && kOf[c] == 7 {
+				total++
+			}
+		}
+	}
+	return total
 }
