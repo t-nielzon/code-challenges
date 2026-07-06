@@ -1,20 +1,29 @@
+package main
+
 /*
 String -> N iterations -> String
 
 We have a string s and a number n.
 
-A function takes the string, concatenates the even-indexed chars to the front,
-odd-indexed chars to the back.
+This kata applies a transformation n times to the string:
+- Concatenate even-indexed characters (0, 2, 4, ...) to the front
+- Concatenate odd-indexed characters (1, 3, 5, ...) to the back
 
 Examples:
-  s = "Wow Example!" -> "WwEapeo xml!"
-  s = "I'm Jomo Pipi" -> "ImJm ii' ooPp"
+s = "Wow Example!"
+result = "WwEapeo xml!"
 
-Return the result of applying the function n times.
+s = "I'm Jomo Pipi"
+result = "ImJm ii' ooPp"
 
-Note: n can be greater than a billion, so optimize.
+For s = "qwertyuio" and n = 2:
+after 1 iteration: s = "qetuowryi"
+after 2 iterations: s = "qtorieuwy"
+return "qtorieuwy"
+
+Note: n can be greater than a billion, so optimization is required.
 */
-package kata
 
-func JumbledString(s string, n int) string {
+func Repeat(s string, n int) string {
+	return ""
 }
