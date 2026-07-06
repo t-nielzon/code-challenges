@@ -1,30 +1,35 @@
-package kata
+package main
 
-func F(n int) int {
-	result := 1
-	hasExpGreaterThanOne := false
-	num := n
-	for p := 2; p*p <= num; p++ {
-		if num%p == 0 {
-			k := 0
-			for num%p == 0 {
-				num /= p
-				k++
-			}
-			if k > 1 {
-				hasExpGreaterThanOne = true
-				factor := k
-				for i := 0; i < k-1; i++ {
-					factor *= p
-				}
-				result *= factor
-			}
-		}
-	}
-	if num > 1 {
-	}
-	if !hasExpGreaterThanOne {
+func f(n int) int {
+	if n <= 1 {
 		return 1
 	}
+
+	// Find prime factorization
+	primeFactors := make(map[int]int)
+	temp := n
+
+	for i := 2; i*i <= temp; i++ {
+		for temp%i == 0 {
+			primeFactors[i]++
+			temp /= i
+		}
+	}
+	if temp > 1 {
+		primeFactors[temp]++
+	}
+
+	// Calculate geometric derivative
+	result := 1
+	for prime, exponent := range primeFactors {
+		if exponent > 1 {
+			power := 1
+			for i := 0; i < exponent-1; i++ {
+				power *= prime
+			}
+			result *= exponent * power
+		}
+	}
+
 	return result
 }
