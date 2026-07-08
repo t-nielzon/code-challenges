@@ -1,38 +1,43 @@
-function areEqual(a, b) {
-  const values = (x) => {
-    if (typeof x === 'string') {
-      return x.split('').map((c) => JSON.stringify(c)).sort();
-    }
-    if (Array.isArray(x)) {
-      return x.map((v) => canonical(v)).sort();
-    }
-    if (x !== null && typeof x === 'object') {
-      return Object.keys(x)
-        .sort()
-        .map((k) => k + ':' + canonical(x[k]));
-    }
-    return [canonical(x)];
-  };
-
-  const canonical = (x) => {
-    if (x !== null && typeof x === 'object') {
-      if (Array.isArray(x)) {
-        return '[' + x.map((v) => canonical(v)).sort().join(',') + ']';
+function areEqual(arg1, arg2) {
+  // handle null and primitives
+  if (arg1 === null || arg2 === null || typeof arg1 !== 'object' || typeof arg2 !== 'object') {
+    return arg1 === arg2;
+  }
+  
+  // check if one is array and other is not
+  if (Array.isArray(arg1) !== Array.isArray(arg2)) {
+    return false;
+  }
+  
+  // handle arrays
+  if (Array.isArray(arg1)) {
+    if (arg1.length !== arg2.length) return false;
+    
+    const used = new Array(arg2.length).fill(false);
+    
+    for (let i = 0; i < arg1.length; i++) {
+      let found = false;
+      for (let j = 0; j < arg2.length; j++) {
+        if (!used[j] && areEqual(arg1[i], arg2[j])) {
+          used[j] = true;
+          found = true;
+          break;
+        }
       }
-      return (
-        '{' +
-        Object.keys(x)
-          .sort()
-          .map((k) => JSON.stringify(k) + ':' + canonical(x[k]))
-          .join(',') +
-        '}'
-      );
+      if (!found) return false;
     }
-    return JSON.stringify(x);
-  };
-
-  const sa = values(a);
-  const sb = values(b);
-  if (sa.length !== sb.length) return false;
-  return sa.every((v, i) => v === sb[i]);
+    return true;
+  }
+  
+  // handle objects
+  const keys1 = Object.keys(arg1);
+  const keys2 = Object.keys(arg2);
+  
+  if (keys1.length !== keys2.length) return false;
+  
+  for (let key of keys1) {
+    if (!keys2.includes(key)) return false;
+    if (!areEqual(arg1[key], arg2[key])) return false;
+  }
+  return true;
 }
