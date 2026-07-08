@@ -1,16 +1,28 @@
-package kata
+package main
 
+// PaperFold returns a function that generates successive values of the paper folding sequence
 func PaperFold() func() int {
-	n := 0
+	sequence := []int{1}
+	index := 0
+
 	return func() int {
-		n++
-		m := n
-		for m&1 == 0 {
-			m >>= 1
+		// expand sequence as needed
+		for len(sequence) <= index {
+			newSeq := make([]int, len(sequence)*2+1)
+			copy(newSeq, sequence)
+			newSeq[len(sequence)] = 1
+
+			// mirror with bit flip: reverse(NOT(previous))
+			prevLen := len(sequence)
+			for i := 0; i < prevLen; i++ {
+				newSeq[prevLen+1+i] = 1 - sequence[prevLen-1-i]
+			}
+
+			sequence = newSeq
 		}
-		if m&2 == 0 {
-			return 1
-		}
-		return 0
+
+		result := sequence[index]
+		index++
+		return result
 	}
 }
