@@ -1,12 +1,16 @@
-function stringExpansion(s) {
-  let count = 1;
-  let result = "";
-  for (const ch of s) {
-    if (/\d/.test(ch)) {
-      count = Number(ch);
+function simpleStringExpansion(str) {
+  if (str === '') return '';
+  
+  let result = '';
+  let multiplier = 1;
+  
+  for (let char of str) {
+    if (/\d/.test(char)) {
+      multiplier = parseInt(char);
     } else {
-      result += ch.repeat(count);
+      result += char.repeat(multiplier);
     }
   }
+  
   return result;
 }
