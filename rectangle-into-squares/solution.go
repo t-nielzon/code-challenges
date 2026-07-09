@@ -1,18 +1,20 @@
-package kata
+package main
 
-func sqInRect(lng int, wdth int) []int {
+func SqInRect(lng, wdth int) []int {
 	if lng == wdth {
 		return nil
 	}
-	var res []int
-	for lng > 0 && wdth > 0 {
-		if lng > wdth {
-			res = append(res, wdth)
-			lng -= wdth
-		} else {
-			res = append(res, lng)
-			wdth -= lng
+
+	var result []int
+	a, b := lng, wdth
+
+	for b > 0 {
+		times := a / b
+		for i := 0; i < times; i++ {
+			result = append(result, b)
 		}
+		a, b = b, a%b
 	}
-	return res
+
+	return result
 }
