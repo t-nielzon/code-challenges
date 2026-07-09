@@ -1,39 +1,41 @@
-package kata
+package main
 
-func PowerSumDigTerm(n int) int {
+func PowerSumDigits(n int) int {
 	count := 0
-	num := 10
+	num := 1
+
 	for {
-		if isPowerOfDigitSum(num) {
-			count++
-			if count == n {
-				return num
+		// calculate sum of digits
+		sumDigits := 0
+		temp := num
+		for temp > 0 {
+			sumDigits += temp % 10
+			temp /= 10
+		}
+
+		// check if any power of sumDigits equals num
+		for power := 1; ; power++ {
+			result := 1
+			for i := 0; i < power; i++ {
+				result *= sumDigits
+				if result > num {
+					break
+				}
+			}
+
+			if result == num {
+				count++
+				if count == n {
+					return num
+				}
+				break
+			}
+
+			if result > num {
+				break
 			}
 		}
+
 		num++
 	}
-}
-
-func digitSum(n int) int {
-	s := 0
-	for n > 0 {
-		s += n % 10
-		n /= 10
-	}
-	return s
-}
-
-func isPowerOfDigitSum(n int) bool {
-	s := digitSum(n)
-	if s < 2 {
-		return false
-	}
-	power := s * s
-	for power <= n {
-		if power == n {
-			return true
-		}
-		power *= s
-	}
-	return false
 }
