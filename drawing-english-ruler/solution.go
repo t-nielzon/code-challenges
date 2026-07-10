@@ -1,36 +1,48 @@
-package kata
+package main
 
 import (
-	"strconv"
+	"fmt"
 	"strings"
 )
 
+type Tick struct {
+	Length int
+	Label  *int
+}
+
 func DrawRuler(t, n int) string {
+	var ticks []Tick
+	
+	// Add major ticks
+	for i := 0; i <= n; i++ {
+		label := i
+		ticks = append(ticks, Tick{Length: t, Label: &label})
+	}
+	
+	// Add subdivision ticks for each interval
+	for i := 0; i < n; i++ {
+		addSubdivisions(t-1, &ticks)
+	}
+	
+	// Format output
 	var lines []string
-
-	drawLine := func(tickLength int, label string) {
-		dashes := strings.Repeat("-", tickLength)
-		if label != "" {
-			lines = append(lines, dashes+" "+label)
-		} else {
-			lines = append(lines, dashes)
+	for _, tick := range ticks {
+		line := strings.Repeat("-", tick.Length)
+		if tick.Label != nil {
+			line += " " + fmt.Sprint(*tick.Label)
 		}
+		lines = append(lines, line)
 	}
-
-	var drawInterval func(centerLength int)
-	drawInterval = func(centerLength int) {
-		if centerLength > 0 {
-			drawInterval(centerLength - 1)
-			drawLine(centerLength, "")
-			drawInterval(centerLength - 1)
-		}
-	}
-
-	drawLine(t, "0")
-	for j := 1; j <= n; j++ {
-		drawInterval(t - 1)
-		drawLine(t, strconv.Itoa(j))
-	}
-
+	
 	return strings.Join(lines, "\n")
+}
+
+func addSubdivisions(length int, ticks *[]Tick) {
+	if length <= 0 {
+		return
+	}
+	
+	addSubdivisions(length-1, ticks)
+	*ticks = append(*ticks, Tick{Length: length})
+	addSubdivisions(length-1, ticks)
 }
