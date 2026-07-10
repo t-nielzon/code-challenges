@@ -1,19 +1,20 @@
 package main
 
 func MoveZeros(arr []int) []int {
-	result := make([]int, len(arr))
-	index := 0
+	writeIdx := 0
 
-	for _, val := range arr {
-		if val != 0 {
-			result[index] = val
-			index++
+	// move all non-zero elements to the front
+	for readIdx := 0; readIdx < len(arr); readIdx++ {
+		if arr[readIdx] != 0 {
+			arr[writeIdx], arr[readIdx] = arr[readIdx], arr[writeIdx]
+			writeIdx++
 		}
 	}
 
-	for i := index; i < len(arr); i++ {
-		result[i] = 0
+	// fill remaining positions with zeros
+	for i := writeIdx; i < len(arr); i++ {
+		arr[i] = 0
 	}
 
-	return result
+	return arr
 }
