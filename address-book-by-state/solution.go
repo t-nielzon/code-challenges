@@ -1,55 +1,95 @@
-package kata
+package main
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 )
 
-func AddressBook(s string) string {
-	states := map[string]string{
-		"AZ": "Arizona",
-		"CA": "California",
-		"ID": "Idaho",
-		"IN": "Indiana",
-		"MA": "Massachusetts",
-		"OK": "Oklahoma",
-		"PA": "Pennsylvania",
-		"VA": "Virginia",
+var stateMap = map[string]string{
+	"AZ": "Arizona",
+	"CA": "California",
+	"ID": "Idaho",
+	"IN": "Indiana",
+	"MA": "Massachusetts",
+	"OK": "Oklahoma",
+	"PA": "Pennsylvania",
+	"VA": "Virginia",
+}
+
+func AddressBookByState(str string) string {
+	if str == "" {
+		return ""
 	}
 
-	groups := map[string][]string{}
-	for _, raw := range strings.Split(s, "\n") {
-		line := strings.TrimSpace(raw)
+	str = strings.ReplaceAll(str, "\r\n", "\n")
+	lines := strings.Split(str, "\n")
+
+	addresses := make(map[string][]map[string]string)
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
 		if line == "" {
 			continue
 		}
-		code := line[len(line)-2:]
-		full, ok := states[code]
+
+		parts := strings.Split(line, ",")
+		if len(parts) < 3 {
+			continue
+		}
+
+		name := strings.TrimSpace(parts[0])
+		address := strings.TrimSpace(parts[1])
+		cityState := strings.TrimSpace(parts[2])
+
+		cityStateParts := strings.Fields(cityState)
+		if len(cityStateParts) < 2 {
+			continue
+		}
+
+		stateCode := cityStateParts[len(cityStateParts)-1]
+		city := strings.Join(cityStateParts[:len(cityStateParts)-1], " ")
+
+		fullState, ok := stateMap[stateCode]
 		if !ok {
 			continue
 		}
-		entry := strings.ReplaceAll(line, ",", "")
-		entry = entry[:len(entry)-2] + full
-		groups[full] = append(groups[full], entry)
+
+		person := map[string]string{
+			"name":    name,
+			"address": address,
+			"city":    city,
+			"state":   fullState,
+		}
+
+		addresses[fullState] = append(addresses[fullState], person)
 	}
 
-	names := make([]string, 0, len(groups))
-	for k := range groups {
-		names = append(names, k)
+	var states []string
+	for state := range addresses {
+		states = append(states, state)
 	}
-	sort.Strings(names)
+	sort.Strings(states)
 
-	var parts []string
-	for i, st := range names {
-		header := st
-		if i > 0 {
-			header = " " + st
-		}
-		parts = append(parts, header)
-		sort.Strings(groups[st])
-		for _, e := range groups[st] {
-			parts = append(parts, "..... "+e)
+	var result []string
+	for _, state := range states {
+		result = append(result, state)
+
+		people := addresses[state]
+		sort.Slice(people, func(i, j int) bool {
+			return people[i]["name"] < people[j]["name"]
+		})
+
+		for _, person := range people {
+			line := fmt.Sprintf("..... %s %s %s %s",
+				person["name"],
+				person["address"],
+				person["city"],
+				person["state"],
+			)
+			result = append(result, line)
 		}
 	}
-	return strings.Join(parts, "\n")
+
+	return strings.Join(result, "\n")
 }
