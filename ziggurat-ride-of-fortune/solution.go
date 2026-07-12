@@ -1,79 +1,90 @@
-func RideOfFortune(artifact []string, explorers []int) [][2]int {
+package main
+
+func RideOfFortune(artifact []string, explorers []int) [][]int {
 	n := len(artifact)
-	
-	// Parse switches and their initial states
+
+	// Parse switches from artifact
 	switches := make(map[[2]int]byte)
-	for i := 0; i < n; i++ {
-		for j := 0; j < len(artifact[i]); j++ {
-			if artifact[i][j] == 'A' || artifact[i][j] == 'B' {
-				switches[[2]int{i, j}] = artifact[i][j]
+	for i, row := range artifact {
+		for j, cell := range row {
+			if cell == 'A' || cell == 'B' {
+				switches[[2]int{i, j}] = byte(cell)
 			}
 		}
 	}
-	
-	results := make([][2]int, len(explorers))
-	
-	for idx, row := range explorers {
-		pos := [2]int{row, -1}
-		dir := [2]int{0, 1}
-		
+
+	results := make([][]int, len(explorers))
+
+	for idx, doorRow := range explorers {
+		row, col := doorRow, -1
+		dir := 0 // 0=east, 1=south, 2=west, 3=north
+
 		for {
-			pos[0] += dir[0]
-			pos[1] += dir[1]
-			
-			if pos[1] < 0 {
-				results[idx] = [2]int{-1, -1}
+			// Move one step in current direction
+			switch dir {
+			case 0: // east
+				col++
+			case 1: // south
+				row++
+			case 2: // west
+				col--
+			case 3: // north
+				row--
+			}
+
+			// Check if hit a wall
+			if col == -1 || col == n || row == -1 || row == n {
+				if col == -1 {
+					results[idx] = []int{-1, -1}
+				} else if col == n {
+					results[idx] = []int{row, n - 1}
+				} else if row == -1 {
+					results[idx] = []int{0, col}
+				} else { // row == n
+					results[idx] = []int{n - 1, col}
+				}
 				break
 			}
-			if pos[1] >= n {
-				results[idx] = [2]int{pos[0], n - 1}
-				break
-			}
-			if pos[0] < 0 {
-				results[idx] = [2]int{0, pos[1]}
-				break
-			}
-			if pos[0] >= n {
-				results[idx] = [2]int{n - 1, pos[1]}
-				break
-			}
-			
-			if state, exists := switches[pos]; exists {
-				dir = routeCart(dir, state)
-				switches[pos] = toggleState(state)
+
+			// Check if hit a switch
+			if state, ok := switches[[2]int{row, col}]; ok {
+				dir = reroute(dir, state)
+				switches[[2]int{row, col}] = toggle(state)
 			}
 		}
 	}
-	
+
 	return results
 }
 
-func routeCart(dir [2]int, state byte) [2]int {
+func reroute(dir int, state byte) int {
 	if state == 'A' {
-		if dir[0] == 0 && dir[1] == 1 {
-			return [2]int{1, 0}
-		} else if dir[0] == 0 && dir[1] == -1 {
-			return [2]int{-1, 0}
-		} else if dir[0] == 1 && dir[1] == 0 {
-			return [2]int{0, 1}
-		} else if dir[0] == -1 && dir[1] == 0 {
-			return [2]int{0, -1}
+		switch dir {
+		case 0: // east -> south
+			return 1
+		case 1: // south -> east
+			return 0
+		case 2: // west -> north
+			return 3
+		case 3: // north -> west
+			return 2
 		}
-	} else {
-		if dir[0] == 0 && dir[1] == 1 {
-			return [2]int{-1, 0}
-		} else if dir[0] == 0 && dir[1] == -1 {
-			return [2]int{1, 0}
-		} else if dir[0] == 1 && dir[1] == 0 {
-			return [2]int{0, -1}
-		} else if dir[0] == -1 && dir[1] == 0 {
-			return [2]int{0, 1}
+	} else { // State B: opposite of A
+		switch dir {
+		case 0: // east -> north
+			return 3
+		case 1: // south -> west
+			return 2
+		case 2: // west -> south
+			return 1
+		case 3: // north -> east
+			return 0
 		}
 	}
 	return dir
 }
 
-func toggleState(state byte) byte {
+func toggle(state byte) byte {
 	if state == 'A' {
 		return 'B'
 	}
