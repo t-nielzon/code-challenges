@@ -1,27 +1,18 @@
-function isPalindrome(s, i, j) {
-  while (i < j) {
-    if (s[i] !== s[j]) return false;
-    i++;
-    j--;
+function solve(str) {
+  function isPalindrome(s) {
+    return s === s.split('').reverse().join('');
   }
-  return true;
-}
-
-function solve(s) {
-  let i = 0;
-  let j = s.length - 1;
-
-  while (i < j) {
-    if (s[i] !== s[j]) {
-      // mismatch found: try removing one of the two mismatched characters
-      if (isPalindrome(s, i + 1, j) || isPalindrome(s, i, j - 1)) {
-        return "remove one";
-      }
-      return "not possible";
+  
+  if (isPalindrome(str)) {
+    return "OK";
+  }
+  
+  for (let i = 0; i < str.length; i++) {
+    const newStr = str.slice(0, i) + str.slice(i + 1);
+    if (isPalindrome(newStr)) {
+      return "remove one";
     }
-    i++;
-    j--;
   }
-
-  return "OK";
+  
+  return "not possible";
 }
