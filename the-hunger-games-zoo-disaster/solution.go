@@ -1,51 +1,77 @@
-package kata
+package main
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
-func ZooDisaster(zoo string) []string {
-	diet := map[string]map[string]bool{
-		"antelope": {"grass": true},
-		"big-fish": {"little-fish": true},
-		"bug":      {"leaves": true},
-		"bear":     {"big-fish": true, "bug": true, "chicken": true, "cow": true, "leaves": true, "sheep": true},
-		"chicken":  {"bug": true},
-		"cow":      {"grass": true},
-		"fox":      {"chicken": true, "sheep": true},
-		"giraffe":  {"leaves": true},
-		"lion":     {"antelope": true, "cow": true},
-		"panda":    {"leaves": true},
-		"sheep":    {"grass": true},
+func ZooDis(zoo string) []string {
+	eats := map[string][]string{
+		"antelope": {"grass"},
+		"big-fish": {"little-fish"},
+		"bug": {"leaves"},
+		"bear": {"big-fish", "bug", "chicken", "cow", "leaves", "sheep"},
+		"chicken": {"bug"},
+		"cow": {"grass"},
+		"fox": {"chicken", "sheep"},
+		"giraffe": {"leaves"},
+		"lion": {"antelope", "cow"},
+		"panda": {"leaves"},
+		"sheep": {"grass"},
 	}
-
-	items := strings.Split(zoo, ",")
+	
 	result := []string{zoo}
-
+	animals := strings.Split(zoo, ",")
+	
 	for {
 		ate := false
-		for i := 0; i < len(items); i++ {
-			eater := items[i]
-			menu, ok := diet[eater]
+		
+		for i := 0; i < len(animals); i++ {
+			eatable, ok := eats[animals[i]]
 			if !ok {
 				continue
 			}
-			if i > 0 && menu[items[i-1]] {
-				result = append(result, eater+" eats "+items[i-1])
-				items = append(items[:i-1], items[i:]...)
-				ate = true
+			
+			// Check left first
+			if i > 0 {
+				for _, food := range eatable {
+					if animals[i-1] == food {
+						victim := animals[i-1]
+						animals = append(animals[:i-1], animals[i:]...)
+						result = append(result, fmt.Sprintf("%s eats %s", animals[i-1], victim))
+						ate = true
+						break
+					}
+				}
+			}
+			
+			if ate {
 				break
 			}
-			if i < len(items)-1 && menu[items[i+1]] {
-				result = append(result, eater+" eats "+items[i+1])
-				items = append(items[:i+1], items[i+2:]...)
-				ate = true
+			
+			// Check right
+			if i < len(animals)-1 {
+				for _, food := range eatable {
+					if animals[i+1] == food {
+						victim := animals[i+1]
+						animals = append(animals[:i+1], animals[i+2:]...)
+						result = append(result, fmt.Sprintf("%s eats %s", animals[i], victim))
+						ate = true
+						break
+					}
+				}
+			}
+			
+			if ate {
 				break
 			}
 		}
+		
 		if !ate {
 			break
 		}
 	}
-
-	result = append(result, strings.Join(items, ","))
+	
+	result = append(result, strings.Join(animals, ","))
 	return result
 }
