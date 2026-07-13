@@ -1,12 +1,16 @@
 package kata
 
-func SplitInParts(s string) []string {
-	if len(s)%2 != 0 {
-		s += "_"
+func SplitStrings(str string) []string {
+	var result []string
+	runes := []rune(str)
+	
+	for i := 0; i < len(runes); i += 2 {
+		if i+1 < len(runes) {
+			result = append(result, string(runes[i:i+2]))
+		} else {
+			result = append(result, string(runes[i])+"_")
+		}
 	}
-	result := []string{}
-	for i := 0; i < len(s); i += 2 {
-		result = append(result, s[i:i+2])
-	}
+	
 	return result
 }
