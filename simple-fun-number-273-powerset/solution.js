@@ -1,19 +1,21 @@
-
-For `nums = [1, 2, 3]`, the output should be 
-
-`[[], [3], [2], [2, 3], [1], [1, 3], [1, 2], [1, 2, 3]]`.
-
-# Input/Output
-
-`[input]` integer array `nums`
-
-Array of positive integers, `1 ≤ nums.length ≤ 10`.
-
-[output] 2D integer array
-
-The powerset of nums.
-*/
-
 function powerset(nums) {
-
+  const result = [];
+  
+  function dfs(index, current) {
+    if (index === nums.length) {
+      result.push([...current]);
+      return;
+    }
+    
+    // don't take current element
+    dfs(index + 1, current);
+    
+    // take current element
+    current.push(nums[index]);
+    dfs(index + 1, current);
+    current.pop();
+  }
+  
+  dfs(0, []);
+  return result;
 }
