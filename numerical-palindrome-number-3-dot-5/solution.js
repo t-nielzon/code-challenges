@@ -1,3 +1,4 @@
+// solution.js
 function numPalindrome(num) {
   if (!Number.isInteger(num) || num < 0) {
     return "Not valid";
@@ -6,16 +7,25 @@ function numPalindrome(num) {
   const str = String(num);
   const palindromes = new Set();
   
+  // Generate all substrings
   for (let i = 0; i < str.length; i++) {
-    for (let j = i + 2; j <= str.length; j++) {
+    for (let j = i + 1; j <= str.length; j++) {
       const substring = str.substring(i, j);
       
-      if (substring[0] === '0' || substring[substring.length - 1] === '0') {
+      // Skip single digit numbers
+      if (substring.length === 1) {
         continue;
       }
       
-      if (substring === substring.split('').reverse().join('')) {
-        palindromes.add(parseInt(substring));
+      // Skip if starts with zero
+      if (substring[0] === '0') {
+        continue;
+      }
+      
+      // Check if palindrome
+      const reversed = substring.split('').reverse().join('');
+      if (substring === reversed) {
+        palindromes.add(Number(substring));
       }
     }
   }
