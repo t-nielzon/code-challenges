@@ -1,1 +1,3 @@
-negation=n=>~n>>>31&n>>>31^1
+function negation(n) {
+  return 1+((n|~n+1)>>31)
+}
