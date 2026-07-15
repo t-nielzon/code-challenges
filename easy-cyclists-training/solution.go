@@ -1,6 +1,8 @@
-package kata
+package main
 
-import "math"
+import (
+	"math"
+)
 
 const (
 	GRAVITY_ACC = 9.81 * 3.6 * 60.0
@@ -13,30 +15,35 @@ const (
 )
 
 func temps(v0, slope, dTot float64) int {
-	t, v, d, watts := 0.0, v0, 0.0, WATTS0
-
-	// function(slope): slope is a grade percentage (rise/run), so the gravity
-	// component along the incline is sin(atan(grade)).
-	gravityComponent := GRAVITY_ACC * math.Sin(math.Atan(slope/100.0))
-
+	t := 0.0
+	v := v0
+	d := 0.0
+	watts := WATTS0
+	
+	slopeFunc := slope / 100.0
+	
 	for d < dTot {
-		gamma := -gravityComponent - DRAG*math.Abs(v)*math.Abs(v)/MASS
+		gamma := -GRAVITY_ACC * slopeFunc
+		gamma -= DRAG * math.Abs(v) * math.Abs(v) / MASS
+		
 		if watts > 0 && v > 0 {
 			gamma += G_THRUST * watts / (v * MASS)
 		}
+		
 		if math.Abs(gamma) <= 1e-5 {
 			gamma = 0
 		}
-
-		v = v + gamma*DELTA_T
+		
+		v += gamma * DELTA_T
+		
 		if v-3.0 <= 1e-2 {
 			return -1
 		}
-
-		d = d + v*DELTA_T/60.0
-		watts = watts - D_WATTS*DELTA_T
-		t = t + DELTA_T
+		
+		d += v * DELTA_T / 60.0
+		watts -= D_WATTS * DELTA_T
+		t += DELTA_T
 	}
-
+	
 	return int(math.Round(t))
 }
