@@ -1,16 +1,31 @@
-package kata
+package main
 
-func isPrime(n uint64) bool {
+func BackwardsReadPrimes(start, end int) []int {
+	result := []int{}
+
+	for num := start; num <= end; num++ {
+		if isPrime(num) {
+			reversed := reverse(num)
+			if isPrime(reversed) && num != reversed {
+				result = append(result, num)
+			}
+		}
+	}
+
+	return result
+}
+
+func isPrime(n int) bool {
 	if n < 2 {
 		return false
 	}
-	if n < 4 {
+	if n == 2 {
 		return true
 	}
 	if n%2 == 0 {
 		return false
 	}
-	for i := uint64(3); i*i <= n; i += 2 {
+	for i := 3; i*i <= n; i += 2 {
 		if n%i == 0 {
 			return false
 		}
@@ -18,31 +33,11 @@ func isPrime(n uint64) bool {
 	return true
 }
 
-func reverseNum(n uint64) uint64 {
-	r := uint64(0)
+func reverse(n int) int {
+	result := 0
 	for n > 0 {
-		r = r*10 + n%10
+		result = result*10 + n%10
 		n /= 10
-	}
-	return r
-}
-
-func BackwardsPrime(start, stop uint64) []uint64 {
-	result := []uint64{}
-	if start < 2 {
-		start = 2
-	}
-	for n := start; n <= stop; n++ {
-		if n < 10 {
-			continue
-		}
-		r := reverseNum(n)
-		if r == n {
-			continue
-		}
-		if isPrime(n) && isPrime(r) {
-			result = append(result, n)
-		}
 	}
 	return result
 }
