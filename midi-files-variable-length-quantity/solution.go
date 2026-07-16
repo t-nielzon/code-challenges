@@ -1,30 +1,28 @@
-package kata
+package main
 
-func encode(n int) []byte {
-	// collect 7-bit groups least-significant first, then reverse
-	groups := []byte{byte(n & 0x7F)}
-	for n >>= 7; n > 0; n >>= 7 {
-		groups = append(groups, byte(n&0x7F))
+func Encode(n int) []byte {
+	if n == 0 {
+		return []byte{0}
 	}
 
-	out := make([]byte, len(groups))
-	for i, j := 0, len(groups)-1; j >= 0; i, j = i+1, j-1 {
-		b := groups[j]
-		// set continuation bit on every byte except the last
-		if j != 0 {
-			b |= 0x80
-		}
-		out[i] = b
+	var bytes []byte
+	for n > 0 {
+		bytes = append([]byte{byte(n & 0x7F)}, bytes...)
+		n >>= 7
 	}
-	return out
+
+	for i := 0; i < len(bytes)-1; i++ {
+		bytes[i] |= 0x80
+	}
+
+	return bytes
 }
 
-func decode(data []byte) int {
+func Decode(data []byte) int {
 	result := 0
 	for _, b := range data {
 		result = (result << 7) | int(b&0x7F)
-		// highest bit clear marks the final byte of this VLQ
-		if b&0x80 == 0 {
+		if (b & 0x80) == 0 {
 			break
 		}
 	}
