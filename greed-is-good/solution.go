@@ -1,28 +1,30 @@
-package kata
+package main
 
 func Score(dice []int) int {
-	counts := make([]int, 7)
+	freq := make(map[int]int)
 	for _, d := range dice {
-		counts[d]++
+		freq[d]++
 	}
 
 	score := 0
-	for face := 1; face <= 6; face++ {
-		n := counts[face]
+	for value := 1; value <= 6; value++ {
+		count := freq[value]
 
-		if n >= 3 {
-			if face == 1 {
+		if count >= 3 {
+			if value == 1 {
 				score += 1000
 			} else {
-				score += face * 100
+				score += value * 100
 			}
-			n -= 3
+			count -= 3
 		}
 
-		if face == 1 {
-			score += n * 100
-		} else if face == 5 {
-			score += n * 50
+		if count > 0 {
+			if value == 1 {
+				score += count * 100
+			} else if value == 5 {
+				score += count * 50
+			}
 		}
 	}
 
