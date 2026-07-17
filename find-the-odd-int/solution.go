@@ -1,9 +1,9 @@
 package kata
 
-func FindOdd(seq []int) int {
+func FindOdd(arr []int) int {
 	result := 0
-	for _, n := range seq {
-		result ^= n
+	for _, num := range arr {
+		result ^= num
 	}
 	return result
 }

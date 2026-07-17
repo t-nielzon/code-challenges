@@ -1,4 +1,8 @@
+package kata
+
 /*
+Find the odd int
+
 Given an array of integers, find the one that appears an odd number of times.
 
 There will always be only one integer that appears an odd number of times.
@@ -11,8 +15,5 @@ Examples:
 [1,2,2,3,3,3,4,3,3,3,2,2,1] should return 4, because it appears 1 time (which is odd).
 */
 
-package kata
-
-func FindOdd(seq []int) int {
-	return 0
+func FindOdd(arr []int) int {
 }
