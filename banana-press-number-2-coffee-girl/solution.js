@@ -1,55 +1,68 @@
 function minCoffeeSwaps(tray, deliverList) {
-  // rotate the tray 90 degrees clockwise (works for non-square trays too)
-  const rotate = (m) => {
-    const rows = m.length, cols = m[0].length, res = [];
-    for (let j = 0; j < cols; j++) {
-      const row = [];
-      for (let i = rows - 1; i >= 0; i--) row.push(m[i][j]);
-      res.push(row);
-    }
-    return res;
-  };
-
-  // mirror horizontally; this also models picking coffees right-to-left
-  const flip = (m) => m.map((r) => [...r].reverse());
-
-  // read the tray row by row into a single sequence
-  const flatten = (m) => m.reduce((acc, r) => acc.concat(r), []);
-
-  // target index of every coffee in the deliverList
-  const pos = new Map();
-  deliverList.forEach((v, i) => pos.set(v, i));
-
-  // minimum swaps to sort a sequence = n - (number of permutation cycles)
-  const swapsFor = (arr) => {
-    const n = arr.length;
-    const target = arr.map((v) => pos.get(v));
-    const seen = new Array(n).fill(false);
-    let cycles = 0;
-    for (let i = 0; i < n; i++) {
-      if (seen[i]) continue;
-      cycles++;
-      let j = i;
-      while (!seen[j]) {
-        seen[j] = true;
-        j = target[j];
+  // rotate tray 90 degrees clockwise
+  function rotate90(tray) {
+    const rows = tray.length;
+    const cols = tray[0].length;
+    const rotated = Array(cols).fill(null).map(() => Array(rows));
+    
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        rotated[j][rows - 1 - i] = tray[i][j];
       }
     }
-    return n - cycles;
-  };
-
-  // generate the 8 dihedral orientations (4 rotations, each with/without mirror)
-  const orientations = [];
-  let cur = tray;
-  for (let r = 0; r < 4; r++) {
-    orientations.push(cur);
-    orientations.push(flip(cur));
-    cur = rotate(cur);
+    return rotated;
   }
-
-  let best = Infinity;
-  for (const o of orientations) {
-    best = Math.min(best, swapsFor(flatten(o)));
+  
+  // flatten tray in specified reading direction
+  function flattenTray(tray, readingDirection) {
+    const flat = [];
+    for (let i = 0; i < tray.length; i++) {
+      if (readingDirection === 'ltr') {
+        flat.push(...tray[i]);
+      } else { // rtl
+        for (let j = tray[i].length - 1; j >= 0; j--) {
+          flat.push(tray[i][j]);
+        }
+      }
+    }
+    return flat;
   }
-  return best;
+  
+  // calculate minimum swaps to match target array
+  function minSwaps(arr, target) {
+    const temp = [...arr];
+    let swaps = 0;
+    
+    for (let i = 0; i < temp.length; i++) {
+      if (temp[i] === target[i]) continue;
+      
+      // find position of target[i]
+      let j = i + 1;
+      while (j < temp.length && temp[j] !== target[i]) {
+        j++;
+      }
+      
+      if (j < temp.length) {
+        [temp[i], temp[j]] = [temp[j], temp[i]];
+        swaps++;
+      }
+    }
+    
+    return swaps;
+  }
+  
+  let minSwapsNeeded = Infinity;
+  let currentTray = tray;
+  
+  // try all 4 rotations and both reading directions
+  for (let rotation = 0; rotation < 4; rotation++) {
+    for (const direction of ['ltr', 'rtl']) {
+      const flattened = flattenTray(currentTray, direction);
+      const swaps = minSwaps(flattened, deliverList);
+      minSwapsNeeded = Math.min(minSwapsNeeded, swaps);
+    }
+    currentTray = rotate90(currentTray);
+  }
+  
+  return minSwapsNeeded;
 }
