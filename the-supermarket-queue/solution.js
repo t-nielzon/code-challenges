@@ -1,11 +1,15 @@
 function queueTime(customers, n) {
-  const tills = new Array(n).fill(0);
-
+  const tills = Array(n).fill(0);
+  
   for (const time of customers) {
-    // assign each customer to the till that becomes free earliest
-    const earliest = tills.indexOf(Math.min(...tills));
-    tills[earliest] += time;
+    let minIndex = 0;
+    for (let i = 1; i < n; i++) {
+      if (tills[i] < tills[minIndex]) {
+        minIndex = i;
+      }
+    }
+    tills[minIndex] += time;
   }
-
+  
   return Math.max(...tills);
 }
