@@ -1,10 +1,11 @@
 /*
-Find last Fibonacci digit [hardcore version]
+Find the last digit of the nth Fibonacci number.
 
-Return the last digit of the nth element in the Fibonacci sequence
-(starting with 1, 1, not 0, 1).
+The Fibonacci sequence starts with 1, 1 (not 0, 1).
 
-For large values of n (up to 1,000,000), brute force calculation is impractical.
+You need to return only the last digit of the nth Fibonacci number.
+
+The numbers can be very large (up to 1,000,000), so you cannot brute force.
 
 Examples:
 LastFibDigit(1) == 1
@@ -13,9 +14,4 @@ LastFibDigit(3) == 2
 LastFibDigit(1000) == 5
 LastFibDigit(1000000) == 5
 */
-package main
-
-func LastFibDigit(n int64) int {
-	// Implementation here
-	return 0
-}
+func LastFibDigit(n int64) int64
