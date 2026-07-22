@@ -1,52 +1,82 @@
-package kata
+package main
 
-func reverseInt(n int) int {
-	r := 0
-	for n > 0 {
-		r = r*10 + n%10
-		n /= 10
-	}
-	return r
-}
-
-func distinctPrimeFactors(n int) []int {
-	var factors []int
-	for p := 2; p*p <= n; p++ {
-		if n%p == 0 {
-			factors = append(factors, p)
-			for n%p == 0 {
-				n /= p
-			}
-		}
-	}
-	if n > 1 {
-		factors = append(factors, n)
-	}
-	return factors
-}
-
-func sameFactors(a, b []int) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
-}
+import "sort"
 
 func SameFactRev(nMax int) []int {
 	result := []int{}
-	for n := 2; n < nMax; n++ {
-		rev := reverseInt(n)
-		if rev == n {
+	
+	for n := 1; n < nMax; n++ {
+		if isPalindrome(n) {
 			continue
 		}
-		if sameFactors(distinctPrimeFactors(n), distinctPrimeFactors(rev)) {
+		
+		if sameFactors(n, reverseNumber(n)) {
 			result = append(result, n)
 		}
 	}
+	
+	sort.Ints(result)
 	return result
+}
+
+func getPrimeFactors(n int) map[int]bool {
+	factors := make(map[int]bool)
+	
+	if n%2 == 0 {
+		factors[2] = true
+		for n%2 == 0 {
+			n /= 2
+		}
+	}
+	
+	for i := 3; i*i <= n; i += 2 {
+		if n%i == 0 {
+			factors[i] = true
+			for n%i == 0 {
+				n /= i
+			}
+		}
+	}
+	
+	if n > 1 {
+		factors[n] = true
+	}
+	
+	return factors
+}
+
+func isPalindrome(n int) bool {
+	original := n
+	reversed := 0
+	for n > 0 {
+		reversed = reversed*10 + n%10
+		n /= 10
+	}
+	return original == reversed
+}
+
+func reverseNumber(n int) int {
+	reversed := 0
+	for n > 0 {
+		reversed = reversed*10 + n%10
+		n /= 10
+	}
+	return reversed
+}
+
+func sameFactors(n1, n2 int) bool {
+	factors1 := getPrimeFactors(n1)
+	factors2 := getPrimeFactors(n2)
+	
+	if len(factors1) != len(factors2) {
+		return false
+	}
+	
+	for k := range factors1 {
+		if !factors2[k] {
+			return false
+		}
+	}
+	
+	return true
 }
