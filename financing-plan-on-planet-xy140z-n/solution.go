@@ -1,5 +1,5 @@
-package kata
+package main
 
-func finance(n uint64) uint64 {
+func finance(n int) int {
 	return n * (n + 1) * (n + 2) / 2
 }
