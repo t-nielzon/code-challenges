@@ -1,21 +1,23 @@
-package kata
+package main
 
 import "strings"
 
 func DuplicateEncode(word string) string {
-	lower := strings.ToLower(word)
-	counts := make(map[rune]int)
-	for _, r := range lower {
-		counts[r]++
+	word = strings.ToLower(word)
+	
+	freq := make(map[rune]int)
+	for _, ch := range word {
+		freq[ch]++
 	}
-	var b strings.Builder
-	b.Grow(len(lower))
-	for _, r := range lower {
-		if counts[r] > 1 {
-			b.WriteByte(')')
+	
+	result := ""
+	for _, ch := range word {
+		if freq[ch] == 1 {
+			result += "("
 		} else {
-			b.WriteByte('(')
+			result += ")"
 		}
 	}
-	return b.String()
+	
+	return result
 }
