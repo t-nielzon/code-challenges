@@ -1,26 +1,30 @@
-function isPalindrome(n) {
-  const s = '' + n;
-  for (let a = 0, b = s.length - 1; a < b; a++, b--) {
-    if (s[a] !== s[b]) return false;
+function largestPalindromicProduct(lower, upper) {
+  function isPalindrome(n) {
+    const str = String(n);
+    return str === str.split('').reverse().join('');
   }
-  return true;
-}
-
-function largestPalindrome(lower, upper) {
-  let best = NaN;
+  
+  let maxPalindrome = -1;
+  
   for (let i = upper; i >= lower; i--) {
-    // largest possible product using i is i * upper; if that can't beat best,
-    // no smaller i can either, so we're done
-    if (i * upper <= best) break;
-    for (let j = upper; j >= i; j--) {
+    // break outer loop if largest possible product with i is less than current max
+    if (i * upper < maxPalindrome) {
+      break;
+    }
+    
+    for (let j = upper; j >= lower; j--) {
       const product = i * j;
-      // products shrink as j shrinks, so once we drop to best, stop this row
-      if (product <= best) break;
-      if (isPalindrome(product)) {
-        best = product;
+      
+      // break inner loop if product is less than current max
+      if (product < maxPalindrome) {
         break;
+      }
+      
+      if (isPalindrome(product) && product > maxPalindrome) {
+        maxPalindrome = product;
       }
     }
   }
-  return best;
+  
+  return maxPalindrome === -1 ? NaN : maxPalindrome;
 }
