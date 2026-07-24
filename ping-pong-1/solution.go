@@ -1,47 +1,53 @@
-package kata
+package main
 
 import "strings"
 
 func PingPong(sounds string) string {
-	parts := strings.Split(sounds, "-")
-
-	scores := map[string]int{"ping": 0, "pong": 0}
-	var server string
-	var lastHitter string
-	var lastBadHitter string
-	inRally := false
-
-	for _, s := range parts {
-		if s == "ping" || s == "pong" {
-			if !inRally {
-				server = s
-				inRally = true
+	soundList := strings.Split(sounds, "-")
+	
+	pingScore := 0
+	pongScore := 0
+	
+	var currentServer string
+	var lastValidHitter string
+	var finalBadHitter string
+	
+	for _, sound := range soundList {
+		if sound == "ping" || sound == "pong" {
+			if currentServer == "" {
+				currentServer = sound
 			}
-			lastHitter = s
+			lastValidHitter = sound
 		} else {
-			if inRally {
-				inRally = false
-				lastBadHitter = lastHitter
-				winner := "ping"
-				if lastHitter == "ping" {
-					winner = "pong"
-				}
-				if server == winner {
-					scores[winner]++
+			// bad noise marks end of rally
+			if currentServer != "" {
+				if currentServer != lastValidHitter {
+					// server wins (opponent made the bad shot)
+					if currentServer == "ping" {
+						pingScore++
+					} else {
+						pongScore++
+					}
 				}
 			}
+			// track final bad hitter for tie-breaking
+			finalBadHitter = lastValidHitter
+			// reset for next rally
+			currentServer = ""
+			lastValidHitter = ""
 		}
 	}
-
-	if scores["ping"] > scores["pong"] {
+	
+	// determine winner
+	if pingScore > pongScore {
+		return "ping"
+	} else if pongScore > pingScore {
+		return "pong"
+	} else {
+		// tie: winner is who didn't hit the final bad shot
+		if finalBadHitter == "ping" {
+			return "pong"
+		}
 		return "ping"
 	}
-	if scores["pong"] > scores["ping"] {
-		return "pong"
-	}
-
-	if lastBadHitter == "ping" {
-		return "pong"
-	}
-	return "ping"
 }
