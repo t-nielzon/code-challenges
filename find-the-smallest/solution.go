@@ -1,32 +1,38 @@
-package kata
+package main
 
-import "strconv"
+import (
+	"strconv"
+)
 
-func Smallest(n int64) [3]int64 {
-	s := []byte(strconv.FormatInt(n, 10))
-	best := n
-	bestI, bestJ := int64(0), int64(0)
-
-	for i := 0; i < len(s); i++ {
-		// build slice without the digit at index i
-		rem := make([]byte, 0, len(s)-1)
-		rem = append(rem, s[:i]...)
-		rem = append(rem, s[i+1:]...)
-
-		for j := 0; j <= len(rem); j++ {
-			cand := make([]byte, 0, len(s))
-			cand = append(cand, rem[:j]...)
-			cand = append(cand, s[i])
-			cand = append(cand, rem[j:]...)
-
-			val, _ := strconv.ParseInt(string(cand), 10, 64)
-			if val < best {
-				best = val
-				bestI = int64(i)
-				bestJ = int64(j)
+func smallest(n int) [3]int {
+	s := strconv.Itoa(n)
+	digits := []rune(s)
+	
+	var result [3]int
+	result[0] = n
+	result[1] = 0
+	result[2] = 0
+	
+	for i := 0; i < len(digits); i++ {
+		digit := digits[i]
+		
+		temp := append([]rune{}, digits[:i]...)
+		temp = append(temp, digits[i+1:]...)
+		
+		for j := 0; j <= len(temp); j++ {
+			newDigits := append([]rune{}, temp[:j]...)
+			newDigits = append(newDigits, digit)
+			newDigits = append(newDigits, temp[j:]...)
+			
+			num, _ := strconv.Atoi(string(newDigits))
+			
+			if num < result[0] || (num == result[0] && i < result[1]) || (num == result[0] && i == result[1] && j < result[2]) {
+				result[0] = num
+				result[1] = i
+				result[2] = j
 			}
 		}
 	}
-
-	return [3]int64{best, bestI, bestJ}
+	
+	return result
 }
