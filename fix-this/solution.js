@@ -1,13 +1,19 @@
-const fix = f => (g => g(g))(x => f(y => x(x)(y)));
+function fix(f) {
+  return f(x => fix(f)(x));
+}
 
-const factorial = f => n => n <= 1n ? 1n : n * f(n - 1n);
+function factorial(f) {
+  return n => n <= 1n ? 1n : n * f(n - 1n);
+}
 
-const fibonacci = f => n => n <= 1 ? BigInt(n) : f(n - 1) + f(n - 2);
+function fibonacci(f) {
+  return n => n <= 1n ? BigInt(n) : f(n - 1n) + f(n - 2n);
+}
 
-const foldr = self => folding_fn => init => gen => {
-  const result = gen.next();
-  if (result.done) {
-    return init;
-  }
-  return folding_fn(result.value)(() => self(folding_fn)(init)(gen));
-};
+function foldr(f) {
+  return z => gen => {
+    const {value, done} = gen.next();
+    if (done) return z;
+    return f(value)(() => foldr(f)(z)(gen));
+  };
+}
