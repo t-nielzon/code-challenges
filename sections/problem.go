@@ -1,21 +1,18 @@
-/*
-Consider the following equation of a surface S: z*z*z = x*x * y*y.
-Take a cross section of S by a plane P: z = k where k is a positive integer (k > 0).
-Call this cross section C(k).
+package kata
 
-Task:
-Find the number of points of C(k) whose coordinates are positive integers.
+/*
+Consider the surface S: z³ = x² * y².
+Take a cross section of S by the plane P: z = k (where k > 0).
+Find the number of points on this cross section whose coordinates are positive integers.
 
 Examples:
 c(1) -> 1
 c(4) -> 4
 c(4096576) -> 160
-c(2019) -> 0 which means that no point of C(2019) has integer coordinates.
-
-Notes:
-- k can go up to about 10,000,000,000
+c(2019) -> 0
 */
-package kata
 
-func C(k int) int {
+func C(k int64) int {
+	// TODO: implement
+	return 0
 }
