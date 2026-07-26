@@ -1,4 +1,4 @@
-package kata
+package main
 
 /*
 A natural number is called k-prime if it has exactly k prime factors, counted with multiplicity.
@@ -16,21 +16,23 @@ The k-prime numbers are not regularly spaced. For example: between 2 and 50 we h
 The steps between two k-primes of this list are 2, 3, 1, 4, 1, 6, 1, 3, 1, 7, 1, 1, 3, 1, 7, 3.
 
 Task:
-Write a function KprimesStep(k, step, start, nd) with parameters:
-- k (integer > 0) which indicates the type of k-primes we are looking for,
-- step (integer > 0) which indicates the step we want to find between two k-primes,
-- start (integer >= 0) which gives the start of the search (start inclusive),
+We will write a function kprimes_step(k, step, start, nd) with parameters:
+- k (integer > 0) which indicates the type of k-primes we are looking for
+- step (integer > 0) which indicates the step we want to find between two k-primes
+- start (integer >= 0) which gives the start of the search (start inclusive)
 - nd (integer >= start) which gives the end of the search (nd inclusive)
 
 This function should return an array of all the pairs (or tuples) of k-prime numbers spaced with a step of step
 between the limits start, nd. This array can be empty.
 
 Examples:
-KprimesStep(2, 2, 0, 50) => [[4, 6], [33, 35]]
-KprimesStep(6, 14, 2113665, 2113889) => [[2113722, 2113736]]
-KprimesStep(2, 10, 0, 50) => [[4, 14], [15, 25], [25, 35], [39, 49]]
-KprimesStep(5, 20, 0, 50) => []
+kprimes_step(2, 2, 0, 50) => [[4, 6], [33, 35]]
+kprimes_step(6, 14, 2113665, 2113889) => [[2113722, 2113736]]
+kprimes_step(2, 10, 0, 50) => [[4, 14], [15, 25], [25, 35], [39, 49]]
+kprimes_step(5, 20, 0, 50) => []
 */
 
-func KprimesStep(k, step, start, nd int) [][]int {
+func kprimes_step(k, step, start, nd int) [][]int {
+	// TODO: implement
+	return nil
 }
