@@ -5,44 +5,35 @@ import (
 	"strings"
 )
 
-type Tick struct {
-	Length int
-	Label  *int
-}
-
-func DrawRuler(t, n int) string {
-	var ticks []Tick
-	
-	// Add major ticks
-	for i := 0; i <= n; i++ {
-		label := i
-		ticks = append(ticks, Tick{Length: t, Label: &label})
-	}
-	
-	// Add subdivision ticks for each interval
-	for i := 0; i < n; i++ {
-		addSubdivisions(t-1, &ticks)
-	}
-	
-	// Format output
+func DrawRuler(t int, n int) string {
 	var lines []string
-	for _, tick := range ticks {
-		line := strings.Repeat("-", tick.Length)
-		if tick.Label != nil {
-			line += " " + fmt.Sprint(*tick.Label)
+
+	// Draw the major tick at position 0
+	lines = append(lines, strings.Repeat("-", t)+" 0")
+
+	// For each inch
+	for i := 0; i < n; i++ {
+		// Draw the sub-ticks in this interval
+		for _, tickLength := range ticksInRange(0, 1, t-1) {
+			lines = append(lines, strings.Repeat("-", tickLength))
 		}
-		lines = append(lines, line)
+
+		// Draw the major tick for the next inch
+		lines = append(lines, fmt.Sprintf("%s %d", strings.Repeat("-", t), i+1))
 	}
-	
+
 	return strings.Join(lines, "\n")
 }
 
-func addSubdivisions(length int, ticks *[]Tick) {
-	if length <= 0 {
-		return
+func ticksInRange(startPos, endPos float64, tickLength int) []int {
+	if tickLength == 0 {
+		return []int{}
 	}
-	
-	addSubdivisions(length-1, ticks)
-	*ticks = append(*ticks, Tick{Length: length})
-	addSubdivisions(length-1, ticks)
+
+	midPos := (startPos + endPos) / 2
+	result := ticksInRange(startPos, midPos, tickLength-1)
+	result = append(result, tickLength)
+	result = append(result, ticksInRange(midPos, endPos, tickLength-1)...)
+
+	return result
 }
