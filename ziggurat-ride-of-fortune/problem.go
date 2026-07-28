@@ -2,28 +2,38 @@
 Ziggurat Ride of Fortune
 
 You and a group of explorers have found a legendary ziggurat hidden in an obscure jungle.
-The outer west wall has entrance doors. When an explorer enters, they sit in a cart that
-moves in a straight path until it reaches a switch or hits a wall.
+The outer west wall consists of entrance doors. When an explorer enters through a door,
+they sit in a mobile cart that moves in a straight path until it reaches a "switch" or hits a wall.
 
-A switch re-routes the cart either left or right, depending on the switch state and
-movement direction. Portals line the north, east, and south walls. If a cart hits one of
-these walls, the explorer exits through a portal. If a cart ends at the west wall, the
-explorer exits through a door (return null).
+A switch re-routes the cart either left or right, depending on the state of the switch and
+the cart's movement direction.
 
-Switch mechanics for state A:
-- west -> north, east -> south, south -> east, north -> west
+Portals line the entire north, east, and south walls. If a cart hits one of these walls,
+the explorer exits through the portal. If a cart ends at the west wall, the explorer exits
+through a door and returns outside.
 
-Switch mechanics for state B (opposite of A):
-- west -> south, east -> north, south -> west, north -> east
+SWITCH MECHANICS:
+If a switch is in state A and a cart enters by moving:
+  - west, they are routed north
+  - east, they are routed south
+  - south, they are routed east
+  - north, they are routed west
 
-After passing through a switch, it changes state by rotating 90 degrees.
+If the switch is in state B, the cart is routed in the orthogonal direction opposite to A.
 
-Input: an n x n matrix (artifact) and an array of door rows (explorers)
-Output: array of exit points ([row, col]) or [-1, -1] for west wall exits
+Immediately after a cart passes through a switch, the switch changes state.
+
+INPUT:
+- artifact: an n x n matrix representing the ziggurat interior
+- explorers: array of door rows where explorers enter
+
+OUTPUT:
+- array of exit points [row, col] for portal exits, or [-1, -1] for west wall exits
 */
 
 package main
 
-func RideOfFortune(artifact []string, explorers []int) [][]int {
-	// implementation here
+func RideOfFortune(artifact []string, explorers []int) [][2]int {
+	// TODO: implement
+	return nil
 }
