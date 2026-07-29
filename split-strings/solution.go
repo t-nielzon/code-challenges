@@ -1,14 +1,13 @@
-package kata
+package main
 
-func SplitStrings(str string) []string {
+func Solution(str string) []string {
 	var result []string
-	runes := []rune(str)
 	
-	for i := 0; i < len(runes); i += 2 {
-		if i+1 < len(runes) {
-			result = append(result, string(runes[i:i+2]))
+	for i := 0; i < len(str); i += 2 {
+		if i+1 < len(str) {
+			result = append(result, str[i:i+2])
 		} else {
-			result = append(result, string(runes[i])+"_")
+			result = append(result, string(str[i])+"_")
 		}
 	}
 	
