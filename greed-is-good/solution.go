@@ -1,30 +1,31 @@
 package main
 
 func Score(dice []int) int {
-	freq := make(map[int]int)
+	counts := make(map[int]int)
 	for _, d := range dice {
-		freq[d]++
+		counts[d]++
 	}
 
 	score := 0
-	for value := 1; value <= 6; value++ {
-		count := freq[value]
+	tripletScores := map[int]int{
+		1: 1000,
+		2: 200,
+		3: 300,
+		4: 400,
+		5: 500,
+		6: 600,
+	}
 
+	for val := 1; val <= 6; val++ {
+		count := counts[val]
 		if count >= 3 {
-			if value == 1 {
-				score += 1000
-			} else {
-				score += value * 100
-			}
+			score += tripletScores[val]
 			count -= 3
 		}
-
-		if count > 0 {
-			if value == 1 {
-				score += count * 100
-			} else if value == 5 {
-				score += count * 50
-			}
+		if val == 1 {
+			score += count * 100
+		} else if val == 5 {
+			score += count * 50
 		}
 	}
 
