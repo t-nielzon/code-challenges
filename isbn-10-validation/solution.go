@@ -1,23 +1,28 @@
-package kata
+package main
 
-func ValidISBN10(isbn string) bool {
+func IsValidISBN10(isbn string) bool {
 	if len(isbn) != 10 {
 		return false
 	}
 
 	sum := 0
-	for i, c := range isbn {
-		var value int
-		switch {
-		case c >= '0' && c <= '9':
-			value = int(c - '0')
-		case c == 'X' && i == 9:
-			// 'X' is only allowed in the final position, where it counts as 10
-			value = 10
-		default:
+	for i := 0; i < 10; i++ {
+		char := isbn[i]
+		position := i + 1
+
+		var digit int
+		if char == 'X' {
+			if i != 9 {
+				return false
+			}
+			digit = 10
+		} else if char >= '0' && char <= '9' {
+			digit = int(char - '0')
+		} else {
 			return false
 		}
-		sum += value * (i + 1)
+
+		sum += digit * position
 	}
 
 	return sum%11 == 0
