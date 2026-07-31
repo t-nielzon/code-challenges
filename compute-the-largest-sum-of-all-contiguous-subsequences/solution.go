@@ -1,16 +1,24 @@
 package kata
 
-func LargestSum(arr []int) int {
-	maxSum := 0
-	currentSum := 0
-	for _, v := range arr {
-		currentSum += v
-		if currentSum < 0 {
-			currentSum = 0
-		}
-		if currentSum > maxSum {
-			maxSum = currentSum
-		}
+func largestSum(nums []int) int {
+	if len(nums) == 0 {
+		return 0
 	}
-	return maxSum
+
+	maxCurrent := 0
+	maxGlobal := 0
+
+	for _, num := range nums {
+		maxCurrent = max(0, maxCurrent+num)
+		maxGlobal = max(maxGlobal, maxCurrent)
+	}
+
+	return maxGlobal
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
