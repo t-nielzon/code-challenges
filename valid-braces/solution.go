@@ -2,28 +2,22 @@ package main
 
 func ValidBraces(s string) bool {
 	stack := []rune{}
-	
+	matches := map[rune]rune{
+		')': '(',
+		']': '[',
+		'}': '{',
+	}
+
 	for _, ch := range s {
-		switch ch {
-		case '(', '[', '{':
+		if closing, isClosing := matches[ch]; isClosing {
+			if len(stack) == 0 || stack[len(stack)-1] != closing {
+				return false
+			}
+			stack = stack[:len(stack)-1]
+		} else {
 			stack = append(stack, ch)
-		case ')':
-			if len(stack) == 0 || stack[len(stack)-1] != '(' {
-				return false
-			}
-			stack = stack[:len(stack)-1]
-		case ']':
-			if len(stack) == 0 || stack[len(stack)-1] != '[' {
-				return false
-			}
-			stack = stack[:len(stack)-1]
-		case '}':
-			if len(stack) == 0 || stack[len(stack)-1] != '{' {
-				return false
-			}
-			stack = stack[:len(stack)-1]
 		}
 	}
-	
+
 	return len(stack) == 0
 }
