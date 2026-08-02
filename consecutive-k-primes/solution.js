@@ -1,21 +1,34 @@
-function countPrimeFactors(n) {
-  let count = 0;
-  for (let p = 2; p * p <= n; p++) {
-    while (n % p === 0) {
+function consec_kprimes(k, arr) {
+  function countPrimeFactors(n) {
+    let count = 0;
+    
+    // Check for factor 2
+    while (n % 2 === 0) {
       count++;
-      n = n / p;
+      n = n / 2;
+    }
+    
+    // Check for odd factors from 3 onwards
+    for (let i = 3; i * i <= n; i += 2) {
+      while (n % i === 0) {
+        count++;
+        n = n / i;
+      }
+    }
+    
+    // If n is still > 1, it's a prime factor
+    if (n > 1) {
+      count++;
+    }
+    
+    return count;
+  }
+  
+  let count = 0;
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (countPrimeFactors(arr[i]) === k && countPrimeFactors(arr[i + 1]) === k) {
+      count++;
     }
   }
-  if (n > 1) count++;
   return count;
-}
-
-function consecKprimes(k, arr) {
-  let result = 0;
-  for (let i = 1; i < arr.length; i++) {
-    if (countPrimeFactors(arr[i - 1]) === k && countPrimeFactors(arr[i]) === k) {
-      result++;
-    }
-  }
-  return result;
 }
