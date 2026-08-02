@@ -1,9 +1,7 @@
 function cycleLength(n) {
   function gcd(a, b) {
     while (b !== 0) {
-      const temp = b;
-      b = a % b;
-      a = temp;
+      [a, b] = [b, a % b];
     }
     return a;
   }
@@ -12,15 +10,15 @@ function cycleLength(n) {
     return -1;
   }
   
-  const remainders = new Map();
   let remainder = 1;
+  const remainderPositions = {};
   let position = 0;
   
-  while (!remainders.has(remainder)) {
-    remainders.set(remainder, position);
+  while (!(remainder in remainderPositions)) {
+    remainderPositions[remainder] = position;
     remainder = (remainder * 10) % n;
     position++;
   }
   
-  return position - remainders.get(remainder);
+  return position - remainderPositions[remainder];
 }
