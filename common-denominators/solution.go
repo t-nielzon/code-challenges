@@ -1,38 +1,40 @@
-func ConvertFracs(fracs [][2]int) [][2]int {
+package main
+
+func gcd(a, b int64) int64 {
+	for b != 0 {
+		a, b = b, a%b
+	}
+	return a
+}
+
+func lcm(a, b int64) int64 {
+	return a / gcd(a, b) * b
+}
+
+func ConvertFracs(fracs [][]int64) [][]int64 {
 	if len(fracs) == 0 {
-		return [][2]int{}
+		return [][]int64{}
 	}
-
-	gcd := func(a, b int) int {
-		for b != 0 {
-			a, b = b, a%b
-		}
-		return a
-	}
-
-	lcm := func(a, b int) int {
-		return (a / gcd(a, b)) * b
-	}
-
-	// reduce all fractions first
-	reduced := make([][2]int, len(fracs))
+	
+	// Reduce input fractions first
+	reduced := make([][]int64, len(fracs))
 	for i, frac := range fracs {
 		g := gcd(frac[0], frac[1])
-		reduced[i] = [2]int{frac[0] / g, frac[1] / g}
+		reduced[i] = []int64{frac[0] / g, frac[1] / g}
 	}
-
-	// find lcm of all denominators
-	commonDenom := reduced[0][1]
+	
+	// Find LCM of all denominators
+	var commonDenom int64 = reduced[0][1]
 	for i := 1; i < len(reduced); i++ {
 		commonDenom = lcm(commonDenom, reduced[i][1])
 	}
-
-	// convert all fractions to common denominator
-	result := make([][2]int, len(reduced))
+	
+	// Convert all fractions to have the common denominator
+	result := make([][]int64, len(reduced))
 	for i, frac := range reduced {
-		newNum := (commonDenom / frac[1]) * frac[0]
-		result[i] = [2]int{newNum, commonDenom}
+		num := frac[0] * (commonDenom / frac[1])
+		result[i] = []int64{num, commonDenom}
 	}
-
+	
 	return result
 }
