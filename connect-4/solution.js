@@ -1,67 +1,66 @@
 class Connect4 {
   constructor() {
-    this.rows = 6;
-    this.cols = 7;
-    this.grid = Array.from({ length: this.rows }, () => new Array(this.cols).fill(0));
+    this.board = Array(6).fill(null).map(() => Array(7).fill(0));
     this.currentPlayer = 1;
-    this.finished = false;
+    this.gameWon = false;
   }
 
   play(column) {
-    if (this.finished) return 'Game has finished!';
+    if (this.gameWon) {
+      return "Game has finished!";
+    }
 
     let row = -1;
-    for (let r = this.rows - 1; r >= 0; r--) {
-      if (this.grid[r][column] === 0) {
-        row = r;
+    for (let i = 5; i >= 0; i--) {
+      if (this.board[i][column] === 0) {
+        row = i;
         break;
       }
     }
 
-    if (row === -1) return 'Column full!';
-
-    const player = this.currentPlayer;
-    this.grid[row][column] = player;
-
-    if (this.checkWin(row, column, player)) {
-      this.finished = true;
-      return `Player ${player} wins!`;
+    if (row === -1) {
+      return "Column full!";
     }
 
-    this.currentPlayer = player === 1 ? 2 : 1;
-    return `Player ${player} has a turn`;
+    this.board[row][column] = this.currentPlayer;
+
+    if (this.checkWin(row, column)) {
+      this.gameWon = true;
+      return `Player ${this.currentPlayer} wins!`;
+    }
+
+    const message = `Player ${this.currentPlayer} has a turn`;
+    this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
+    return message;
   }
 
-  checkWin(row, col, player) {
-    const directions = [
-      [0, 1],
-      [1, 0],
-      [1, 1],
-      [1, -1],
-    ];
+  checkWin(row, col) {
+    const player = this.board[row][col];
 
-    for (const [dr, dc] of directions) {
-      let count = 1;
+    // horizontal
+    let count = 1;
+    for (let c = col - 1; c >= 0 && this.board[row][c] === player; c--) count++;
+    for (let c = col + 1; c < 7 && this.board[row][c] === player; c++) count++;
+    if (count >= 4) return true;
 
-      for (let dir = -1; dir <= 1; dir += 2) {
-        let r = row + dr * dir;
-        let c = col + dc * dir;
-        while (
-          r >= 0 && r < this.rows &&
-          c >= 0 && c < this.cols &&
-          this.grid[r][c] === player
-        ) {
-          count++;
-          r += dr * dir;
-          c += dc * dir;
-        }
-      }
+    // vertical
+    count = 1;
+    for (let r = row - 1; r >= 0 && this.board[r][col] === player; r--) count++;
+    for (let r = row + 1; r < 6 && this.board[r][col] === player; r++) count++;
+    if (count >= 4) return true;
 
-      if (count >= 4) return true;
-    }
+    // diagonal (top-left to bottom-right)
+    count = 1;
+    for (let r = row - 1, c = col - 1; r >= 0 && c >= 0 && this.board[r][c] === player; r--, c--) count++;
+    for (let r = row + 1, c = col + 1; r < 6 && c < 7 && this.board[r][c] === player; r++, c++) count++;
+    if (count >= 4) return true;
+
+    // diagonal (top-right to bottom-left)
+    count = 1;
+    for (let r = row - 1, c = col + 1; r >= 0 && c < 7 && this.board[r][c] === player; r--, c++) count++;
+    for (let r = row + 1, c = col - 1; r < 6 && c >= 0 && this.board[r][c] === player; r++, c--) count++;
+    if (count >= 4) return true;
 
     return false;
   }
 }
-
-module.exports = Connect4;
