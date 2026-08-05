@@ -1,49 +1,68 @@
-package kata
+package main
 
-func Interpreter(code, tape string) string {
-	t := []byte(tape)
-	ptr := 0
+func Interpreter(code string, tape string) string {
+	bits := make([]int, len(tape))
+	for i, c := range tape {
+		bits[i] = int(c - '0')
+	}
+
+	pointer := 0
 	ip := 0
 
-	for ip < len(code) && ptr >= 0 && ptr < len(t) {
-		switch code[ip] {
+	for ip < len(code) {
+		cmd := code[ip]
+
+		switch cmd {
 		case '>':
-			ptr++
-		case '<':
-			ptr--
-		case '*':
-			if t[ptr] == '0' {
-				t[ptr] = '1'
-			} else {
-				t[ptr] = '0'
+			pointer++
+			if pointer >= len(bits) {
+				break
 			}
+			ip++
+		case '<':
+			pointer--
+			if pointer < 0 {
+				break
+			}
+			ip++
+		case '*':
+			bits[pointer] = 1 - bits[pointer]
+			ip++
 		case '[':
-			if t[ptr] == '0' {
+			if bits[pointer] == 0 {
 				depth := 1
-				for depth > 0 {
-					ip++
+				for ip++; ip < len(code) && depth > 0; ip++ {
 					if code[ip] == '[' {
 						depth++
 					} else if code[ip] == ']' {
 						depth--
 					}
 				}
+			} else {
+				ip++
 			}
 		case ']':
-			if t[ptr] != '0' {
+			if bits[pointer] != 0 {
 				depth := 1
-				for depth > 0 {
-					ip--
+				for ip--; ip >= 0 && depth > 0; ip-- {
 					if code[ip] == ']' {
 						depth++
 					} else if code[ip] == '[' {
 						depth--
 					}
 				}
+				ip++
+			} else {
+				ip++
 			}
+		default:
+			ip++
 		}
-		ip++
 	}
 
-	return string(t)
+	result := ""
+	for _, b := range bits {
+		result += string(byte(b + int('0')))
+	}
+	return result
 }
