@@ -1,32 +1,38 @@
 /*
- * Easy Cyclist's Training
- *
- * John has bought a bike and wants to simulate his mountain biking trip.
- *
- * His trip consists of an ascent of dTot km with an average slope (%).
- * No wind, constant mass (80 kg), initial power 225 watts.
- * No rolling resistance. Pushed start at v0 km/h. Initial acceleration is 0.
- * Time step DELTA_T = 1/60 min.
- *
- * He loses D_WATTS * DELTA_T of power each step.
- *
- * Acceleration has three components:
- *   1) gravity:  -GRAVITY_ACC * sin(atan(slope/100))
- *   2) air drag: -DRAG * |v|^2 / MASS
- *   3) thrust (if watts > 0 and v > 0): +G_THRUST * watts / (v * MASS)
- *   4) if |acceleration| <= 1e-5, set to 0
- *
- * If v - 3.0 <= 1e-2, John gives up (return -1).
- *
- * speed(t+dt) = speed(t) + gamma * DELTA_T
- * dist(t+dt)  = dist(t) + speed(t+dt) * DELTA_T / 60
- *
- * Return rounded integer time in minutes, or -1 if he gives up.
- *
- * Examples:
- *   temps(30, 5, 30)  -> 114
- *   temps(30, 20, 30) -> -1
- *   temps(30, 8, 20)  -> 110
- */
+John has bought a bike and wants to simulate his mountain climbing performance.
+
+Trip parameters:
+- Distance to climb: dTot (km)
+- Slope: slope (percent)
+- Initial speed: v0 (km/h)
+
+Constants:
+GRAVITY_ACC = 9.81 * 3.6 * 60.0
+DRAG = 60.0 * 0.3 / 3.6
+DELTA_T = 1.0 / 60.0
+G_THRUST = 60 * 3.6 * 3.6
+MASS = 80.0
+WATTS0 = 225.0
+D_WATTS = 0.5
+
+Acceleration components:
+1) Gravity: - GRAVITY_ACC * sin(arctan(slope / 100))
+2) Air drag: - DRAG * v^2 / MASS
+3) Thrust: + G_THRUST * watts / (v * MASS) (if v > 0 and watts > 0)
+4) If |acceleration| <= 1e-5, set to 0
+
+John gives up if v - 3.0 <= 1e-2
+
+Task:
+Write function temps(v0, slope, dTot) which returns the time in minutes to travel dTot km.
+Return -1 if John gives up.
+
+Examples:
+temps(30, 5, 30) -> 114
+temps(30, 20, 30) -> -1
+temps(30, 8, 20) -> 110
+*/
+
 function temps(v0, slope, dTot) {
+  
 }
