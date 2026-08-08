@@ -1,37 +1,39 @@
-function countBlackSquares(width, height, resolution) {
+function countBlack(width, height, resolution) {
   if (width === 0 || height === 0) return 0;
   
-  const full_cols = Math.floor(width / resolution);
-  const full_rows = Math.floor(height / resolution);
-  const partial_width = width % resolution;
-  const partial_height = height % resolution;
+  const fullCols = Math.floor(width / resolution);
+  const fullRows = Math.floor(height / resolution);
+  const partialWidth = width % resolution;
+  const partialHeight = height % resolution;
   
   let count = 0;
   
-  // count from full resolution x resolution grid
-  const full_black = Math.floor((full_cols * full_rows) / 2);
-  count += full_black * resolution * resolution;
-  
-  // count from right edge (if width not evenly divisible by resolution)
-  if (partial_width > 0) {
-    const col = full_cols;
-    const black_rows = col % 2 === 0 ? Math.floor(full_rows / 2) : Math.ceil(full_rows / 2);
-    count += black_rows * partial_width * resolution;
+  // region 1: full resolution×resolution blocks arranged in a checkerboard
+  if (fullCols > 0 && fullRows > 0) {
+    const total = fullCols * fullRows;
+    const numBlackBlocks = Math.floor(total / 2);
+    count += numBlackBlocks * resolution * resolution;
   }
   
-  // count from bottom edge (if height not evenly divisible by resolution)
-  if (partial_height > 0) {
-    const row = full_rows;
-    const black_cols = row % 2 === 0 ? Math.floor(full_cols / 2) : Math.ceil(full_cols / 2);
-    count += black_cols * resolution * partial_height;
+  // region 2: right edge strip (partial width, full height rows)
+  if (partialWidth > 0 && fullRows > 0) {
+    // first block at column fullCols; it's black if fullCols is odd
+    const numBlackBlocks = (fullCols % 2 === 1) ? Math.ceil(fullRows / 2) : Math.floor(fullRows / 2);
+    count += numBlackBlocks * partialWidth * resolution;
   }
   
-  // count from bottom-right corner (if both edges are partial)
-  if (partial_width > 0 && partial_height > 0) {
-    const col = full_cols;
-    const row = full_rows;
-    if ((col + row) % 2 === 1) {
-      count += partial_width * partial_height;
+  // region 3: bottom edge strip (full width columns, partial height)
+  if (partialHeight > 0 && fullCols > 0) {
+    // first block at row fullRows; it's black if fullRows is odd
+    const numBlackBlocks = (fullRows % 2 === 1) ? Math.ceil(fullCols / 2) : Math.floor(fullCols / 2);
+    count += numBlackBlocks * resolution * partialHeight;
+  }
+  
+  // region 4: corner block (partial width and height)
+  if (partialWidth > 0 && partialHeight > 0) {
+    // block at (fullCols, fullRows) is black if sum of indices is odd
+    if ((fullCols + fullRows) % 2 === 1) {
+      count += partialWidth * partialHeight;
     }
   }
   
