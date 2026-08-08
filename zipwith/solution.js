@@ -1,8 +1,8 @@
-function zipWith(fn, a1, a2) {
-  const length = Math.min(a1.length, a2.length);
+function zipWith(fn, array1, array2) {
+  const length = Math.min(array1.length, array2.length);
   const result = [];
   for (let i = 0; i < length; i++) {
-    result.push(fn(a1[i], a2[i]));
+    result.push(fn(array1[i], array2[i]));
   }
   return result;
 }
