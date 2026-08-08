@@ -1,48 +1,53 @@
-package kata
+package main
 
-import (
-	"math/big"
-	"strings"
-)
-
-const factAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-func Dec2FactString(nb *big.Int) string {
-	n := new(big.Int).Set(nb)
-	if n.Sign() == 0 {
+func DecimalToFactorial(n int) string {
+	if n == 0 {
 		return "0"
 	}
-	var digits []byte
-	divisor := big.NewInt(1)
-	one := big.NewInt(1)
-	rem := new(big.Int)
-	for n.Sign() > 0 {
-		n.DivMod(n, divisor, rem)
-		digits = append(digits, factAlphabet[rem.Int64()])
-		divisor = new(big.Int).Add(divisor, one)
+	
+	digits := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	var result []rune
+	
+	position := 1
+	for n > 0 {
+		digit := n % (position + 1)
+		result = append(result, rune(digits[digit]))
+		n = n / (position + 1)
+		position++
 	}
-	var sb strings.Builder
-	for i := len(digits) - 1; i >= 0; i-- {
-		sb.WriteByte(digits[i])
+	
+	// Reverse the result
+	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
+		result[i], result[j] = result[j], result[i]
 	}
-	return sb.String()
+	
+	// Add trailing 0 for 0! position
+	result = append(result, '0')
+	
+	return string(result)
 }
 
-func FactString2Dec(s string) *big.Int {
-	result := big.NewInt(0)
-	fact := big.NewInt(1)
-	for p := 0; p < len(s); p++ {
-		c := s[len(s)-1-p]
-		var d int64
-		switch {
-		case c >= '0' && c <= '9':
-			d = int64(c - '0')
-		case c >= 'A' && c <= 'Z':
-			d = int64(c-'A') + 10
+func FactorialToDecimal(s string) int {
+	digits := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	result := 0
+	
+	for i, ch := range s {
+		digitValue := 0
+		for j, d := range digits {
+			if d == ch {
+				digitValue = j
+				break
+			}
 		}
-		term := new(big.Int).Mul(fact, big.NewInt(d))
-		result.Add(result, term)
-		fact = new(big.Int).Mul(fact, big.NewInt(int64(p+1)))
+		
+		base := len(s) - 1 - i
+		baseFactorial := 1
+		for j := 1; j <= base; j++ {
+			baseFactorial *= j
+		}
+		
+		result += digitValue * baseFactorial
 	}
+	
 	return result
 }
