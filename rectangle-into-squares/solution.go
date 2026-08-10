@@ -1,19 +1,20 @@
-package main
-
 func SqInRect(lng, wdth int) []int {
 	if lng == wdth {
 		return nil
 	}
 
 	var result []int
-	a, b := lng, wdth
+	l, w := lng, wdth
 
-	for b > 0 {
-		times := a / b
-		for i := 0; i < times; i++ {
-			result = append(result, b)
+	for w > 0 {
+		if l < w {
+			l, w = w, l
 		}
-		a, b = b, a%b
+		count := l / w
+		for i := 0; i < count; i++ {
+			result = append(result, w)
+		}
+		l = l % w
 	}
 
 	return result

@@ -1,26 +1,24 @@
 /*
-Rectangle into Squares (6 kyu)
+Rectangle into Squares - Difficulty: 6 kyu
 
-The drawing shows how to cut a given rectangle into squares.
-A "true" rectangle has two different dimensions.
+The drawing below gives an idea of how to cut a given "true" rectangle into squares
+("true" rectangle meaning that the two dimensions are different).
 
-Given:
-1. A positive integer length
-2. A positive integer width
+Can you translate this drawing into an algorithm?
 
-Return a collection with the size of each square when cutting the rectangle.
+You will be given two dimensions:
+1. a positive integer length
+2. a positive integer width
+
+You will return a collection with the size of each of the squares.
 
 Examples:
   SqInRect(5, 3) should return [3, 2, 1, 1]
   SqInRect(3, 5) should return [3, 2, 1, 1]
 
 Notes:
-- If length == width, return nil (not a true rectangle)
-- The algorithm repeatedly cuts the largest possible square from the rectangle
+- If lng == wdth (both dimensions are equal), return nil
+- Return the size of each square as you cut them from the rectangle
 */
-
-package main
-
 func SqInRect(lng, wdth int) []int {
-	return nil
 }
