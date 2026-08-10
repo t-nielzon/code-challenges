@@ -1,77 +1,58 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "strings"
 
 func ZooDis(zoo string) []string {
 	eats := map[string][]string{
-		"antelope": {"grass"},
-		"big-fish": {"little-fish"},
-		"bug": {"leaves"},
-		"bear": {"big-fish", "bug", "chicken", "cow", "leaves", "sheep"},
-		"chicken": {"bug"},
-		"cow": {"grass"},
-		"fox": {"chicken", "sheep"},
-		"giraffe": {"leaves"},
-		"lion": {"antelope", "cow"},
-		"panda": {"leaves"},
-		"sheep": {"grass"},
+		"antelope":   {"grass"},
+		"big-fish":   {"little-fish"},
+		"bug":        {"leaves"},
+		"bear":       {"big-fish", "bug", "chicken", "cow", "leaves", "sheep"},
+		"chicken":    {"bug"},
+		"cow":        {"grass"},
+		"fox":        {"chicken", "sheep"},
+		"giraffe":    {"leaves"},
+		"lion":       {"antelope", "cow"},
+		"panda":      {"leaves"},
+		"sheep":      {"grass"},
 	}
-	
-	result := []string{zoo}
+
 	animals := strings.Split(zoo, ",")
-	
-	for {
-		ate := false
-		
-		for i := 0; i < len(animals); i++ {
-			eatable, ok := eats[animals[i]]
-			if !ok {
-				continue
-			}
-			
-			// Check left first
-			if i > 0 {
-				for _, food := range eatable {
-					if animals[i-1] == food {
-						victim := animals[i-1]
-						animals = append(animals[:i-1], animals[i:]...)
-						result = append(result, fmt.Sprintf("%s eats %s", animals[i-1], victim))
-						ate = true
-						break
-					}
-				}
-			}
-			
-			if ate {
-				break
-			}
-			
-			// Check right
-			if i < len(animals)-1 {
-				for _, food := range eatable {
-					if animals[i+1] == food {
-						victim := animals[i+1]
-						animals = append(animals[:i+1], animals[i+2:]...)
-						result = append(result, fmt.Sprintf("%s eats %s", animals[i], victim))
-						ate = true
-						break
-					}
-				}
-			}
-			
-			if ate {
-				break
+	result := []string{zoo}
+
+	canEat := func(predator string, food string) bool {
+		foods, ok := eats[predator]
+		if !ok {
+			return false
+		}
+		for _, f := range foods {
+			if f == food {
+				return true
 			}
 		}
-		
-		if !ate {
+		return false
+	}
+
+	for {
+		eaten := false
+
+		for i := 0; i < len(animals) && !eaten; i++ {
+			if i > 0 && canEat(animals[i], animals[i-1]) {
+				result = append(result, animals[i]+" eats "+animals[i-1])
+				animals = append(animals[:i-1], animals[i:]...)
+				eaten = true
+			} else if i < len(animals)-1 && canEat(animals[i], animals[i+1]) {
+				result = append(result, animals[i]+" eats "+animals[i+1])
+				animals = append(animals[:i+1], animals[i+2:]...)
+				eaten = true
+			}
+		}
+
+		if !eaten {
 			break
 		}
 	}
-	
+
 	result = append(result, strings.Join(animals, ","))
 	return result
 }
