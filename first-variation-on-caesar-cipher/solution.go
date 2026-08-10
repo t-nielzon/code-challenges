@@ -1,49 +1,70 @@
-package kata
-
-func shiftRune(c byte, amount int) byte {
-	amount = ((amount % 26) + 26) % 26
-	switch {
-	case c >= 'a' && c <= 'z':
-		return 'a' + (c-'a'+byte(amount))%26
-	case c >= 'A' && c <= 'Z':
-		return 'A' + (c-'A'+byte(amount))%26
-	default:
-		return c
-	}
-}
+package main
 
 func movingShift(s string, shift int) []string {
-	coded := make([]byte, len(s))
-	for i := 0; i < len(s); i++ {
-		coded[i] = shiftRune(s[i], shift+i)
-	}
-
-	n := len(coded)
-	// ceil(n/5) gives the size of the leading, fully-packed parts
-	chunk := (n + 4) / 5
-
-	parts := make([]string, 5)
-	pos := 0
-	for p := 0; p < 5; p++ {
-		end := pos + chunk
-		if end > n {
-			end = n
+	// Encode the string
+	encoded := ""
+	for i, ch := range s {
+		if ch >= 'a' && ch <= 'z' {
+			offset := int(ch - 'a')
+			newOffset := (offset + shift + i) % 26
+			encoded += string(rune('a' + newOffset))
+		} else if ch >= 'A' && ch <= 'Z' {
+			offset := int(ch - 'A')
+			newOffset := (offset + shift + i) % 26
+			encoded += string(rune('A' + newOffset))
+		} else {
+			encoded += string(ch)
 		}
-		parts[p] = string(coded[pos:end])
-		pos = end
 	}
+
+	// Split into 5 parts
+	length := len(encoded)
+	min_size := length / 5
+	total_for_first_4 := (min_size + 1) * 4
+	if total_for_first_4 > length {
+		total_for_first_4 = length
+	}
+
+	base := total_for_first_4 / 4
+	rem := total_for_first_4 % 4
+
+	var parts []string
+	idx := 0
+	for i := 0; i < 4; i++ {
+		size := base
+		if i < rem {
+			size++
+		}
+		parts = append(parts, encoded[idx:idx+size])
+		idx += size
+	}
+	parts = append(parts, encoded[idx:])
+
 	return parts
 }
 
 func demovingShift(s []string, shift int) string {
-	joined := ""
+	// Concatenate all parts
+	encoded := ""
 	for _, part := range s {
-		joined += part
+		encoded += part
 	}
 
-	decoded := make([]byte, len(joined))
-	for i := 0; i < len(joined); i++ {
-		decoded[i] = shiftRune(joined[i], -(shift + i))
+	// Decode by reversing the shift
+	decoded := ""
+	for i, ch := range encoded {
+		if ch >= 'a' && ch <= 'z' {
+			offset := int(ch - 'a')
+			newOffset := ((offset - shift - i) % 26 + 26) % 26
+			decoded += string(rune('a' + newOffset))
+		} else if ch >= 'A' && ch <= 'Z' {
+			offset := int(ch - 'A')
+			newOffset := ((offset - shift - i) % 26 + 26) % 26
+			decoded += string(rune('A' + newOffset))
+		} else {
+			decoded += string(ch)
+		}
 	}
-	return string(decoded)
+
+	return decoded
 }
