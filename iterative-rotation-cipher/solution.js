@@ -1,124 +1,91 @@
-function rotateRight(str, amount) {
+function rotateRight(str, n) {
   if (str.length === 0) return str;
-  amount = ((amount % str.length) + str.length) % str.length;
-  if (amount === 0) return str;
-  return str.slice(-amount) + str.slice(0, -amount);
+  n = n % str.length;
+  return str.slice(-n) + str.slice(0, -n);
 }
 
-function encodeOneIteration(str, n) {
-  // step 1: remove spaces and remember positions
-  const spacePositions = [];
-  let noSpaces = '';
-  for (let i = 0; i < str.length; i++) {
-    if (str[i] === ' ') {
-      spacePositions.push(i);
-    } else {
-      noSpaces += str[i];
-    }
-  }
-  
-  // step 2: rotate string right by n
-  const rotatedString = rotateRight(noSpaces, n);
-  
-  // step 3: put spaces back
-  let result = '';
-  let rotatedIdx = 0;
-  for (let i = 0; i < str.length; i++) {
-    if (spacePositions.includes(i)) {
-      result += ' ';
-    } else {
-      result += rotatedString[rotatedIdx++];
-    }
-  }
-  
-  // step 4: rotate each substring separated by spaces
-  let finalResult = '';
-  let currentSubstring = '';
-  
-  for (let i = 0; i < result.length; i++) {
-    if (result[i] === ' ') {
-      if (currentSubstring.length > 0) {
-        finalResult += rotateRight(currentSubstring, n);
-        currentSubstring = '';
-      }
-      finalResult += ' ';
-    } else {
-      currentSubstring += result[i];
-    }
-  }
-  
-  if (currentSubstring.length > 0) {
-    finalResult += rotateRight(currentSubstring, n);
-  }
-  
-  return finalResult;
-}
-
-function decodeOneIteration(str, n) {
-  // reverse of step 4: rotate each substring left by n
-  let afterStep4Reverse = '';
-  let currentSubstring = '';
-  
-  for (let i = 0; i < str.length; i++) {
-    if (str[i] === ' ') {
-      if (currentSubstring.length > 0) {
-        afterStep4Reverse += rotateRight(currentSubstring, -n);
-        currentSubstring = '';
-      }
-      afterStep4Reverse += ' ';
-    } else {
-      currentSubstring += str[i];
-    }
-  }
-  
-  if (currentSubstring.length > 0) {
-    afterStep4Reverse += rotateRight(currentSubstring, -n);
-  }
-  
-  // reverse of steps 3 & 2: remove spaces, rotate left, put back
-  const spacePositions = [];
-  let noSpaces = '';
-  for (let i = 0; i < afterStep4Reverse.length; i++) {
-    if (afterStep4Reverse[i] === ' ') {
-      spacePositions.push(i);
-    } else {
-      noSpaces += afterStep4Reverse[i];
-    }
-  }
-  
-  const rotatedString = rotateRight(noSpaces, -n);
-  
-  let result = '';
-  let rotatedIdx = 0;
-  for (let i = 0; i < afterStep4Reverse.length; i++) {
-    if (spacePositions.includes(i)) {
-      result += ' ';
-    } else {
-      result += rotatedString[rotatedIdx++];
-    }
-  }
-  
-  return result;
+function rotateLeft(str, n) {
+  if (str.length === 0) return str;
+  n = n % str.length;
+  return str.slice(n) + str.slice(0, n);
 }
 
 const IterativeRotationCipher = {
   encode(n, str) {
-    let result = str;
     for (let i = 0; i < n; i++) {
-      result = encodeOneIteration(result, n);
+      // Step 1: remove spaces
+      let noSpace = '';
+      for (let j = 0; j < str.length; j++) {
+        if (str[j] !== ' ') {
+          noSpace += str[j];
+        }
+      }
+      
+      // Step 2: rotate right
+      noSpace = rotateRight(noSpace, n);
+      
+      // Step 3: put spaces back
+      let withSpace = '';
+      let noSpaceIdx = 0;
+      for (let j = 0; j < str.length; j++) {
+        if (str[j] === ' ') {
+          withSpace += ' ';
+        } else {
+          withSpace += noSpace[noSpaceIdx++];
+        }
+      }
+      
+      // Step 4: rotate each substring right
+      const parts = withSpace.split(/( +)/);
+      str = parts.map(part => {
+        if (part.match(/^ +$/)) return part;
+        return rotateRight(part, n);
+      }).join('');
     }
-    return n + ' ' + result;
+    
+    return n + ' ' + str;
   },
   
   decode(str) {
-    const spaceIndex = str.indexOf(' ');
-    const n = parseInt(str.substring(0, spaceIndex));
-    let encoded = str.substring(spaceIndex + 1);
+    const spaceIdx = str.indexOf(' ');
+    const n = parseInt(str.slice(0, spaceIdx));
+    let result = str.slice(spaceIdx + 1);
     
     for (let i = 0; i < n; i++) {
-      encoded = decodeOneIteration(encoded, n);
+      // Reverse step 4: rotate each substring left
+      const parts = result.split(/( +)/);
+      result = parts.map(part => {
+        if (part.match(/^ +$/)) return part;
+        return rotateLeft(part, n);
+      }).join('');
+      
+      // Reverse step 3: remember space positions and remove spaces
+      const spacePositions = [];
+      let noSpace = '';
+      for (let j = 0; j < result.length; j++) {
+        if (result[j] === ' ') {
+          spacePositions.push(j);
+        } else {
+          noSpace += result[j];
+        }
+      }
+      
+      // Reverse step 2: rotate left
+      noSpace = rotateLeft(noSpace, n);
+      
+      // Reverse step 1: put spaces back
+      const newResult = [];
+      let noSpaceIdx = 0;
+      for (let j = 0; j < result.length; j++) {
+        if (spacePositions.includes(j)) {
+          newResult.push(' ');
+        } else {
+          newResult.push(noSpace[noSpaceIdx++]);
+        }
+      }
+      result = newResult.join('');
     }
     
-    return encoded;
+    return result;
   }
 };

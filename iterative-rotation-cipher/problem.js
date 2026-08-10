@@ -1,18 +1,16 @@
 /*
  * Iterative Rotation Cipher (IRC)
  * 
- * Create an object with two methods: encode and decode
+ * Create an object with encode and decode methods.
  * 
- * Encoding (n rotations):
- * Step 1: Remove all spaces, remember their positions
- * Step 2: Rotate the string right by n characters
- * Step 3: Put spaces back in their original positions
- * Step 4: Rotate each space-separated substring right by n characters
- * Repeat steps 1-4 n times total
- * Prepend n to the result with a space
+ * Encoding:
+ * 1. Remove spaces (remember positions)
+ * 2. Rotate string right by n
+ * 3. Put spaces back in original positions
+ * 4. Rotate each space-separated substring right by n
+ * Repeat n times total, then prepend n with a space.
  * 
- * Decoding:
- * Reverse the encoding process by reversing each iteration in reverse order
+ * Decoding: Reverse the process.
  */
 
 const IterativeRotationCipher = {
