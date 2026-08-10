@@ -1,9 +1,9 @@
 package kata
 
-func FindMissingLetter(chars []rune) rune {
-	for i := 1; i < len(chars); i++ {
-		if chars[i]-chars[i-1] != 1 {
-			return chars[i-1] + 1
+func FindMissingLetter(letters string) byte {
+	for i := 0; i < len(letters)-1; i++ {
+		if letters[i+1]-letters[i] != 1 {
+			return letters[i] + 1
 		}
 	}
 	return 0
