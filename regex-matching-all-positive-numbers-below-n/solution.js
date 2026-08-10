@@ -1,75 +1,55 @@
-function regex(n) {
-  const nStr = String(n);
-  const len = nStr.length;
-  const patterns = [];
-  
-  // Patterns for all numbers with fewer digits than n
-  for (let l = 1; l < len; l++) {
-    if (l === 1) {
-      patterns.push('[1-9]');
-    } else {
-      patterns.push('[1-9][0-9]{' + (l - 1) + '}');
-    }
-  }
-  
-  // Patterns for numbers with the same number of digits as n, but less than n
-  const sameDigitPatterns = buildSameDigit(nStr);
-  if (sameDigitPatterns.length > 0) {
-    if (sameDigitPatterns.length === 1) {
-      patterns.push(sameDigitPatterns[0]);
-    } else {
-      patterns.push('(?:' + sameDigitPatterns.join('|') + ')');
-    }
-  }
-  
-  let result;
-  if (patterns.length === 0) {
-    result = '(?!)';
-  } else if (patterns.length === 1) {
-    result = patterns[0];
-  } else {
-    result = '(?:' + patterns.join('|') + ')';
-  }
-  
-  return '^' + result + '$';
-}
-
-function buildSameDigit(nStr) {
-  const result = [];
-  const len = nStr.length;
-  
-  function build(pos, current) {
-    if (pos === len) {
-      if (current !== nStr) {
-        result.push(current);
-      }
-      return;
+function patternNumbers(n) {
+    const s = n.toString();
+    const patterns = [];
+    
+    // Match all numbers with fewer digits than n
+    for (let len = 1; len < s.length; len++) {
+        if (len === 1) {
+            patterns.push("[1-9]");
+        } else {
+            patterns.push("[1-9][0-9]{" + (len - 1) + "}");
+        }
     }
     
-    const digit = parseInt(nStr[pos]);
+    // Match numbers with same digit count as n but less than n
+    const sameLenPatterns = [];
+    let prefix = "";
     
-    // Match a digit less than current, followed by any digits
-    if (digit > 0) {
-      const from = pos === 0 ? 1 : 0;
-      let digitPat;
-      if (from === digit - 1) {
-        digitPat = String(digit - 1);
-      } else {
-        digitPat = '[' + from + '-' + (digit - 1) + ']';
-      }
-      
-      if (pos === len - 1) {
-        result.push(current + digitPat);
-      } else {
-        result.push(current + digitPat + '[0-9]{' + (len - pos - 1) + '}');
-      }
+    for (let i = 0; i < s.length; i++) {
+        const digit = parseInt(s[i]);
+        const remaining = s.length - i - 1;
+        
+        if (digit > 0) {
+            if (i === 0) {
+                // First digit must be 1-9, can use digits less than current
+                if (digit > 1) {
+                    let pattern = "[1-" + (digit - 1) + "]";
+                    if (remaining > 0) {
+                        pattern += "[0-9]{" + remaining + "}";
+                    }
+                    sameLenPatterns.push(pattern);
+                }
+            } else {
+                // Middle/last digits can include 0
+                let pattern = prefix + "[0-" + (digit - 1) + "]";
+                if (remaining > 0) {
+                    pattern += "[0-9]{" + remaining + "}";
+                }
+                sameLenPatterns.push(pattern);
+            }
+        }
+        
+        prefix += digit;
     }
     
-    // Match current digit and continue
-    build(pos + 1, current + digit);
-  }
-  
-  build(0, '');
-  
-  return result;
+    if (sameLenPatterns.length > 0) {
+        patterns.push(...sameLenPatterns);
+    }
+    
+    // Handle case where no valid numbers exist (n = 1)
+    if (patterns.length === 0) {
+        return "[^\\s\\S]";
+    }
+    
+    return patterns.join("|");
 }
