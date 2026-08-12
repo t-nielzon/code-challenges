@@ -1,41 +1,49 @@
-package kata
+package main
 
-var sumDivCache = []int{}
+var memo = make(map[int]int)
+var currentIndex = 0
+var currentNum = 0
 
-func reverse(x int) int {
-	r := 0
-	for x > 0 {
-		r = r*10 + x%10
-		x /= 10
+func reverseNumber(num int) int {
+	reversed := 0
+	for num > 0 {
+		reversed = reversed*10 + num%10
+		num /= 10
 	}
-	return r
+	return reversed
 }
 
-func SumDivSequence(n int) int {
-	for len(sumDivCache) < n {
-		// candidate numbering continues from the last found term
-		next := 1
-		if len(sumDivCache) > 0 {
-			next = sumDivCache[len(sumDivCache)-1] + 1
-		}
-		for num := next; ; num++ {
-			// numbers ending in 0 reverse with a leading zero; skip them
-			if num%10 == 0 {
-				continue
-			}
-			rev := reverse(num)
-			diff := num - rev
-			if diff < 0 {
-				diff = -diff
-			}
-			if diff == 0 {
-				continue
-			}
-			if (num+rev)%diff == 0 {
-				sumDivCache = append(sumDivCache, num)
-				break
-			}
+func hasSpecialProperty(num int) bool {
+	if num%10 == 0 {
+		return false
+	}
+	
+	reversed := reverseNumber(num)
+	sum := num + reversed
+	diff := num - reversed
+	if diff < 0 {
+		diff = -diff
+	}
+	
+	if diff == 0 {
+		return false
+	}
+	
+	return sum%diff == 0
+}
+
+func Nthterm(n int) int {
+	if val, ok := memo[n]; ok {
+		return val
+	}
+	
+	for currentIndex < n {
+		currentNum++
+		if hasSpecialProperty(currentNum) {
+			currentIndex++
+			memo[currentIndex] = currentNum
 		}
 	}
-	return sumDivCache[n-1]
+	
+	return memo[n]
 }
