@@ -1,88 +1,106 @@
 const palindromeMatcher = {
   [Symbol.match](str) {
+    const matches = [];
     const regex = /\b[a-z]+\b/gi;
     let match;
-    const palindromes = [];
     while ((match = regex.exec(str)) !== null) {
-      const word = match[0];
-      const lower = word.toLowerCase();
-      if (lower === lower.split('').reverse().join('')) {
-        palindromes.push(word);
+      if (isPalindrome(match[0])) {
+        matches.push(match[0]);
       }
     }
-    return palindromes.length > 0 ? palindromes : null;
+    return matches.length > 0 ? matches : null;
   },
 
   [Symbol.matchAll](str) {
+    const matches = [];
     const regex = /\b[a-z]+\b/gi;
     let match;
-    const results = [];
     while ((match = regex.exec(str)) !== null) {
-      const word = match[0];
-      const lower = word.toLowerCase();
-      if (lower === lower.split('').reverse().join('')) {
-        const matchObject = [word];
-        matchObject.index = match.index;
-        matchObject.input = str;
-        matchObject.groups = undefined;
-        results.push(matchObject);
+      if (isPalindrome(match[0])) {
+        matches.push(Object.assign([], match, {
+          index: match.index,
+          input: match.input,
+          groups: match.groups
+        }));
       }
     }
-    return results[Symbol.iterator]();
+    return matches[Symbol.iterator]();
   },
 
-  [Symbol.replace](str, replaceValue) {
+  [Symbol.replace](str, replacement) {
     const regex = /\b[a-z]+\b/gi;
+    const matches = [];
     let match;
-    const palindromes = [];
+    
     while ((match = regex.exec(str)) !== null) {
-      const word = match[0];
-      const lower = word.toLowerCase();
-      if (lower === lower.split('').reverse().join('')) {
-        palindromes.push({ word, index: match.index });
+      if (isPalindrome(match[0])) {
+        matches.push({
+          matched: match[0],
+          index: match.index
+        });
       }
     }
     
-    for (let i = palindromes.length - 1; i >= 0; i--) {
-      const { word, index } = palindromes[i];
-      let replacement;
-      if (typeof replaceValue === 'function') {
-        replacement = replaceValue(word, index, str);
+    let result = str;
+    for (let i = matches.length - 1; i >= 0; i--) {
+      const m = matches[i];
+      let replaceStr;
+      
+      if (typeof replacement === 'function') {
+        replaceStr = replacement(m.matched, 0, str);
       } else {
-        replacement = String(replaceValue).replace(/\$&/g, word);
+        replaceStr = replacement
+          .replace(/\$&/g, m.matched)
+          .replace(/\$`/g, str.substring(0, m.index))
+          .replace(/\$'/g, str.substring(m.index + m.matched.length));
       }
-      str = str.slice(0, index) + replacement + str.slice(index + word.length);
+      
+      result = result.substring(0, m.index) + replaceStr + result.substring(m.index + m.matched.length);
     }
-    return str;
+    
+    return result;
   },
 
   [Symbol.search](str) {
     const regex = /\b[a-z]+\b/gi;
     let match;
     while ((match = regex.exec(str)) !== null) {
-      const word = match[0];
-      const lower = word.toLowerCase();
-      if (lower === lower.split('').reverse().join('')) {
+      if (isPalindrome(match[0])) {
         return match.index;
       }
     }
     return -1;
   },
 
-  [Symbol.split](str) {
+  [Symbol.split](str, limit) {
     const regex = /\b[a-z]+\b/gi;
-    let match;
-    const parts = [];
+    const result = [];
     let lastIndex = 0;
+    let match;
+    
     while ((match = regex.exec(str)) !== null) {
-      const word = match[0];
-      const lower = word.toLowerCase();
-      if (lower === lower.split('').reverse().join('')) {
-        parts.push(str.slice(lastIndex, match.index));
-        lastIndex = match.index + word.length;
+      if (isPalindrome(match[0])) {
+        result.push(str.substring(lastIndex, match.index));
+        lastIndex = match.index + match[0].length;
       }
     }
-    parts.push(str.slice(lastIndex));
-    return parts;
+    
+    result.push(str.substring(lastIndex));
+    
+    if (limit !== undefined) {
+      result.length = limit;
+    }
+    
+    return result;
   }
 };
+
+function isPalindrome(word) {
+  const lower = word.toLowerCase();
+  for (let i = 0; i < lower.length / 2; i++) {
+    if (lower[i] !== lower[lower.length - 1 - i]) {
+      return false;
+    }
+  }
+  return true;
+}
