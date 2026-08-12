@@ -2,66 +2,69 @@ package main
 
 import "strings"
 
-func Diag2Sym(s string) string {
+func diag_2_sym(s string) string {
 	lines := strings.Split(s, "\n")
 	n := len(lines)
 	
-	result := make([][]rune, n)
-	for i := range result {
-		result[i] = make([]rune, n)
+	result := make([][]byte, n)
+	for i := 0; i < n; i++ {
+		result[i] = make([]byte, n)
 	}
 	
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
-			result[n-1-j][n-1-i] = rune(lines[i][j])
+			result[i][j] = lines[n-1-j][n-1-i]
 		}
 	}
 	
-	return linesToString(result)
+	var res []string
+	for i := 0; i < n; i++ {
+		res = append(res, string(result[i]))
+	}
+	
+	return strings.Join(res, "\n")
 }
 
-func Rot90Counter(s string) string {
+func rot_90_counter(s string) string {
 	lines := strings.Split(s, "\n")
 	n := len(lines)
 	
-	result := make([][]rune, n)
-	for i := range result {
-		result[i] = make([]rune, n)
+	result := make([][]byte, n)
+	for i := 0; i < n; i++ {
+		result[i] = make([]byte, n)
 	}
 	
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
-			result[n-1-j][i] = rune(lines[i][j])
+			result[i][j] = lines[j][n-1-i]
 		}
 	}
 	
-	return linesToString(result)
+	var res []string
+	for i := 0; i < n; i++ {
+		res = append(res, string(result[i]))
+	}
+	
+	return strings.Join(res, "\n")
 }
 
-func SelfieDiag2Counterclock(s string) string {
-	diag2 := Diag2Sym(s)
-	rot90 := Rot90Counter(s)
+func selfie_diag2_counterclock(s string) string {
+	lines := strings.Split(s, "\n")
+	diag := diag_2_sym(s)
+	rot := rot_90_counter(s)
 	
-	origLines := strings.Split(s, "\n")
-	diag2Lines := strings.Split(diag2, "\n")
-	rot90Lines := strings.Split(rot90, "\n")
+	diagLines := strings.Split(diag, "\n")
+	rotLines := strings.Split(rot, "\n")
 	
 	var result []string
-	for i := 0; i < len(origLines); i++ {
-		result = append(result, origLines[i]+"|"+diag2Lines[i]+"|"+rot90Lines[i])
+	for i := 0; i < len(lines); i++ {
+		combined := lines[i] + "|" + diagLines[i] + "|" + rotLines[i]
+		result = append(result, combined)
 	}
 	
 	return strings.Join(result, "\n")
 }
 
-func linesToString(grid [][]rune) string {
-	var lines []string
-	for i := range grid {
-		lines = append(lines, string(grid[i]))
-	}
-	return strings.Join(lines, "\n")
-}
-
-func Oper(fct func(string) string, s string) string {
+func oper(fct func(string) string, s string) string {
 	return fct(s)
 }
