@@ -1,27 +1,32 @@
-package main
+package kata
 
 func OddEvenCompositions(n int) int {
+	memo := make(map[int]int)
+	return count(n, memo)
+}
+
+func count(n int, memo map[int]int) int {
 	if n == 0 {
 		return 1
 	}
 
-	dp := make([]int, n+1)
-	dp[0] = 1
-
-	for i := 1; i <= n; i++ {
-		if i%2 == 0 {
-			// Even: valid choices are 1, 2, 4, 6, ..., i
-			dp[i] = dp[i-1] // choice of 1
-			for k := 2; k <= i; k += 2 {
-				dp[i] += dp[i-k]
-			}
-		} else {
-			// Odd: valid choices are 1, 3, 5, 7, ..., i
-			for k := 1; k <= i; k += 2 {
-				dp[i] += dp[i-k]
-			}
-		}
+	if val, exists := memo[n]; exists {
+		return val
 	}
 
-	return dp[n]
+	// we can always choose 1, or choose n itself
+	result := count(n-1, memo) + 1
+
+	// choose k where k has same parity as n and 2 <= k < n
+	start := 2
+	if n%2 == 1 {
+		start = 3
+	}
+
+	for k := start; k < n; k += 2 {
+		result += count(n-k, memo)
+	}
+
+	memo[n] = result
+	return result
 }
