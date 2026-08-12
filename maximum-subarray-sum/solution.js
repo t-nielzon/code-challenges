@@ -1,15 +1,11 @@
-var maxSequence = function(arr) {
-  if (!arr.length) return 0;
-
-  let maxSum = 0;
-  let currentSum = 0;
-
-  for (let i = 0; i < arr.length; i++) {
-    currentSum = Math.max(0, currentSum + arr[i]);
-    maxSum = Math.max(maxSum, currentSum);
+function maxSum(arr) {
+  let maxCurrent = 0;
+  let maxGlobal = 0;
+  
+  for (let num of arr) {
+    maxCurrent = Math.max(0, maxCurrent + num);
+    maxGlobal = Math.max(maxGlobal, maxCurrent);
   }
-
-  return maxSum;
-};
-
-module.exports = maxSequence;
+  
+  return maxGlobal;
+}
