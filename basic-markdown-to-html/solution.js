@@ -1,23 +1,20 @@
-function format(str) {
-  let content = str;
-  let tag = 'p';
+function format(text) {
+  function processStrong(str) {
+    return str.replace(/\*\*(.+?)\*\*/g, '< strong>$1< /strong>');
+  }
   
-  // Check for header
-  const headerMatch = str.match(/^(#{1,})\s/);
+  const headerMatch = text.match(/^(#+) (.*)$/);
   if (headerMatch) {
-    const countedHashtags = headerMatch[1].length;
-    const level = Math.min(countedHashtags, 6);
-    tag = `h${level}`;
-    content = str.substring(level + 1);
-  }
-  // Check for list item
-  else if (str.startsWith('* ')) {
-    tag = 'li';
-    content = str.substring(2);
+    const level = Math.min(headerMatch[1].length, 6);
+    const content = processStrong(headerMatch[2]);
+    return `< h${level}>${content}< /h${level}>`;
   }
   
-  // Process bold emphasis (non-greedy)
-  content = content.replace(/\*\*(.+?)\*\*/g, '< strong>$1< /strong>');
+  if (text.match(/^\* /)) {
+    const content = processStrong(text.substring(2));
+    return `< li>${content}< /li>`;
+  }
   
-  return `< ${tag}>${content}< /${tag}>`;
+  const content = processStrong(text);
+  return `< p>${content}< /p>`;
 }
