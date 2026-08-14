@@ -1,9 +1,9 @@
-package kata
+package main
 
-func JosephusSurvivor(n, k int) int {
-	survivor := 0
+func Josephus(n int, k int) int {
+	result := 0
 	for i := 2; i <= n; i++ {
-		survivor = (survivor + k) % i
+		result = (result + k) % i
 	}
-	return survivor + 1
+	return result + 1
 }
