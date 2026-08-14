@@ -1,15 +1,20 @@
-package kata
+package main
 
 func LastFibDigit(n int64) int {
-	// the last digits of fibonacci numbers repeat with period 60
-	pisanoDigits := []int{
-		1, 1, 2, 3, 5, 8, 3, 1, 4, 5,
-		9, 4, 3, 7, 0, 7, 7, 4, 1, 5,
-		6, 1, 7, 8, 5, 3, 8, 1, 9, 0,
-		9, 9, 8, 7, 5, 2, 7, 9, 6, 5,
-		1, 6, 7, 3, 0, 3, 3, 6, 9, 5,
-		4, 9, 3, 2, 5, 7, 2, 9, 1, 0,
+	// the last digits of fibonacci numbers follow the Pisano period: they repeat every 60 numbers
+	n = n % 60
+	if n == 0 {
+		n = 60
 	}
 
-	return pisanoDigits[(n-1)%60]
+	if n == 1 || n == 2 {
+		return 1
+	}
+
+	prev, curr := 1, 1
+	for i := int64(3); i <= n; i++ {
+		prev, curr = curr, (prev+curr)%10
+	}
+
+	return curr
 }
