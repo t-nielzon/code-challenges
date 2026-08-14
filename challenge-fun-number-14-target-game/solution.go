@@ -1,36 +1,30 @@
-func TargetGame(vals []int) int {
-	n := len(vals)
-	if n == 0 {
+package main
+
+func maxScore(vals []int) int {
+	if len(vals) == 0 {
 		return 0
 	}
 
-	if n == 1 {
-		if vals[0] < 0 {
-			return 0
-		}
-		return vals[0]
+	n := len(vals)
+	// dp[i] = maximum points achievable starting from index i
+	dp := make([]int, n+2)
+
+	// Fill dp array from right to left
+	for i := n - 1; i >= 0; i-- {
+		// Option 1: skip shooting at i, take best from i+1
+		skipCurrent := dp[i+1]
+		// Option 2: shoot at i, skip i+1 due to reload, then best from i+2
+		shootCurrent := vals[i] + dp[i+2]
+
+		dp[i] = max(skipCurrent, shootCurrent)
 	}
 
-	dp := make([]int, n)
+	return dp[0]
+}
 
-	dp[0] = vals[0]
-	if dp[0] < 0 {
-		dp[0] = 0
+func max(a, b int) int {
+	if a > b {
+		return a
 	}
-
-	dp[1] = vals[1]
-	if dp[1] < dp[0] {
-		dp[1] = dp[0]
-	}
-
-	for i := 2; i < n; i++ {
-		option1 := dp[i-1]
-		option2 := vals[i] + dp[i-2]
-		dp[i] = option1
-		if option2 > option1 {
-			dp[i] = option2
-		}
-	}
-
-	return dp[n-1]
+	return b
 }
