@@ -1,39 +1,38 @@
-package main
+package kata
 
 import (
-	"fmt"
+	"strconv"
 	"strings"
 )
 
-func DrawRuler(t int, n int) string {
+func DrawRuler(t, n int) string {
 	var lines []string
 
-	// Draw the major tick at position 0
+	// Draw major tick 0
 	lines = append(lines, strings.Repeat("-", t)+" 0")
 
-	// For each inch
+	// For each interval between consecutive inches
 	for i := 0; i < n; i++ {
-		// Draw the sub-ticks in this interval
-		for _, tickLength := range ticksInRange(0, 1, t-1) {
-			lines = append(lines, strings.Repeat("-", tickLength))
-		}
+		// Draw subdivisions between inch i and i+1
+		addTicks(&lines, t-1)
 
-		// Draw the major tick for the next inch
-		lines = append(lines, fmt.Sprintf("%s %d", strings.Repeat("-", t), i+1))
+		// Draw major tick i+1
+		lines = append(lines, strings.Repeat("-", t)+" "+strconv.Itoa(i+1))
 	}
 
 	return strings.Join(lines, "\n")
 }
 
-func ticksInRange(startPos, endPos float64, tickLength int) []int {
-	if tickLength == 0 {
-		return []int{}
+func addTicks(lines *[]string, height int) {
+	if height == 0 {
+		return
 	}
 
-	midPos := (startPos + endPos) / 2
-	result := ticksInRange(startPos, midPos, tickLength-1)
-	result = append(result, tickLength)
-	result = append(result, ticksInRange(midPos, endPos, tickLength-1)...)
-
-	return result
+	if height == 1 {
+		*lines = append(*lines, "-")
+	} else {
+		addTicks(lines, height-1)
+		*lines = append(*lines, strings.Repeat("-", height))
+		addTicks(lines, height-1)
+	}
 }
