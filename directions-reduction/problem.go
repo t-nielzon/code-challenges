@@ -1,53 +1,27 @@
 /*
-Directions Reduction
-Difficulty: 5 kyu
+Directions Reduction - 5 kyu
 
-Once upon a time, on a way through the old wild mountainous west, a man was
-given directions to go from one point to another. The directions were
-"NORTH", "SOUTH", "WEST", "EAST". Clearly "NORTH" and "SOUTH" are opposite,
-"WEST" and "EAST" too.
+Once upon a time, on a way through the old wild mountainous west,…
 
-Going to one direction and coming back the opposite direction right away is a
-needless effort. Since this is the wild west, with dreadful weather and not
-much water, it's important to save yourself some energy, otherwise you might
-die of thirst!
+… a man was given directions to go from one point to another. The directions were "NORTH", "SOUTH", "WEST", "EAST". Clearly "NORTH" and "SOUTH" are opposite, "WEST" and "EAST" too.
 
-The directions given to the man are, for example, the following:
+Going to one direction and coming back the opposite direction right away is a needless effort. Since this is the wild west, with dreadful weather and not much water, it's important to save yourself some energy, otherwise you might die of thirst!
 
-	["NORTH", "SOUTH", "SOUTH", "EAST", "WEST", "NORTH", "WEST"]
+The task is to write a function dirReduc which will take an array of strings and returns an array of strings with the needless directions removed (W<->E or S<->N side by side).
 
-Going "NORTH" and immediately "SOUTH" is not reasonable, better stay to the
-same place! So the task is to give to the man a simplified version of the
-plan. A better plan in this case is simply:
+Examples:
+- ["NORTH", "SOUTH", "SOUTH", "EAST", "WEST", "NORTH", "WEST"] => ["WEST"]
+- ["NORTH", "SOUTH", "EAST", "WEST"] => []
+- ["NORTH", "EAST", "WEST", "SOUTH", "WEST", "WEST"] => ["WEST", "WEST"]
+- ["NORTH", "WEST", "SOUTH", "EAST"] => ["NORTH", "WEST", "SOUTH", "EAST"]
 
-	["WEST"]
-
-Other examples:
-
-In ["NORTH", "SOUTH", "EAST", "WEST"], the direction "NORTH" + "SOUTH" is
-going north and coming back right away. The path becomes ["EAST", "WEST"],
-now "EAST" and "WEST" annihilate each other, therefore, the final result is
-[].
-
-In ["NORTH", "EAST", "WEST", "SOUTH", "WEST", "WEST"], "NORTH" and "SOUTH"
-are not directly opposite but they become directly opposite after the
-reduction of "EAST" and "WEST" so the whole path is reducible to
-["WEST", "WEST"].
-
-Task
-
-Write a function dirReduc which will take an array of strings and returns an
-array of strings with the needless directions removed (W<->E or S<->N side by
-side).
-
-Notes
-
-Not all paths can be made simpler. The path
-["NORTH", "WEST", "SOUTH", "EAST"] is not reducible.
+Notes:
+- Not all paths can be made simpler.
+- Directions that become opposite after other reductions should also be removed.
 */
 
-package kata
+package main
 
-func dirReduc(arr []string) []string {
-	return nil
+func Dirreduc(arr []string) []string {
+	// Your implementation here
 }
