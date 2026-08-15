@@ -1,54 +1,56 @@
 package kata
 
 import (
-	"fmt"
+	"regexp"
 	"strconv"
-	"strings"
 )
 
-func HiddenCubic(s string) string {
-	var groups []string
-	i := 0
-	for i < len(s) {
-		if s[i] >= '0' && s[i] <= '9' {
-			j := i
-			for j < len(s) && s[j] >= '0' && s[j] <= '9' {
-				j++
+func SumOfCubic(s string) string {
+	isCubic := func(n int) bool {
+		sum := 0
+		temp := n
+		for temp > 0 {
+			digit := temp % 10
+			sum += digit * digit * digit
+			temp /= 10
+		}
+		return sum == n
+	}
+
+	re := regexp.MustCompile(`\d+`)
+	digitGroups := re.FindAllString(s, -1)
+
+	var cubicNumbers []int
+	total := 0
+
+	for _, group := range digitGroups {
+		for len(group) > 3 {
+			chunk := group[:3]
+			num, _ := strconv.Atoi(chunk)
+			if isCubic(num) {
+				cubicNumbers = append(cubicNumbers, num)
+				total += num
 			}
-			run := s[i:j]
-			for k := 0; k < len(run); k += 3 {
-				end := k + 3
-				if end > len(run) {
-					end = len(run)
-				}
-				groups = append(groups, run[k:end])
+			group = group[3:]
+		}
+
+		if len(group) > 0 {
+			num, _ := strconv.Atoi(group)
+			if isCubic(num) {
+				cubicNumbers = append(cubicNumbers, num)
+				total += num
 			}
-			i = j
-		} else {
-			i++
 		}
 	}
 
-	var cubics []int
-	var parts []string
-	sum := 0
-	for _, g := range groups {
-		n, _ := strconv.Atoi(g)
-		cubeSum := 0
-		for _, c := range g {
-			d := int(c - '0')
-			cubeSum += d * d * d
-		}
-		if cubeSum == n {
-			cubics = append(cubics, n)
-			parts = append(parts, fmt.Sprintf("%d", n))
-			sum += n
-		}
-	}
-
-	if len(cubics) == 0 {
+	if len(cubicNumbers) == 0 {
 		return "Unlucky"
 	}
-	parts = append(parts, fmt.Sprintf("%d", sum))
-	return strings.Join(parts, " ") + " Lucky"
+
+	result := ""
+	for _, num := range cubicNumbers {
+		result += strconv.Itoa(num) + " "
+	}
+	result += strconv.Itoa(total) + " Lucky"
+	return result
 }
