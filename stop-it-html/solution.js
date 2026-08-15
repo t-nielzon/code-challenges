@@ -1,32 +1,25 @@
 function loadMyTemplateLanguage() {
   const selfClosingTags = new Set(['link', 'img', 'br', 'hr']);
-  const tags = ['html', 'head', 'title', 'body', 'script', 'link', 'div', 'span', 'img', 'br', 'hr'];
+  const allTags = ['html', 'head', 'title', 'body', 'script', 'link', 'div', 'span', 'img', 'br', 'hr'];
   
-  function createTag(tagName) {
+  function createElement(tagName, isSelfClosing) {
     return function(attributes = {}, content) {
-      let html = `<${tagName}`;
-      
-      for (const [key, value] of Object.entries(attributes)) {
-        html += ` ${key}="${value}"`;
+      let attrString = '';
+      for (let [key, value] of Object.entries(attributes)) {
+        attrString += ` ${key}="${value}"`;
       }
       
-      if (selfClosingTags.has(tagName)) {
-        html += ' />';
+      if (isSelfClosing) {
+        return `<${tagName}${attrString} />`;
       } else {
-        html += '>';
-        if (content) {
-          for (const item of content) {
-            html += item;
-          }
-        }
-        html += `</${tagName}>`;
+        const contentString = Array.isArray(content) ? content.join('') : '';
+        return `<${tagName}${attrString}>${contentString}</${tagName}>`;
       }
-      
-      return html;
     };
   }
   
-  for (const tag of tags) {
-    global[tag] = createTag(tag);
-  }
+  allTags.forEach(tag => {
+    const isSelfClosing = selfClosingTags.has(tag);
+    globalThis[tag] = createElement(tag, isSelfClosing);
+  });
 }
