@@ -1,5 +1,5 @@
 function moveZeros(arr) {
-  const zeroCount = arr.filter(x => x === 0).length;
-  const nonZeros = arr.filter(x => x !== 0);
-  return nonZeros.concat(Array(zeroCount).fill(0));
+  const nonZeros = arr.filter(el => el !== 0);
+  const zeroCount = arr.length - nonZeros.length;
+  return [...nonZeros, ...Array(zeroCount).fill(0)];
 }
