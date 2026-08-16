@@ -1,12 +1,14 @@
 package main
 
+import "strconv"
+
 func BackwardsReadPrimes(start, end int) []int {
 	result := []int{}
 
 	for num := start; num <= end; num++ {
 		if isPrime(num) {
-			reversed := reverse(num)
-			if isPrime(reversed) && num != reversed {
+			reversed := reverseNumber(num)
+			if reversed != num && isPrime(reversed) {
 				result = append(result, num)
 			}
 		}
@@ -33,11 +35,12 @@ func isPrime(n int) bool {
 	return true
 }
 
-func reverse(n int) int {
-	result := 0
-	for n > 0 {
-		result = result*10 + n%10
-		n /= 10
+func reverseNumber(n int) int {
+	str := strconv.Itoa(n)
+	reversed := ""
+	for i := len(str) - 1; i >= 0; i-- {
+		reversed += string(str[i])
 	}
-	return result
+	num, _ := strconv.Atoi(reversed)
+	return num
 }
