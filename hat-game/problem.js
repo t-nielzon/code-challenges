@@ -1,18 +1,22 @@
 /*
- * Kata: Hat Game (6 kyu)
+ * Hat Game - 6 kyu
  *
- * A team of n players line up by decreasing height, each able to see the
- * hats of all players in front of them but not their own. Hats are either
- * "Red" or "Blue". Starting from the back, each player guesses their own
- * hat colour out loud. The team is allowed at most one wrong guess.
+ * Players are lined up facing forward, each can see all hats in front but not their own.
+ * Starting from the back, each player guesses their hat color ("Red" or "Blue").
+ * The team can afford at most one mistake - if two or more guess wrong, the team loses.
  *
- * Implement `guessColour(guesses, hats)` returning "Red" or "Blue":
- *   - guesses: list of previous guesses heard so far (back-to-front order)
- *   - hats:    list of hats visible in front of the current player
+ * Strategy:
+ * - First player sacrifices by announcing the parity of red hats they see in front
+ * - All other players use this parity signal + visible hats to deduce their own hat
+ * - This guarantees at most one mistake (the first player)
  *
- * Strategy must be stateless and consistent.
+ * Inputs:
+ *   guesses: array of previous guesses heard ("Red" or "Blue")
+ *   hats: array of hats visible in front of current player ("Red" or "Blue")
+ * Output:
+ *   the player's guess ("Red" or "Blue")
  */
 
-function guessColour(guesses, hats) {
-  // your code here
+function guess_colour(guesses, hats) {
+  // empty stub
 }
