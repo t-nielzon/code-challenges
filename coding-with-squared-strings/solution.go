@@ -1,52 +1,87 @@
-package kata
+package main
 
-import (
-	"math"
-	"strings"
-)
+import "strings"
 
-func Code(s string) string {
-	l := len(s)
-	n := int(math.Ceil(math.Sqrt(float64(l))))
-	if n*n < l {
+func code(t string) string {
+	if t == "" {
+		return ""
+	}
+	
+	l := len(t)
+	n := 1
+	for n*n < l {
 		n++
 	}
-	padded := s + strings.Repeat("\x0b", n*n-l)
-	rows := make([]string, n)
-	for i := 0; i < n; i++ {
-		rows[i] = padded[i*n : (i+1)*n]
+	
+	padded := t
+	for len(padded) < n*n {
+		padded += string(rune(11))
 	}
-	rotated := make([][]byte, n)
+	
+	square := make([][]rune, n)
 	for i := 0; i < n; i++ {
-		rotated[i] = make([]byte, n)
-	}
-	for i := 0; i < n; i++ {
+		square[i] = make([]rune, n)
 		for j := 0; j < n; j++ {
-			rotated[j][n-1-i] = rows[i][j]
+			square[i][j] = rune(padded[i*n+j])
 		}
 	}
-	out := make([]string, n)
+	
+	rotated := make([][]rune, n)
 	for i := 0; i < n; i++ {
-		out[i] = string(rotated[i])
+		rotated[i] = make([]rune, n)
 	}
-	return strings.Join(out, "\n")
+	
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			rotated[j][n-1-i] = square[i][j]
+		}
+	}
+	
+	result := ""
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			result += string(rotated[i][j])
+		}
+		if i < n-1 {
+			result += "\n"
+		}
+	}
+	
+	return result
 }
 
-func Decode(s string) string {
-	rows := strings.Split(s, "\n")
-	n := len(rows)
-	rotated := make([][]byte, n)
-	for i := 0; i < n; i++ {
-		rotated[i] = make([]byte, n)
+func decode(s string) string {
+	if s == "" {
+		return ""
 	}
+	
+	lines := strings.Split(s, "\n")
+	n := len(lines)
+	
+	square := make([][]rune, n)
+	for i := 0; i < n; i++ {
+		square[i] = []rune(lines[i])
+	}
+	
+	rotated := make([][]rune, n)
+	for i := 0; i < n; i++ {
+		rotated[i] = make([]rune, n)
+	}
+	
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
-			rotated[n-1-j][i] = rows[i][j]
+			rotated[n-1-j][i] = square[i][j]
 		}
 	}
-	var b strings.Builder
+	
+	result := ""
 	for i := 0; i < n; i++ {
-		b.Write(rotated[i])
+		for j := 0; j < n; j++ {
+			if rotated[i][j] != rune(11) {
+				result += string(rotated[i][j])
+			}
+		}
 	}
-	return strings.TrimRight(b.String(), "\x0b")
+	
+	return result
 }
