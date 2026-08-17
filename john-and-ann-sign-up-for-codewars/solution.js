@@ -1,38 +1,32 @@
-const cache = {};
-
-function getSequences(n) {
-  if (cache[n]) return cache[n];
+function computeSequences(n) {
+  const a = [1];
+  const j = [0];
   
-  let a = [1], j = [0];
   for (let day = 1; day < n; day++) {
-    let t_j = j[day - 1];
-    j.push(day - a[t_j]);
+    const prev_a = a[day - 1];
+    const prev_j = j[day - 1];
     
-    let t_a = a[day - 1];
-    a.push(day - j[t_a]);
+    a.push(day - (j[prev_a] || 0));
+    j.push(day - (a[prev_j] || 0));
   }
-  cache[n] = { a, j };
+  
   return { a, j };
 }
 
 function ann(n) {
-  if (n === 0) return [];
-  return getSequences(n).a;
+  return computeSequences(n).a;
 }
 
 function john(n) {
-  if (n === 0) return [];
-  return getSequences(n).j;
+  return computeSequences(n).j;
 }
 
 function sum_ann(n) {
-  if (n === 0) return 0;
-  let { a } = getSequences(n);
-  return a.reduce((sum, x) => sum + x, 0);
+  const { a } = computeSequences(n);
+  return a.reduce((sum, val) => sum + val, 0);
 }
 
 function sum_john(n) {
-  if (n === 0) return 0;
-  let { j } = getSequences(n);
-  return j.reduce((sum, x) => sum + x, 0);
+  const { j } = computeSequences(n);
+  return j.reduce((sum, val) => sum + val, 0);
 }
