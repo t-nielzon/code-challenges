@@ -1,19 +1,20 @@
+package main
+
 /*
 Disease Spread
 
 In 1978 the British Medical Journal reported on an outbreak of influenza at a British boarding school.
 There were 1000 students. The outbreak began with one infected student.
 
-We want to study the spread of the disease through the population of this school.
-The total population may be divided into three:
-the infected (i), those who have recovered (r), and
-those who are still susceptible (s) to get the disease.
+We want to study the spread of the disease through the population of this school. The total population
+may be divided into three: the infected (i), those who have recovered (r), and those who are still
+susceptible (s) to get the disease.
 
 We will study the disease on a period of tm days. One model of propagation uses 3 differential equations:
 
 (1) s'(t) = -b * s(t) * i(t)
-(2) i'(t) =  b * s(t) * i(t) - a * i(t)
-(3) r'(t) =  a * i(t)
+(2) i'(t) = b * s(t) * i(t) - a * i(t)
+(3) r'(t) = a * i(t)
 
 where s(t), i(t), r(t) are the susceptible, infected, recovered at time t and
 s'(t), i'(t), r'(t) the corresponding derivatives.
@@ -38,7 +39,8 @@ Example:
 tm = 14; n = 336; s0 = 996; i0 = 2; b = 0.00206; a = 0.41
 epidemic(tm, n, s0, i0, b, a) --> 483
 */
-package kata
 
-func Epidemic(tm, n, s0, i0, b, a float64) int {
+func epidemic(tm float64, n int, s0, i0, b, a float64) int {
+	// TODO: implement
+	return 0
 }
