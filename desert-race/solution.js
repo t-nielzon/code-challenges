@@ -1,37 +1,51 @@
 function desertRace(camels, events) {
-  const camelMap = {};
-  const positions = {};
-  const hasOasis = {};
+  const camelMap = new Map();
+  camels.forEach(camel => {
+    camelMap.set(camel.id, camel);
+  });
+  
+  const positions = new Map();
+  const hasOasis = new Map();
   
   camels.forEach(camel => {
-    camelMap[camel.id] = camel;
-    positions[camel.id] = 0;
-    hasOasis[camel.id] = false;
+    positions.set(camel.id, 0);
+    hasOasis.set(camel.id, false);
   });
   
   events.forEach(event => {
-    if (!camelMap[event.runnerId]) return;
+    const { runnerId, type, value } = event;
     
-    const runnerId = event.runnerId;
+    if (!camelMap.has(runnerId)) {
+      return;
+    }
     
-    if (event.type === 'move') {
-      let moveValue = event.value;
-      if (hasOasis[runnerId]) {
+    if (type === 'move') {
+      let moveValue = value;
+      if (hasOasis.get(runnerId)) {
         moveValue *= 2;
-        hasOasis[runnerId] = false;
+        hasOasis.set(runnerId, false);
       }
-      positions[runnerId] += moveValue;
-    } else if (event.type === 'sandstorm') {
-      positions[runnerId] -= 2;
-    } else if (event.type === 'oasis') {
-      hasOasis[runnerId] = true;
+      positions.set(runnerId, positions.get(runnerId) + moveValue);
+    } else if (type === 'sandstorm') {
+      positions.set(runnerId, positions.get(runnerId) - 2);
+    } else if (type === 'oasis') {
+      hasOasis.set(runnerId, true);
     }
   });
   
-  const maxPosition = Math.max(...camels.map(camel => positions[camel.id]));
+  let maxPosition = -Infinity;
+  positions.forEach(pos => {
+    maxPosition = Math.max(maxPosition, pos);
+  });
   
-  return camels
-    .filter(camel => positions[camel.id] === maxPosition)
-    .map(camel => camel.name)
-    .sort();
+  const winners = [];
+  camels.forEach(camel => {
+    if (positions.get(camel.id) === maxPosition) {
+      winners.push(camel.name);
+    }
+  });
+  
+  winners.sort();
+  
+  return winners;
 }
