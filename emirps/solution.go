@@ -1,49 +1,66 @@
-package kata
+package main
 
 func FindEmirp(n int) [3]int {
-	if n < 2 {
+	if n <= 2 {
 		return [3]int{0, 0, 0}
 	}
 
-	// sieve of eratosthenes for primes below n (exclusive upper limit)
-	limit := n - 1
-	isComposite := make([]bool, limit+1)
-	for i := 2; i*i <= limit; i++ {
-		if !isComposite[i] {
-			for j := i * i; j <= limit; j += i {
-				isComposite[j] = true
-			}
-		}
-	}
-
+	primes := sievePrimes(n)
 	primeSet := make(map[int]bool)
-	for i := 2; i <= limit; i++ {
-		if !isComposite[i] {
-			primeSet[i] = true
-		}
+	for _, p := range primes {
+		primeSet[p] = true
 	}
 
-	count, largest, sum := 0, 0, 0
-	for p := range primeSet {
-		r := reverse(p)
-		// emirp: reversed is a different prime, so palindromes are excluded
-		if r != p && primeSet[r] {
+	count := 0
+	largest := 0
+	sum := 0
+
+	for _, prime := range primes {
+		reversed := reverseNumber(prime)
+
+		if reversed != prime && primeSet[reversed] {
 			count++
-			sum += p
-			if p > largest {
-				largest = p
-			}
+			largest = prime
+			sum += prime
 		}
 	}
 
 	return [3]int{count, largest, sum}
 }
 
-func reverse(num int) int {
-	rev := 0
+func sievePrimes(n int) []int {
+	if n < 2 {
+		return []int{}
+	}
+
+	isPrime := make([]bool, n)
+	for i := 2; i < n; i++ {
+		isPrime[i] = true
+	}
+
+	for i := 2; i*i < n; i++ {
+		if isPrime[i] {
+			for j := i * i; j < n; j += i {
+				isPrime[j] = false
+			}
+		}
+	}
+
+	var primes []int
+	for i := 2; i < n; i++ {
+		if isPrime[i] {
+			primes = append(primes, i)
+		}
+	}
+
+	return primes
+}
+
+func reverseNumber(num int) int {
+	result := 0
 	for num > 0 {
-		rev = rev*10 + num%10
+		result = result*10 + num%10
 		num /= 10
 	}
-	return rev
+	return result
 }
