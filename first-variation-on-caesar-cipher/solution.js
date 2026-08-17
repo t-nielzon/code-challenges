@@ -1,67 +1,59 @@
 function movingShift(s, shift) {
-  let encoded = "";
-  let currentShift = shift;
-  
-  for (let char of s) {
-    if (/[a-z]/.test(char)) {
-      let charCode = char.charCodeAt(0) - 'a'.charCodeAt(0);
-      charCode = (charCode + currentShift) % 26;
-      encoded += String.fromCharCode(charCode + 'a'.charCodeAt(0));
-    } else if (/[A-Z]/.test(char)) {
-      let charCode = char.charCodeAt(0) - 'A'.charCodeAt(0);
-      charCode = (charCode + currentShift) % 26;
-      encoded += String.fromCharCode(charCode + 'A'.charCodeAt(0));
-    } else {
-      encoded += char;
+    // encode the string with increasing shift for each character position
+    let encoded = '';
+    for (let i = 0; i < s.length; i++) {
+        const char = s[i];
+        if ((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')) {
+            const isLower = char >= 'a';
+            const base = isLower ? 'a'.charCodeAt(0) : 'A'.charCodeAt(0);
+            const offset = char.charCodeAt(0) - base;
+            const newOffset = (offset + shift + i) % 26;
+            encoded += String.fromCharCode(base + newOffset);
+        } else {
+            encoded += char;
+        }
     }
-    currentShift++;
-  }
-  
-  let length = encoded.length;
-  let baseHigh = Math.ceil(length / 5);
-  let baseLow = Math.floor(length / 5);
-  
-  let part1 = baseHigh;
-  let part2 = baseHigh;
-  let part3 = baseHigh;
-  let remaining = length - part1 - part2 - part3;
-  
-  let part4 = Math.max(baseLow, Math.min(baseHigh, remaining));
-  remaining -= part4;
-  
-  let part5 = remaining;
-  
-  let parts = [];
-  let index = 0;
-  for (let size of [part1, part2, part3, part4, part5]) {
-    parts.push(encoded.substring(index, index + size));
-    index += size;
-  }
-  
-  return parts;
+    
+    // split into 5 parts with optimal distribution
+    const length = encoded.length;
+    const baseLength = Math.floor(length / 5);
+    const numLongerParts = Math.min(4, length - 4 * baseLength);
+    
+    const parts = [];
+    let start = 0;
+    
+    for (let i = 0; i < 5; i++) {
+        let partLength;
+        if (i < numLongerParts) {
+            partLength = baseLength + 1;
+        } else if (i < 4) {
+            partLength = baseLength;
+        } else {
+            partLength = length - start;
+        }
+        parts.push(encoded.substring(start, start + partLength));
+        start += partLength;
+    }
+    
+    return parts;
 }
 
-function demovingShift(arr, shift) {
-  let encoded = arr.join("");
-  let decoded = "";
-  let currentShift = shift;
-  
-  for (let char of encoded) {
-    if (/[a-z]/.test(char)) {
-      let charCode = char.charCodeAt(0) - 'a'.charCodeAt(0);
-      let shiftMod = currentShift % 26;
-      charCode = ((charCode - shiftMod) % 26 + 26) % 26;
-      decoded += String.fromCharCode(charCode + 'a'.charCodeAt(0));
-    } else if (/[A-Z]/.test(char)) {
-      let charCode = char.charCodeAt(0) - 'A'.charCodeAt(0);
-      let shiftMod = currentShift % 26;
-      charCode = ((charCode - shiftMod) % 26 + 26) % 26;
-      decoded += String.fromCharCode(charCode + 'A'.charCodeAt(0));
-    } else {
-      decoded += char;
+function demovingShift(s, shift) {
+    const encoded = s.join('');
+    let decoded = '';
+    
+    for (let i = 0; i < encoded.length; i++) {
+        const char = encoded[i];
+        if ((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')) {
+            const isLower = char >= 'a';
+            const base = isLower ? 'a'.charCodeAt(0) : 'A'.charCodeAt(0);
+            const offset = char.charCodeAt(0) - base;
+            const newOffset = (offset - shift - i + 26 * 100) % 26;
+            decoded += String.fromCharCode(base + newOffset);
+        } else {
+            decoded += char;
+        }
     }
-    currentShift++;
-  }
-  
-  return decoded;
+    
+    return decoded;
 }
