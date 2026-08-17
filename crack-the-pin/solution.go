@@ -1,16 +1,16 @@
-package kata
+package main
 
 import (
 	"crypto/md5"
-	"encoding/hex"
 	"fmt"
 )
 
-func Crack(hash string) string {
+func CrackPin(hash string) string {
 	for i := 0; i < 100000; i++ {
 		pin := fmt.Sprintf("%05d", i)
-		sum := md5.Sum([]byte(pin))
-		if hex.EncodeToString(sum[:]) == hash {
+		h := md5.Sum([]byte(pin))
+		hashStr := fmt.Sprintf("%x", h)
+		if hashStr == hash {
 			return pin
 		}
 	}
