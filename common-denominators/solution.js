@@ -1,14 +1,36 @@
-function convertFrac(arr) {
-  const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b));
-  const lcm = (a, b) => (a / gcd(a, b)) * b;
-
-  // simplify each fraction first to keep the common denominator minimal
-  const reduced = arr.map(([n, d]) => {
-    const g = gcd(n, d);
-    return [n / g, d / g];
+function convertFracs(lst) {
+  if (lst.length === 0) return [];
+  
+  function gcd(a, b) {
+    while (b !== 0) {
+      let temp = b;
+      b = a % b;
+      a = temp;
+    }
+    return a;
+  }
+  
+  function lcm(a, b) {
+    return (a * b) / gcd(a, b);
+  }
+  
+  // Simplify input fractions first
+  let simplified = lst.map(([num, denom]) => {
+    let g = gcd(num, denom);
+    return [num / g, denom / g];
   });
-
-  const D = reduced.reduce((acc, [, d]) => lcm(acc, d), 1);
-
-  return reduced.map(([n, d]) => [(n * D) / d, D]);
+  
+  // Find LCM of all denominators
+  let commonDenom = simplified[0][1];
+  for (let i = 1; i < simplified.length; i++) {
+    commonDenom = lcm(commonDenom, simplified[i][1]);
+  }
+  
+  // Convert each fraction to common denominator
+  let result = simplified.map(([num, denom]) => {
+    let newNum = num * (commonDenom / denom);
+    return [newNum, commonDenom];
+  });
+  
+  return result;
 }
