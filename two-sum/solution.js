@@ -1,13 +1,13 @@
 function twoSum(numbers, target) {
-  const seen = {};
+  const map = {};
   
   for (let i = 0; i < numbers.length; i++) {
     const complement = target - numbers[i];
     
-    if (complement in seen) {
-      return [seen[complement], i];
+    if (complement in map) {
+      return [map[complement], i];
     }
     
-    seen[numbers[i]] = i;
+    map[numbers[i]] = i;
   }
 }
