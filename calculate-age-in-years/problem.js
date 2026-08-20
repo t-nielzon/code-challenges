@@ -1,6 +1,4 @@
-/*
- * Calculate age in years
- * 
+/**
  * Complete the following function that will return the difference in years (age) 
  * for a birthdate, and optionally a "now" date. Both arguments to the function 
  * are expected to be Date objects. The returned difference can be either positive 
@@ -13,5 +11,6 @@
  * getAge(new Date('2008/01/01'), new Date('2000/01/01')) === -8
  */
 
-function getAge(birthDate, nowDate) {
+function getAge(birthDate, now) {
+
 }
