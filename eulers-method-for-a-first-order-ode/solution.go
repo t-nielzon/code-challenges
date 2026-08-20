@@ -1,33 +1,33 @@
 package main
 
-import (
-	"math"
-)
+import "math"
 
-func Ex_euler(n int) float64 {
-	h := 1.0 / float64(n)
+func ExEuler(n int) float64 {
 	x := 0.0
 	y := 1.0
-	
-	totalError := 0.0
-	
-	for k := 0; k <= n; k++ {
-		// exact solution at x_k
-		z := 1.0 + 0.5*math.Exp(-4*x) - 0.5*math.Exp(-2*x)
-		
-		// relative error
-		relError := math.Abs(y-z) / z
-		totalError += relError
-		
-		// euler's method step: f(x,y) = 2 - e^(-4x) - 2y
-		f := 2.0 - math.Exp(-4*x) - 2*y
-		y = y + f*h
-		x = x + h
+	h := 1.0 / float64(n)
+
+	f := func(x, y float64) float64 {
+		return 2 - math.Exp(-4*x) - 2*y
 	}
-	
-	// mean error
+
+	z := func(x float64) float64 {
+		return 1 + 0.5*math.Exp(-4*x) - 0.5*math.Exp(-2*x)
+	}
+
+	var totalError float64
+
+	for k := 0; k <= n; k++ {
+		zk := z(x)
+		error := math.Abs(y-zk) / zk
+		totalError += error
+
+		if k < n {
+			y = y + f(x, y)*h
+			x = x + h
+		}
+	}
+
 	meanError := totalError / float64(n+1)
-	
-	// truncate to 6 decimal places
-	return math.Trunc(meanError*1e6) / 1e6
+	return math.Floor(meanError*1e6) / 1e6
 }
