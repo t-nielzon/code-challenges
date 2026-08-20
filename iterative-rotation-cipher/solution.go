@@ -1,105 +1,115 @@
-package solution
+package main
 
 import (
-	"strconv"
+	"fmt"
 	"strings"
 )
 
-func rotateRight(s []rune, n int) []rune {
-	if len(s) == 0 {
-		return s
-	}
-	k := n % len(s)
-	res := make([]rune, 0, len(s))
-	res = append(res, s[len(s)-k:]...)
-	res = append(res, s[:len(s)-k]...)
-	return res
-}
-
-func rotateLeft(s []rune, n int) []rune {
-	if len(s) == 0 {
-		return s
-	}
-	k := n % len(s)
-	res := make([]rune, 0, len(s))
-	res = append(res, s[k:]...)
-	res = append(res, s[:k]...)
-	return res
-}
-
-// reinsert space runes at the recorded positions of the full-length string
-func putSpaces(noSpace []rune, positions []int) []rune {
-	total := len(noSpace) + len(positions)
-	res := make([]rune, 0, total)
-	pi, ni := 0, 0
-	for i := 0; i < total; i++ {
-		if pi < len(positions) && positions[pi] == i {
-			res = append(res, ' ')
-			pi++
-		} else {
-			res = append(res, noSpace[ni])
-			ni++
-		}
-	}
-	return res
-}
-
-// apply a rotation to each maximal run of non-space characters
-func rotateSubstrings(r []rune, n int, rot func([]rune, int) []rune) []rune {
-	res := make([]rune, 0, len(r))
-	i := 0
-	for i < len(r) {
-		if r[i] == ' ' {
-			res = append(res, ' ')
-			i++
-			continue
-		}
-		j := i
-		for j < len(r) && r[j] != ' ' {
-			j++
-		}
-		res = append(res, rot(r[i:j], n)...)
-		i = j
-	}
-	return res
-}
-
 func Encode(n int, s string) string {
-	r := []rune(s)
-	for iter := 0; iter < n; iter++ {
-		var noSpace []rune
-		var positions []int
-		for i, c := range r {
-			if c == ' ' {
-				positions = append(positions, i)
-			} else {
-				noSpace = append(noSpace, c)
-			}
-		}
-		noSpace = rotateRight(noSpace, n)
-		r = putSpaces(noSpace, positions)
-		r = rotateSubstrings(r, n, rotateRight)
+	result := s
+	for i := 0; i < n; i++ {
+		result = encodeIteration(n, result)
 	}
-	return strconv.Itoa(n) + " " + string(r)
+	return fmt.Sprintf("%d %s", n, result)
 }
 
 func Decode(s string) string {
-	idx := strings.Index(s, " ")
-	n, _ := strconv.Atoi(s[:idx])
-	r := []rune(s[idx+1:])
-	for iter := 0; iter < n; iter++ {
-		r = rotateSubstrings(r, n, rotateLeft)
-		var noSpace []rune
-		var positions []int
-		for i, c := range r {
-			if c == ' ' {
-				positions = append(positions, i)
-			} else {
-				noSpace = append(noSpace, c)
-			}
-		}
-		noSpace = rotateLeft(noSpace, n)
-		r = putSpaces(noSpace, positions)
+	parts := strings.SplitN(s, " ", 2)
+	if len(parts) != 2 {
+		return ""
 	}
-	return string(r)
+	
+	var n int
+	fmt.Sscanf(parts[0], "%d", &n)
+	result := parts[1]
+	
+	for i := 0; i < n; i++ {
+		result = decodeIteration(n, result)
+	}
+	return result
+}
+
+func encodeIteration(n int, s string) string {
+	spacePositions := []int{}
+	noSpaces := ""
+	for i, ch := range s {
+		if ch == ' ' {
+			spacePositions = append(spacePositions, i)
+		} else {
+			noSpaces += string(ch)
+		}
+	}
+	
+	rotated := rotateRight(noSpaces, n)
+	
+	result := ""
+	rotatedIdx := 0
+	spaceIdx := 0
+	for i := 0; i < len(s); i++ {
+		if spaceIdx < len(spacePositions) && spacePositions[spaceIdx] == i {
+			result += " "
+			spaceIdx++
+		} else {
+			result += string(rotated[rotatedIdx])
+			rotatedIdx++
+		}
+	}
+	
+	substrings := strings.Split(result, " ")
+	for i := range substrings {
+		substrings[i] = rotateRight(substrings[i], n)
+	}
+	
+	return strings.Join(substrings, " ")
+}
+
+func decodeIteration(n int, s string) string {
+	substrings := strings.Split(s, " ")
+	for i := range substrings {
+		substrings[i] = rotateLeft(substrings[i], n)
+	}
+	result := strings.Join(substrings, " ")
+	
+	spacePositions := []int{}
+	noSpaces := ""
+	for i, ch := range result {
+		if ch == ' ' {
+			spacePositions = append(spacePositions, i)
+		} else {
+			noSpaces += string(ch)
+		}
+	}
+	
+	rotated := rotateLeft(noSpaces, n)
+	
+	finalResult := ""
+	rotatedIdx := 0
+	spaceIdx := 0
+	for i := 0; i < len(result); i++ {
+		if spaceIdx < len(spacePositions) && spacePositions[spaceIdx] == i {
+			finalResult += " "
+			spaceIdx++
+		} else {
+			finalResult += string(rotated[rotatedIdx])
+			rotatedIdx++
+		}
+	}
+	
+	return finalResult
+}
+
+func rotateRight(s string, n int) string {
+	if len(s) == 0 {
+		return s
+	}
+	n = n % len(s)
+	return s[len(s)-n:] + s[:len(s)-n]
+}
+
+func rotateLeft(s string, n int) string {
+	if len(s) == 0 {
+		return s
+	}
+	n = n % len(s)
+	return s[n:] + s[:n]
 }
