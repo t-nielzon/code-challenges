@@ -1,59 +1,65 @@
-package kata
+package main
 
 import (
-	"fmt"
-	"sort"
 	"strconv"
 	"strings"
 )
 
-// triple holds the weight, original index, and value of a number.
-type triple struct {
-	weight int
-	index  int
-	value  int
-}
-
-func digitWeight(n int) int {
-	w := 0
-	for n > 0 {
-		w += n % 10
-		n /= 10
-	}
-	return w
-}
-
-func closest(strng string) string {
-	fields := strings.Fields(strng)
-	if len(fields) == 0 {
-		return "[(), ()]"
+func closest(strng string) [][]int {
+	if strng == "" {
+		return [][]int{}
 	}
 
-	triples := make([]triple, 0, len(fields))
-	for i, f := range fields {
-		v, _ := strconv.Atoi(f)
-		triples = append(triples, triple{digitWeight(v), i, v})
+	parts := strings.Fields(strng)
+	if len(parts) < 2 {
+		return [][]int{}
 	}
 
-	// sort by weight, then by original index, so adjacent pairs are the
-	// closest candidates and ties resolve to the smallest weights/indices.
-	sort.Slice(triples, func(i, j int) bool {
-		if triples[i].weight != triples[j].weight {
-			return triples[i].weight < triples[j].weight
+	weights := make([]int, len(parts))
+	numbers := make([]int, len(parts))
+	for i, part := range parts {
+		weight := 0
+		for _, ch := range part {
+			weight += int(ch - '0')
 		}
-		return triples[i].index < triples[j].index
-	})
+		weights[i] = weight
+		numbers[i], _ = strconv.Atoi(part)
+	}
 
-	bestDiff := -1
-	var a, b triple
-	for i := 0; i+1 < len(triples); i++ {
-		diff := triples[i+1].weight - triples[i].weight
-		if bestDiff == -1 || diff < bestDiff {
-			bestDiff = diff
-			a, b = triples[i], triples[i+1]
+	var bestI, bestJ int
+	var bestDiff int = -1
+	var bestSum int
+
+	for i := 0; i < len(weights); i++ {
+		for j := i + 1; j < len(weights); j++ {
+			diff := abs(weights[i] - weights[j])
+			sum := weights[i] + weights[j]
+
+			if bestDiff == -1 ||
+				diff < bestDiff ||
+				(diff == bestDiff && sum < bestSum) ||
+				(diff == bestDiff && sum == bestSum && i < bestI) ||
+				(diff == bestDiff && sum == bestSum && i == bestI && j < bestJ) {
+				bestI, bestJ = i, j
+				bestDiff = diff
+				bestSum = sum
+			}
 		}
 	}
 
-	return fmt.Sprintf("[(%d, %d, %d), (%d, %d, %d)]",
-		a.weight, a.index, a.value, b.weight, b.index, b.value)
+	arr1 := []int{weights[bestI], bestI, numbers[bestI]}
+	arr2 := []int{weights[bestJ], bestJ, numbers[bestJ]}
+
+	if arr1[0] > arr2[0] || (arr1[0] == arr2[0] && arr1[1] > arr2[1]) {
+		arr1, arr2 = arr2, arr1
+	}
+
+	return [][]int{arr1, arr2}
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
