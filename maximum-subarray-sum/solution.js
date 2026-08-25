@@ -1,9 +1,9 @@
-function maxSum(arr) {
+function maxSubarraySum(arr) {
   let maxCurrent = 0;
   let maxGlobal = 0;
   
-  for (let num of arr) {
-    maxCurrent = Math.max(0, maxCurrent + num);
+  for (let i = 0; i < arr.length; i++) {
+    maxCurrent = Math.max(0, maxCurrent + arr[i]);
     maxGlobal = Math.max(maxGlobal, maxCurrent);
   }
   
