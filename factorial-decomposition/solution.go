@@ -1,35 +1,63 @@
-package kata
+package main
 
 import (
-	"strconv"
+	"fmt"
 	"strings"
 )
 
 func decomp(n int) string {
-	// sieve of eratosthenes for primes up to n
-	sieve := make([]bool, n+1)
-	var parts []string
-
-	for p := 2; p <= n; p++ {
-		if sieve[p] {
-			continue
+	if n < 2 {
+		return "1"
+	}
+	
+	primes := sieve(n)
+	var result []string
+	
+	for _, p := range primes {
+		count := 0
+		power := p
+		for power <= n {
+			count += n / power
+			if power > n/p {
+				break
+			}
+			power *= p
 		}
-		for m := p * p; m <= n; m += p {
-			sieve[m] = true
-		}
-
-		// legendre's formula: exponent of prime p in n! is sum of floor(n/p^k)
-		exp := 0
-		for pk := p; pk <= n; pk *= p {
-			exp += n / pk
-		}
-
-		if exp == 1 {
-			parts = append(parts, strconv.Itoa(p))
+		
+		if count == 1 {
+			result = append(result, fmt.Sprintf("%d", p))
 		} else {
-			parts = append(parts, strconv.Itoa(p)+"^"+strconv.Itoa(exp))
+			result = append(result, fmt.Sprintf("%d^%d", p, count))
 		}
 	}
+	
+	return strings.Join(result, " * ")
+}
 
-	return strings.Join(parts, " * ")
+func sieve(n int) []int {
+	if n < 2 {
+		return []int{}
+	}
+	
+	is_prime := make([]bool, n+1)
+	for i := 2; i <= n; i++ {
+		is_prime[i] = true
+	}
+	
+	for i := 2; i*i <= n; i++ {
+		if is_prime[i] {
+			for j := i * i; j <= n; j += i {
+				is_prime[j] = false
+			}
+		}
+	}
+	
+	var primes []int
+	for i := 2; i <= n; i++ {
+		if is_prime[i] {
+			primes = append(primes, i)
+		}
+	}
+	
+	return primes
 }
