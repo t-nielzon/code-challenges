@@ -3,26 +3,26 @@ package main
 /*
 Esolang Interpreters #2 - Custom Smallfuck Interpreter
 
-Smallfuck is an esoteric programming language operating on bits.
+Smallfuck is an esoteric language that operates on bits.
 
 Commands:
-- > : Move pointer right (terminate if out of bounds)
-- < : Move pointer left (terminate if out of bounds)
-- * : Flip the bit at current cell
-- [ : Jump past matching ] if current cell is 0
-- ] : Jump back to matching [ if current cell is nonzero
+- `>` - Move pointer right
+- `<` - Move pointer left
+- `*` - Flip the bit at current cell
+- `[` - Jump past matching `]` if current cell is 0
+- `]` - Jump back to matching `[` if current cell is 1
 
-The interpreter receives:
-- code: The Smallfuck program as a string (may contain non-command characters)
-- tape: The initial tape state as a string of 0s and 1s
+Program terminates when:
+1. All commands have been processed
+2. Pointer goes out-of-bounds
+
+Arguments:
+- code: Smallfuck program (string, may contain non-command characters to ignore)
+- tape: Initial bit state (string of 0s and 1s)
 
 Returns:
-- The final state of the tape as a string
-
-The pointer starts at the leftmost cell. Execution terminates when all commands
-are processed or when the pointer moves out of bounds.
+- Final tape state as a string
 */
-
 func Interpreter(code string, tape string) string {
 	return ""
 }

@@ -1,68 +1,64 @@
 package main
 
 func Interpreter(code string, tape string) string {
-	bits := make([]int, len(tape))
-	for i, c := range tape {
-		bits[i] = int(c - '0')
+	t := make([]byte, len(tape))
+	for i := 0; i < len(tape); i++ {
+		t[i] = tape[i]
 	}
-
-	pointer := 0
+	
+	ptr := 0
 	ip := 0
-
+	
 	for ip < len(code) {
-		cmd := code[ip]
-
-		switch cmd {
+		switch code[ip] {
 		case '>':
-			pointer++
-			if pointer >= len(bits) {
-				break
+			ptr++
+			if ptr >= len(t) {
+				return string(t)
 			}
-			ip++
 		case '<':
-			pointer--
-			if pointer < 0 {
-				break
+			ptr--
+			if ptr < 0 {
+				return string(t)
 			}
-			ip++
 		case '*':
-			bits[pointer] = 1 - bits[pointer]
-			ip++
+			if t[ptr] == '0' {
+				t[ptr] = '1'
+			} else {
+				t[ptr] = '0'
+			}
 		case '[':
-			if bits[pointer] == 0 {
+			if t[ptr] == '0' {
 				depth := 1
-				for ip++; ip < len(code) && depth > 0; ip++ {
+				for ip++; ip < len(code); ip++ {
 					if code[ip] == '[' {
 						depth++
 					} else if code[ip] == ']' {
 						depth--
+						if depth == 0 {
+							break
+						}
 					}
 				}
-			} else {
-				ip++
 			}
 		case ']':
-			if bits[pointer] != 0 {
+			if t[ptr] != '0' {
 				depth := 1
-				for ip--; ip >= 0 && depth > 0; ip-- {
+				for ip--; ip >= 0; ip-- {
 					if code[ip] == ']' {
 						depth++
 					} else if code[ip] == '[' {
 						depth--
+						if depth == 0 {
+							break
+						}
 					}
 				}
-				ip++
-			} else {
-				ip++
+				ip--
 			}
-		default:
-			ip++
 		}
+		ip++
 	}
-
-	result := ""
-	for _, b := range bits {
-		result += string(byte(b + int('0')))
-	}
-	return result
+	
+	return string(t)
 }
