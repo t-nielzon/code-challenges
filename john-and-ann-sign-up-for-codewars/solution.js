@@ -1,32 +1,67 @@
-function computeSequences(n) {
+function ann(n) {
+  if (n === 0) return [];
+  
   const a = [1];
   const j = [0];
   
-  for (let day = 1; day < n; day++) {
-    const prev_a = a[day - 1];
-    const prev_j = j[day - 1];
-    
-    a.push(day - (j[prev_a] || 0));
-    j.push(day - (a[prev_j] || 0));
+  for (let i = 1; i < n; i++) {
+    const jVal = i - a[j[i-1]];
+    const aVal = i - j[a[i-1]];
+    j.push(jVal);
+    a.push(aVal);
   }
   
-  return { a, j };
-}
-
-function ann(n) {
-  return computeSequences(n).a;
+  return a;
 }
 
 function john(n) {
-  return computeSequences(n).j;
+  if (n === 0) return [];
+  
+  const a = [1];
+  const j = [0];
+  
+  for (let i = 1; i < n; i++) {
+    const jVal = i - a[j[i-1]];
+    const aVal = i - j[a[i-1]];
+    j.push(jVal);
+    a.push(aVal);
+  }
+  
+  return j;
 }
 
 function sum_ann(n) {
-  const { a } = computeSequences(n);
-  return a.reduce((sum, val) => sum + val, 0);
+  if (n === 0) return 0;
+  
+  const a = [1];
+  const j = [0];
+  let sum = 1;
+  
+  for (let i = 1; i < n; i++) {
+    const jVal = i - a[j[i-1]];
+    const aVal = i - j[a[i-1]];
+    j.push(jVal);
+    a.push(aVal);
+    sum += aVal;
+  }
+  
+  return sum;
 }
 
 function sum_john(n) {
-  const { j } = computeSequences(n);
-  return j.reduce((sum, val) => sum + val, 0);
+  if (n === 0) return 0;
+  
+  const a = [1];
+  const j = [0];
+  let sum = 0;
+  
+  for (let i = 1; i < n; i++) {
+    const jVal = i - a[j[i-1]];
+    const aVal = i - j[a[i-1]];
+    j.push(jVal);
+    a.push(aVal);
+    sum += jVal;
+  }
+  
+  return sum;
 }
