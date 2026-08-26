@@ -1,5 +1,6 @@
 package main
 
-func finance(n int) int {
-	return n * (n + 1) * (n + 2) / 2
+func Finance(n int) int64 {
+	nn := int64(n)
+	return nn * (nn + 1) * (nn + 2) / 2
 }
