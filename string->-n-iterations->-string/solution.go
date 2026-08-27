@@ -1,35 +1,41 @@
 package main
 
-func Repeat(s string, n int) string {
+func Transform(s string, n int) string {
+	if n == 0 {
+		return s
+	}
+	
 	seen := make(map[string]int)
 	current := s
-	seen[current] = 0
+	iteration := 0
+	seen[current] = iteration
 	
-	for i := 1; i <= n; i++ {
-		current = transform(current)
+	for iteration < n {
+		current = transformOnce(current)
+		iteration++
 		
-		if prevI, exists := seen[current]; exists {
-			cycleLength := i - prevI
-			remaining := (n - i) % cycleLength
+		if prevIteration, ok := seen[current]; ok {
+			cycleLength := iteration - prevIteration
+			offset := (n - prevIteration) % cycleLength
 			
-			for j := 0; j < remaining; j++ {
-				current = transform(current)
+			result := current
+			for i := 0; i < offset; i++ {
+				result = transformOnce(result)
 			}
-			return current
+			return result
 		}
 		
-		seen[current] = i
+		seen[current] = iteration
 	}
 	
 	return current
 }
 
-func transform(s string) string {
-	runes := []rune(s)
-	even := make([]rune, 0)
-	odd := make([]rune, 0)
+func transformOnce(s string) string {
+	even := []rune{}
+	odd := []rune{}
 	
-	for i, ch := range runes {
+	for i, ch := range s {
 		if i%2 == 0 {
 			even = append(even, ch)
 		} else {
@@ -37,9 +43,5 @@ func transform(s string) string {
 		}
 	}
 	
-	result := make([]rune, 0, len(runes))
-	result = append(result, even...)
-	result = append(result, odd...)
-	
-	return string(result)
+	return string(append(even, odd...))
 }
