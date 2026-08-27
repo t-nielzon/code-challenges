@@ -1,28 +1,29 @@
-package kata
+package main
 
 import "math"
 
-func ListSquared(m, n int) [][2]int {
-	result := [][2]int{}
+func SumOfSquaredDivisors(m, n int) [][]int {
+	var result [][]int
+	
 	for num := m; num <= n; num++ {
-		sum := sumSquaredDivisors(num)
-		sqrt := int(math.Round(math.Sqrt(float64(sum))))
-		if sqrt*sqrt == sum {
-			result = append(result, [2]int{num, sum})
-		}
-	}
-	return result
-}
-
-func sumSquaredDivisors(n int) int {
-	sum := 0
-	for i := 1; i*i <= n; i++ {
-		if n%i == 0 {
-			sum += i * i
-			if i != n/i {
-				sum += (n / i) * (n / i)
+		sumOfSquares := 0
+		
+		// find all divisors and sum their squares
+		for i := 1; i*i <= num; i++ {
+			if num%i == 0 {
+				sumOfSquares += i * i
+				if i != num/i {
+					sumOfSquares += (num/i) * (num/i)
+				}
 			}
 		}
+		
+		// check if sum is a perfect square
+		sqrt := int(math.Sqrt(float64(sumOfSquares)))
+		if sqrt*sqrt == sumOfSquares {
+			result = append(result, []int{num, sumOfSquares})
+		}
 	}
-	return sum
+	
+	return result
 }
