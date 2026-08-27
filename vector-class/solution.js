@@ -1,39 +1,42 @@
-class Vector {
-  constructor(components) {
-    this.components = components;
-  }
-
-  _checkLength(other) {
-    if (this.components.length !== other.components.length) {
-      throw new Error('Vectors must have the same length');
-    }
-  }
-
-  add(other) {
-    this._checkLength(other);
-    return new Vector(this.components.map((v, i) => v + other.components[i]));
-  }
-
-  subtract(other) {
-    this._checkLength(other);
-    return new Vector(this.components.map((v, i) => v - other.components[i]));
-  }
-
-  dot(other) {
-    this._checkLength(other);
-    return this.components.reduce((sum, v, i) => sum + v * other.components[i], 0);
-  }
-
-  norm() {
-    return Math.sqrt(this.components.reduce((sum, v) => sum + v * v, 0));
-  }
-
-  equals(other) {
-    if (this.components.length !== other.components.length) return false;
-    return this.components.every((v, i) => v === other.components[i]);
-  }
-
-  toString() {
-    return `(${this.components.join(',')})`;
-  }
+// solution.js
+function Vector(components) {
+  this.components = components;
 }
+
+Vector.prototype.add = function(vector) {
+  if (this.components.length !== vector.components.length) {
+    throw new Error('Vector dimensions must match');
+  }
+  const result = this.components.map((val, i) => val + vector.components[i]);
+  return new Vector(result);
+};
+
+Vector.prototype.subtract = function(vector) {
+  if (this.components.length !== vector.components.length) {
+    throw new Error('Vector dimensions must match');
+  }
+  const result = this.components.map((val, i) => val - vector.components[i]);
+  return new Vector(result);
+};
+
+Vector.prototype.dot = function(vector) {
+  if (this.components.length !== vector.components.length) {
+    throw new Error('Vector dimensions must match');
+  }
+  return this.components.reduce((sum, val, i) => sum + val * vector.components[i], 0);
+};
+
+Vector.prototype.norm = function() {
+  return Math.sqrt(this.components.reduce((sum, val) => sum + val * val, 0));
+};
+
+Vector.prototype.toString = function() {
+  return '(' + this.components.join(',') + ')';
+};
+
+Vector.prototype.equals = function(vector) {
+  if (this.components.length !== vector.components.length) {
+    return false;
+  }
+  return this.components.every((val, i) => val === vector.components[i]);
+};
