@@ -1,44 +1,43 @@
 function countBlackSquares(width, height, resolution) {
   if (width === 0 || height === 0) return 0;
   
-  const cols_full = Math.floor(width / resolution);
-  const rows_full = Math.floor(height / resolution);
-  const rem_w = width % resolution;
-  const rem_h = height % resolution;
+  const full_cols = Math.floor(width / resolution);
+  const remainder_width = width % resolution;
+  const full_rows = Math.floor(height / resolution);
+  const remainder_height = height % resolution;
   
+  const res_sq = resolution * resolution;
   let count = 0;
   
-  // Interior full cells
-  const blackCellsInInterior = countBlackCells(cols_full, rows_full);
-  count += blackCellsInInterior * resolution * resolution;
+  const even_rows = Math.ceil(full_rows / 2);
+  const odd_rows = Math.floor(full_rows / 2);
+  const odd_cols = Math.floor(full_cols / 2);
+  const even_cols = Math.ceil(full_cols / 2);
   
-  // Right strip (if exists)
-  if (rem_w > 0) {
-    const blackInRightStrip = cols_full % 2 === 0 ? Math.floor(rows_full / 2) : Math.ceil(rows_full / 2);
-    count += blackInRightStrip * rem_w * resolution;
+  count += even_rows * odd_cols * res_sq;
+  count += odd_rows * even_cols * res_sq;
+  
+  if (remainder_width > 0) {
+    if (full_cols % 2 === 1) {
+      count += even_rows * remainder_width * resolution;
+    } else {
+      count += odd_rows * remainder_width * resolution;
+    }
   }
   
-  // Bottom strip (if exists)
-  if (rem_h > 0) {
-    const blackInBottomStrip = rows_full % 2 === 0 ? Math.floor(cols_full / 2) : Math.ceil(cols_full / 2);
-    count += blackInBottomStrip * resolution * rem_h;
+  if (remainder_height > 0) {
+    if (full_rows % 2 === 0) {
+      count += odd_cols * resolution * remainder_height;
+    } else {
+      count += even_cols * resolution * remainder_height;
+    }
   }
   
-  // Corner (if exists)
-  if (rem_w > 0 && rem_h > 0) {
-    if ((cols_full + rows_full) % 2 === 1) {
-      count += rem_w * rem_h;
+  if (remainder_width > 0 && remainder_height > 0) {
+    if ((full_rows + full_cols) % 2 === 1) {
+      count += remainder_width * remainder_height;
     }
   }
   
   return count;
-}
-
-function countBlackCells(cols, rows) {
-  if (cols === 0 || rows === 0) return 0;
-  const evenRows = Math.ceil(rows / 2);
-  const oddRows = Math.floor(rows / 2);
-  const oddCols = Math.floor(cols / 2);
-  const evenCols = Math.ceil(cols / 2);
-  return evenRows * oddCols + oddRows * evenCols;
 }
