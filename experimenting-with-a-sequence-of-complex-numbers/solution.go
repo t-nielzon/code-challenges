@@ -1,32 +1,31 @@
-package main
+package kata
 
-import (
-	"math"
-	"math/cmplx"
-)
+import "math/cmplx"
 
 func F(z complex128, eps float64) int {
-	modZ := cmplx.Abs(z)
-	
-	// domain of convergence is |z| < 1
-	if modZ >= 1 {
+	// Check if z is in the domain of convergence |z| < 1
+	if cmplx.Abs(z) >= 1 {
 		return -1
 	}
+
+	// The geometric series z + z^2 + ... + z^n = z(1 - z^n)/(1 - z)
+	// So S(n, z) = (1 - z) * z(1 - z^n)/(1 - z) = z(1 - z^n)
+	// As n → ∞ with |z| < 1: z^n → 0, so S(n, z) → z
+	// We need the smallest n such that |S(n, z) - z| < eps
+	// |z(1 - z^n) - z| = |z||−z^n| = |z|^(n+1) < eps
 	
-	// S(n, z) = z(1 - z^n), lim = z as n → ∞
-	// condition: |z(1 - z^n) - z| < eps
-	// simplifies to: |z|^(n+1) < eps
-	// taking log: (n+1) * log|z| < log(eps)
-	// since log|z| < 0: n+1 > log(eps) / log|z|
-	// smallest integer n: floor(log(eps) / log|z|)
-	
-	logZ := math.Log(modZ)
-	logEps := math.Log(eps)
-	
-	n := int(logEps / logZ)
-	if n < 1 {
-		n = 1
+	zPowN := z  // z^1
+	for n := 1; n <= 10000; n++ {
+		// S(n, z) = z * (1 - z^n)
+		sn := z * (1 - zPowN)
+
+		// Check if |S(n, z) - z| < eps
+		if cmplx.Abs(sn-z) < eps {
+			return n
+		}
+
+		zPowN *= z  // z^(n+1)
 	}
-	
-	return n
+
+	return -1
 }
