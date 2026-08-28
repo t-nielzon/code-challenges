@@ -1,32 +1,41 @@
-package kata
+package main
 
-func PlayPass(s string, n int) string {
-	runes := []rune(s)
-	out := make([]rune, len(runes))
-	for i, r := range runes {
-		var c rune
-		switch {
-		case r >= 'A' && r <= 'Z':
-			c = 'A' + (r-'A'+rune(n))%26
-		case r >= 'a' && r <= 'z':
-			c = 'a' + (r-'a'+rune(n))%26
-		case r >= '0' && r <= '9':
-			c = '9' - (r - '0')
-		default:
-			c = r
+func PlayPassphrase(s string, shift int) string {
+	// Step 1: Shift letters circularly
+	shifted := make([]rune, 0)
+	for _, r := range s {
+		if r >= 'A' && r <= 'Z' {
+			idx := int(r-'A') + shift
+			idx = ((idx % 26) + 26) % 26
+			shifted = append(shifted, rune('A'+idx))
+		} else if r >= '0' && r <= '9' {
+			shifted = append(shifted, r)
+		} else {
+			shifted = append(shifted, r)
 		}
-		if c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' {
-			if i%2 == 0 {
-				if c >= 'a' && c <= 'z' {
-					c = c - 'a' + 'A'
-				}
-			} else {
-				if c >= 'A' && c <= 'Z' {
-					c = c - 'A' + 'a'
-				}
+	}
+	
+	// Step 2: Replace digits with complement to 9
+	for i, r := range shifted {
+		if r >= '0' && r <= '9' {
+			digit := int(r - '0')
+			shifted[i] = rune('0' + (9-digit))
+		}
+	}
+	
+	// Step 4: Downcase odd positions, upcase even positions
+	for i, r := range shifted {
+		if r >= 'A' && r <= 'Z' {
+			if i%2 == 1 {
+				shifted[i] = r + 32
 			}
 		}
-		out[len(runes)-1-i] = c
 	}
-	return string(out)
+	
+	// Step 5: Reverse
+	for i, j := 0, len(shifted)-1; i < j; i, j = i+1, j-1 {
+		shifted[i], shifted[j] = shifted[j], shifted[i]
+	}
+	
+	return string(shifted)
 }
