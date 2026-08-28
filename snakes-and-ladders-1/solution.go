@@ -1,56 +1,86 @@
-package kata
+package main
 
 import "fmt"
 
 type SnakesLadders struct {
-	positions [2]int
-	turn      int
-	gameOver  bool
+	player1Pos    int
+	player2Pos    int
+	currentPlayer int
+	gameWon       bool
+	snakes        map[int]int
+	ladders       map[int]int
 }
 
 func NewSnakesLadders() *SnakesLadders {
-	return &SnakesLadders{}
+	return &SnakesLadders{
+		player1Pos:    0,
+		player2Pos:    0,
+		currentPlayer: 1,
+		gameWon:       false,
+		snakes: map[int]int{
+			17: 7,
+			54: 34,
+			62: 18,
+			87: 24,
+			93: 73,
+			95: 75,
+			98: 79,
+		},
+		ladders: map[int]int{
+			1:  38,
+			4:  14,
+			9:  31,
+			21: 42,
+			28: 84,
+			51: 67,
+			72: 91,
+			80: 99,
+		},
+	}
 }
 
-// jumps maps the bottom of a ladder (or top of a snake) to its destination square.
-var jumps = map[int]int{
-	// ladders
-	2: 38, 7: 14, 8: 31, 15: 26, 21: 42, 28: 84,
-	36: 44, 51: 67, 71: 91, 78: 98, 87: 94,
-	// snakes
-	16: 6, 46: 25, 49: 11, 62: 19, 64: 60, 74: 53,
-	89: 68, 92: 88, 95: 75, 99: 80,
-}
-
-func (s *SnakesLadders) play(die1, die2 int) string {
-	if s.gameOver {
+func (sl *SnakesLadders) Play(die1, die2 int) string {
+	if sl.gameWon {
 		return "Game over!"
 	}
 
-	player := s.turn
-	pos := s.positions[player] + die1 + die2
+	player := sl.currentPlayer
+	var pos int
 
-	// bounce backward off the final square when overshooting
+	if player == 1 {
+		pos = sl.player1Pos
+	} else {
+		pos = sl.player2Pos
+	}
+
+	pos += die1 + die2
+
 	if pos > 100 {
 		pos = 200 - pos
 	}
 
-	// landing exactly on the foot of a ladder or head of a snake relocates the piece
-	if dest, ok := jumps[pos]; ok {
-		pos = dest
+	if ladder, exists := sl.ladders[pos]; exists {
+		pos = ladder
 	}
 
-	s.positions[player] = pos
+	if snake, exists := sl.snakes[pos]; exists {
+		pos = snake
+	}
+
+	if player == 1 {
+		sl.player1Pos = pos
+	} else {
+		sl.player2Pos = pos
+	}
 
 	if pos == 100 {
-		s.gameOver = true
-		return fmt.Sprintf("Player %d Wins!", player+1)
+		sl.gameWon = true
+		return fmt.Sprintf("Player %d Wins!", player)
 	}
 
-	// doubles grant the same player another turn; otherwise pass to the other player
 	if die1 != die2 {
-		s.turn = 1 - s.turn
+		sl.currentPlayer = 3 - player
 	}
 
-	return fmt.Sprintf("Player %d is on square %d", player+1, pos)
+	return fmt.Sprintf("Player %d is on square %d", player, pos)
 }
