@@ -1,27 +1,16 @@
-/*
-### Checkerboard Resolution
-
-Count the number of black squares on a special checkerboard where the resolution 
-determines the dimensions of squares of a single colour.
-
-Given a checkerboard with:
-- width: The width of the board
-- height: The height of the board  
-- resolution: The size of coloured squares on the checkerboard
-
-The top-left square is always white. Return the total count of all individual black squares.
-
-Examples:
-- width=11, height=6, resolution=1 → 33 black squares
-- width=11, height=6, resolution=2 → 32 black squares
-- width=11, height=6, resolution=5 → 31 black squares
-
-Constraints:
-- 0 <= width <= 10**32
-- 0 <= height <= 10**32
-- 1 <= resolution <= 10**32
-*/
-
-function countBlackSquares(width, height, resolution) {
+/**
+ * Checkerboard Resolution
+ * 
+ * Count the black squares on a checkerboard with variable resolution.
+ * The board has dimensions width × height, divided into squares of size 
+ * resolution × resolution. The top-left square is always white, and the 
+ * pattern alternates like a checkerboard.
+ * 
+ * @param {number} width - The width of the board
+ * @param {number} height - The height of the board
+ * @param {number} resolution - The size of colored squares
+ * @returns {number} The total count of black squares
+ */
+function checkerboard(width, height, resolution) {
   
 }
