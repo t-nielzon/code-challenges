@@ -1,31 +1,30 @@
-package kata
-
-func countPrimeFactors(n int) int {
-	count := 0
-	for d := 2; d*d <= n; d++ {
-		for n%d == 0 {
+func consec_kprimes(k int, arr []int) int {
+	countPrimeFactors := func(n int) int {
+		count := 0
+		// factor out all 2s
+		for n%2 == 0 {
 			count++
-			n /= d
+			n /= 2
 		}
+		// factor out odd numbers
+		for i := 3; i*i <= n; i += 2 {
+			for n%i == 0 {
+				count++
+				n /= i
+			}
+		}
+		// if n is still greater than 1, it's a prime factor itself
+		if n > 1 {
+			count++
+		}
+		return count
 	}
-	if n > 1 {
-		count++
-	}
-	return count
-}
 
-func ConsecKprimes(k int, arr []int) int {
-	if len(arr) < 2 {
-		return 0
-	}
 	result := 0
-	prev := countPrimeFactors(arr[0])
-	for i := 1; i < len(arr); i++ {
-		cur := countPrimeFactors(arr[i])
-		if prev == k && cur == k {
+	for i := 0; i < len(arr)-1; i++ {
+		if countPrimeFactors(arr[i]) == k && countPrimeFactors(arr[i+1]) == k {
 			result++
 		}
-		prev = cur
 	}
 	return result
 }
