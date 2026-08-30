@@ -1,16 +1,17 @@
 function lazyChain(value) {
-  const queue = [];
-
+  const operations = [];
+  
   return {
     invoke(methodName, ...args) {
-      queue.push({ methodName, args });
+      operations.push({ methodName, args });
       return this;
     },
     value() {
-      return queue.reduce(
-        (acc, { methodName, args }) => acc[methodName](...args),
-        value
-      );
+      let result = value;
+      for (const operation of operations) {
+        result = result[operation.methodName](...operation.args);
+      }
+      return result;
     }
   };
 }
