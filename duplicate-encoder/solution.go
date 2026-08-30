@@ -2,22 +2,22 @@ package kata
 
 import "strings"
 
-func DuplicateEncoder(word string) string {
-	lower := strings.ToLower(word)
+func DuplicateEncode(word string) string {
+	word = strings.ToLower(word)
 	
-	count := make(map[rune]int)
-	for _, ch := range lower {
-		count[ch]++
+	freq := make(map[rune]int)
+	for _, char := range word {
+		freq[char]++
 	}
 	
-	result := ""
-	for _, ch := range lower {
-		if count[ch] == 1 {
-			result += "("
+	result := make([]rune, 0, len(word))
+	for _, char := range word {
+		if freq[char] == 1 {
+			result = append(result, '(')
 		} else {
-			result += ")"
+			result = append(result, ')')
 		}
 	}
 	
-	return result
+	return string(result)
 }
