@@ -1,23 +1,22 @@
-package kata
+package main
 
-func Xbonacci(signature []float64, n int) []float64 {
-	x := len(signature)
-	if n <= 0 || x == 0 {
-		return []float64{}
-	}
-
-	result := make([]float64, 0, n)
-	for i := 0; i < x && i < n; i++ {
+func Xbonacci(signature []int, n int) []int {
+	result := make([]int, 0, n)
+	
+	// Add the signature elements (or up to n if signature is shorter)
+	for i := 0; i < len(signature) && i < n; i++ {
 		result = append(result, signature[i])
 	}
-
+	
+	// Generate remaining elements
 	for len(result) < n {
-		var sum float64
-		for i := len(result) - x; i < len(result); i++ {
+		sum := 0
+		// Sum the last len(signature) elements
+		for i := len(result) - len(signature); i < len(result); i++ {
 			sum += result[i]
 		}
 		result = append(result, sum)
 	}
-
+	
 	return result
 }
