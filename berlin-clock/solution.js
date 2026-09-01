@@ -1,28 +1,32 @@
-function berlinClock(time) {
-  const [h, m, s] = time.split(':').map(Number);
+function berlinClock(timeStr) {
+  const [hours, minutes, seconds] = timeStr.split(':').map(Number);
   
-  // Top row: seconds (Y if even, O if odd)
-  const topRow = s % 2 === 0 ? 'Y' : 'O';
+  // Top light - Yellow if even seconds, Off if odd
+  const topLight = seconds % 2 === 0 ? 'Y' : 'O';
   
-  // First row: 5-hour blocks (4 fields total)
-  const firstRow = 'R'.repeat(Math.floor(h / 5)) + 'O'.repeat(4 - Math.floor(h / 5));
+  // First row - Red fields for 5 hours each (0-4 lights)
+  const fiveHours = Math.floor(hours / 5);
+  const firstRow = 'R'.repeat(fiveHours) + 'O'.repeat(4 - fiveHours);
   
-  // Second row: 1-hour blocks (4 fields total)
-  const secondRow = 'R'.repeat(h % 5) + 'O'.repeat(4 - (h % 5));
+  // Second row - Red fields for 1 hour each (0-4 lights)
+  const oneHour = hours % 5;
+  const secondRow = 'R'.repeat(oneHour) + 'O'.repeat(4 - oneHour);
   
-  // Third row: 5-minute blocks (11 fields total, red at positions 3, 7, 11)
-  const thirdRowCount = Math.floor(m / 5);
+  // Third row - 11 lights for 5 minutes each
+  // Red at positions 2, 5, 8 (representing 15, 30, 45 minutes)
+  const fiveMinutes = Math.floor(minutes / 5);
   let thirdRow = '';
   for (let i = 0; i < 11; i++) {
-    if (i < thirdRowCount) {
-      thirdRow += (i === 2 || i === 6 || i === 10) ? 'R' : 'Y';
+    if (i < fiveMinutes) {
+      thirdRow += (i === 2 || i === 5 || i === 8) ? 'R' : 'Y';
     } else {
       thirdRow += 'O';
     }
   }
   
-  // Fourth row: 1-minute blocks (4 fields total)
-  const fourthRow = 'Y'.repeat(m % 5) + 'O'.repeat(4 - (m % 5));
+  // Fourth row - 4 Yellow fields for 1 minute each
+  const oneMinute = minutes % 5;
+  const fourthRow = 'Y'.repeat(oneMinute) + 'O'.repeat(4 - oneMinute);
   
-  return `${topRow}\n${firstRow}\n${secondRow}\n${thirdRow}\n${fourthRow}`;
+  return [topLight, firstRow, secondRow, thirdRow, fourthRow].join('\n');
 }
