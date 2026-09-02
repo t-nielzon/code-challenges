@@ -1,52 +1,53 @@
-package kata
+package main
 
-func ConnectingValues(arr [][]int, val int, coord [2]int) [][2]int {
-	result := [][2]int{}
+func ConnectingValues(arr [][]int, val int, coord []int) [][]int {
 	if len(arr) == 0 || len(arr[0]) == 0 {
-		return result
-	}
-	rows := len(arr)
-	cols := len(arr[0])
-	r0, c0 := coord[0], coord[1]
-	if r0 < 0 || r0 >= rows || c0 < 0 || c0 >= cols {
-		return result
-	}
-	if arr[r0][c0] != val {
-		return result
+		return [][]int{}
 	}
 
-	visited := make([][]bool, rows)
-	for i := range visited {
-		visited[i] = make([]bool, cols)
+	row, col := coord[0], coord[1]
+
+	if row < 0 || row >= len(arr) || col < 0 || col >= len(arr[0]) {
+		return [][]int{}
 	}
 
-	stack := [][2]int{coord}
-	visited[r0][c0] = true
+	if arr[row][col] != val {
+		return [][]int{}
+	}
 
-	dirs := [8][2]int{
+	var result [][]int
+
+	type pos struct {
+		r, c int
+	}
+	visited := make(map[pos]bool)
+
+	directions := [][]int{
 		{-1, -1}, {-1, 0}, {-1, 1},
 		{0, -1}, {0, 1},
 		{1, -1}, {1, 0}, {1, 1},
 	}
 
-	for len(stack) > 0 {
-		cur := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		result = append(result, cur)
-		for _, d := range dirs {
-			nr := cur[0] + d[0]
-			nc := cur[1] + d[1]
-			if nr < 0 || nr >= rows || nc < 0 || nc >= cols {
-				continue
+	queue := [][]int{{row, col}}
+	visited[pos{row, col}] = true
+
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+
+		r, c := current[0], current[1]
+		result = append(result, []int{r, c})
+
+		for _, dir := range directions {
+			nr, nc := r+dir[0], c+dir[1]
+
+			if nr >= 0 && nr < len(arr) && nc >= 0 && nc < len(arr[0]) {
+				p := pos{nr, nc}
+				if !visited[p] && arr[nr][nc] == val {
+					visited[p] = true
+					queue = append(queue, []int{nr, nc})
+				}
 			}
-			if visited[nr][nc] {
-				continue
-			}
-			if arr[nr][nc] != val {
-				continue
-			}
-			visited[nr][nc] = true
-			stack = append(stack, [2]int{nr, nc})
 		}
 	}
 
