@@ -1,28 +1,32 @@
-// PI approximation
-//
-// The aim of the kata is to try to show how difficult it can be to calculate
-// decimals of an irrational number with a certain precision. We have chosen to
-// get a few decimals of the number "pi" using the following infinite series
-// (Leibniz 1646-1716):
-//
-// PI / 4 = 1 - 1/3 + 1/5 - 1/7 + ... which gives an approximation of PI / 4.
-//
-// To have a measure of the difficulty we will count how many iterations are
-// needed to calculate PI with a given precision of `epsilon`.
-//
-// We will stop the iterative process when the absolute value of the difference
-// between our calculation using the Leibniz series and the math.Pi constant is
-// less than `epsilon`.
-//
-// Your function returns a slice with:
-//   - your number of iterations
-//   - your approximation of PI with 10 decimals
-//
-// Example:
-//   Iter_pi(0.001) --> [1000, 3.1405926538]
+package main
 
-package kata
+/*
+PI approximation using Leibniz formula
 
-func Iter_pi(epsilon float64) [2]float64 {
-	return [2]float64{}
+The aim of the kata is to try to show how difficult it can be to calculate
+decimals of an irrational number with a certain precision. We have chosen
+to get a few decimals of the number "pi" using the following infinite series
+(Leibniz 1646–1716):
+
+PI / 4 = 1 - 1/3 + 1/5 - 1/7 + ...
+
+which gives an approximation of PI / 4.
+
+To have a measure of the difficulty we will count how many iterations are
+needed to calculate PI with a given precision of epsilon.
+
+We calculate PI within epsilon of the Math.PI constant by stopping the
+iterative process when the absolute value of the difference between our
+calculation using the Leibniz series and Math.PI is less than epsilon.
+
+Your function returns an array with:
+- the number of iterations
+- your approximation of PI with 10 decimals
+
+Example:
+Given epsilon = 0.001, the function should return [1000, 3.1405926538]
+*/
+
+func IterPi(epsilon float64) [2]interface{} {
+	// TODO: implement
 }

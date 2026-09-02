@@ -1,18 +1,21 @@
-package kata
+package main
 
 import "math"
 
-func Iter_pi(epsilon float64) [2]float64 {
+func IterPi(epsilon float64) [2]interface{} {
 	sum := 0.0
-	iterations := 0
-	sign := 1.0
-
-	for math.Abs(math.Pi-4*sum) >= epsilon {
-		sum += sign / float64(2*iterations+1)
-		sign = -sign
-		iterations++
+	n := 0
+	pi := math.Pi
+	
+	for {
+		sum += math.Pow(-1, float64(n)) / (2*float64(n) + 1)
+		approximation := 4 * sum
+		
+		if math.Abs(approximation-pi) < epsilon {
+			multiplier := math.Pow(10, 10)
+			rounded := math.Round(approximation*multiplier) / multiplier
+			return [2]interface{}{n + 1, rounded}
+		}
+		n++
 	}
-
-	approx := math.Round(4*sum*1e10) / 1e10
-	return [2]float64{float64(iterations), approx}
 }
