@@ -1,13 +1,20 @@
-function isBST(node) {
-  const arr = [];
-  (function inorder(n) {
-    if (!n) return;
-    inorder(n.left);
-    arr.push(n.value);
-    inorder(n.right);
-  })(node);
-
-  const ascending = arr.every((v, i) => i === 0 || arr[i - 1] < v);
-  const descending = arr.every((v, i) => i === 0 || arr[i - 1] > v);
-  return ascending || descending;
+function isBst(node) {
+  const values = [];
+  
+  function inOrder(n) {
+    if (n === null) return;
+    inOrder(n.left);
+    values.push(n.value);
+    inOrder(n.right);
+  }
+  
+  inOrder(node);
+  
+  if (values.length <= 1) return true;
+  
+  // Check if strictly increasing or decreasing
+  const increasing = values.every((v, i) => i === 0 || v > values[i - 1]);
+  const decreasing = values.every((v, i) => i === 0 || v < values[i - 1]);
+  
+  return increasing || decreasing;
 }
