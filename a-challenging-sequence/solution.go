@@ -1,56 +1,54 @@
-package kata
+package main
 
 import "sort"
 
-func HashRadSeq(nMax int, k int) int {
-	type entry struct {
-		n      int
-		radical int
+func HashRadSeq(nMax, k int) int {
+	// Sieve of Eratosthenes to find all primes up to nMax
+	isPrime := make([]bool, nMax+1)
+	for i := 2; i <= nMax; i++ {
+		isPrime[i] = true
 	}
-
-	entries := make([]entry, 0, nMax)
-
-	for n := 1; n <= nMax; n++ {
-		rad := calculateRadical(n)
-		entries = append(entries, entry{n, rad})
-	}
-
-	sort.Slice(entries, func(i, j int) bool {
-		if entries[i].radical != entries[j].radical {
-			return entries[i].radical < entries[j].radical
-		}
-		return entries[i].n < entries[j].n
-	})
-
-	return entries[k-1].n
-}
-
-func calculateRadical(n int) int {
-	if n == 1 {
-		return 1
-	}
-
-	radical := 1
-
-	if n%2 == 0 {
-		radical *= 2
-		for n%2 == 0 {
-			n /= 2
-		}
-	}
-
-	for i := 3; i*i <= n; i += 2 {
-		if n%i == 0 {
-			radical *= i
-			for n%i == 0 {
-				n /= i
+	for p := 2; p*p <= nMax; p++ {
+		if isPrime[p] {
+			for multiple := p * p; multiple <= nMax; multiple += p {
+				isPrime[multiple] = false
 			}
 		}
 	}
 
-	if n > 1 {
-		radical *= n
+	// Calculate radical for each number
+	radicals := make([]int, nMax+1)
+	for i := 1; i <= nMax; i++ {
+		radicals[i] = 1
 	}
 
-	return radical
+	for p := 2; p <= nMax; p++ {
+		if isPrime[p] {
+			for multiple := p; multiple <= nMax; multiple += p {
+				radicals[multiple] *= p
+			}
+		}
+	}
+
+	// Create pairs of (n, radical)
+	type pair struct {
+		n      int
+		radical int
+	}
+
+	pairs := make([]pair, nMax)
+	for i := 1; i <= nMax; i++ {
+		pairs[i-1] = pair{n: i, radical: radicals[i]}
+	}
+
+	// Sort by radical first, then by n for ties
+	sort.Slice(pairs, func(i, j int) bool {
+		if pairs[i].radical != pairs[j].radical {
+			return pairs[i].radical < pairs[j].radical
+		}
+		return pairs[i].n < pairs[j].n
+	})
+
+	// Return the n value at position k (k is 1-indexed)
+	return pairs[k-1].n
 }

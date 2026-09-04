@@ -1,34 +1,28 @@
-package kata
+package main
 
 /*
+A Challenging Sequence
+
 Each composed integer may have a prime factorization.
-If n is the integer, its prime factorization will be:
-n = p1^k1 * p2^k2 * p3^k3 * ... * pn^kn
+The radical of n, Rad(n), is the product of all the prime factors of the number (without the exponents).
 
-The radical of n, Rad(n), is the product of all distinct prime factors
-(without the exponents):
-Rad(n) = p1 * p2 * p3 * ... * pn
+For example, if n = 172800:
+  n = 2^8 . 3^3 . 5^2
+  Rad(172800) = 2 . 3 . 5 = 30
 
-For example:
-- n = 172800 = 2^8 * 3^3 * 5^2
-- Rad(172800) = 2 * 3 * 5 = 30
-- Rad(31) = 31 (prime)
-- Rad(1) = 1
+Create a function HashRadSeq() that receives two arguments:
+  - nMax: the upper bound such that all values of n are in the interval (1, nMax) (1 <= n <= nMax)
+  - k: the ordinal number of a term in a sequence sorted by the values of the radicals
 
-Create a function that:
-1. Computes the radical for each number from 1 to nMax
-2. Sorts numbers by their radical value (and by n itself when radicals are equal)
-3. Returns the n-value at the k-th position in the sorted sequence
+The function should output the value of n for the k-th position in a sequence sorted by Rad(n).
+When multiple numbers have the same radical, they are ordered by their own value.
 
-Examples:
-hash_radSeq(10, 4) -> 8
-hash_radSeq(10, 6) -> 9
-hash_radSeq(10, 9) -> 7
-hash_radSeq(20, 4) -> 8
-hash_radSeq(20, 6) -> 3
-hash_radSeq(20, 9) -> 6
+Example:
+  HashRadSeq(10, 4) -> 8
+  HashRadSeq(10, 6) -> 9
+  HashRadSeq(10, 9) -> 7
 */
 
-func HashRadSeq(nMax int, k int) int {
-	return 0
+func HashRadSeq(nMax, k int) int {
+
 }
