@@ -1,93 +1,70 @@
-package solution
-
-import "math"
+package kata
 
 func HexagonBeamMaxSum(n int, seq []int) int {
-	var grid [][]int
+	// Build the hexagonal grid
+	grid := make([][]int, 2*n-1)
 	seqIdx := 0
 	
-	// Build the hexagonal grid by filling with sequence values
 	for i := 0; i < 2*n-1; i++ {
-		var rowLen int
+		var width int
 		if i < n {
-			rowLen = n + i
+			width = n + i
 		} else {
-			rowLen = 3*n - 2 - i
+			width = 3*n - 2 - i
 		}
 		
-		row := make([]int, rowLen)
-		for j := 0; j < rowLen; j++ {
-			row[j] = seq[seqIdx%len(seq)]
+		grid[i] = make([]int, width)
+		for j := 0; j < width; j++ {
+			grid[i][j] = seq[seqIdx%len(seq)]
 			seqIdx++
 		}
-		grid = append(grid, row)
 	}
 	
-	maxSum := math.MinInt
-	
-	// Get the visual offset (left indentation) for a given row
-	getOffset := func(row int) int {
-		if row < n {
-			return n - 1 - row
-		}
-		return row - n + 1
-	}
-	
-	// Get cell value at row with a given visual column
-	getCell := func(row, visualCol int) (int, bool) {
-		offset := getOffset(row)
-		col := visualCol - offset
-		if col >= 0 && col < len(grid[row]) {
-			return grid[row][col], true
-		}
-		return 0, false
+	// Initialize with first horizontal beam
+	maxSum := 0
+	for j := 0; j < len(grid[0]); j++ {
+		maxSum += grid[0][j]
 	}
 	
 	// Check all horizontal beams (each row)
-	for i := 0; i < len(grid); i++ {
+	for i := 1; i < 2*n-1; i++ {
 		sum := 0
 		for j := 0; j < len(grid[i]); j++ {
 			sum += grid[i][j]
 		}
-		if sum > maxSum {
-			maxSum = sum
-		}
+		maxSum = max(maxSum, sum)
 	}
 	
-	// Check all diagonal beams in both directions
-	for startRow := 0; startRow < len(grid); startRow++ {
-		for startCol := 0; startCol < len(grid[startRow]); startCol++ {
-			startVisualCol := getOffset(startRow) + startCol
-			
-			// Down-right diagonal (visual column increases by 1 per row)
-			sum := 0
-			for row := startRow; row < len(grid); row++ {
-				visualCol := startVisualCol + (row - startRow)
-				if val, ok := getCell(row, visualCol); ok {
-					sum += val
-				} else {
-					break
-				}
-			}
-			if sum > maxSum {
-				maxSum = sum
-			}
-			
-			// Down-left diagonal (visual column decreases by 1 per row)
-			sum = 0
-			for row := startRow; row < len(grid); row++ {
-				visualCol := startVisualCol - (row - startRow)
-				if val, ok := getCell(row, visualCol); ok {
-					sum += val
-				} else {
-					break
-				}
-			}
-			if sum > maxSum {
-				maxSum = sum
+	// Check all beams in diagonal direction 1 (row - col = constant)
+	for k := -(2*n - 2); k <= 2*n-2; k++ {
+		sum := 0
+		for i := 0; i < 2*n-1; i++ {
+			j := i - k
+			if j >= 0 && j < len(grid[i]) {
+				sum += grid[i][j]
 			}
 		}
+		maxSum = max(maxSum, sum)
+	}
+	
+	// Check all beams in diagonal direction 2 (row + col = constant)
+	for k := 0; k <= 4*n-4; k++ {
+		sum := 0
+		for i := 0; i < 2*n-1; i++ {
+			j := k - i
+			if j >= 0 && j < len(grid[i]) {
+				sum += grid[i][j]
+			}
+		}
+		maxSum = max(maxSum, sum)
 	}
 	
 	return maxSum
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
