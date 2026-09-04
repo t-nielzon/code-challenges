@@ -1,19 +1,21 @@
+package main
+
 func consec_kprimes(k int, arr []int) int {
 	countPrimeFactors := func(n int) int {
 		count := 0
-		// factor out all 2s
+		// Check for factor 2
 		for n%2 == 0 {
 			count++
 			n /= 2
 		}
-		// factor out odd numbers
+		// Check for odd factors from 3 onwards
 		for i := 3; i*i <= n; i += 2 {
 			for n%i == 0 {
 				count++
 				n /= i
 			}
 		}
-		// if n is still greater than 1, it's a prime factor itself
+		// If n is still greater than 1, it's a prime factor
 		if n > 1 {
 			count++
 		}
