@@ -1,3 +1,5 @@
+package main
+
 /*
 Consider the sequence U(n, x) = x + 2x**2 + 3x**3 + .. + nx**n where x is a real number and n a positive integer.
 
@@ -8,12 +10,13 @@ Usually given x we try to find m. Here we will try to find x (x real, 0 < x < 1)
 Let us call solve the function solve(m) which returns x such as U(n, x) goes to m when n goes to infinity.
 
 Examples:
-solve(2.0) returns 0.5
-solve(8.0) returns 0.7034648345913732
+- solve(2.0) returns 0.5 since U(n, 0.5) goes to 2 when n goes to infinity.
+- solve(8.0) returns 0.7034648345913732 since U(n, 0.7034648345913732) goes to 8 when n goes to infinity.
 
-Note: abs(actual - expected) <= 1e-12
+Note: You pass the tests if abs(actual - expected) <= 1e-12
 */
-package kata
 
-func Solve(m float64) float64 {
+func solve(m float64) float64 {
+	// TODO: implement
+	return 0
 }
