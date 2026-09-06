@@ -1,8 +1,8 @@
-package kata
+package main
 
 import "strings"
 
-func DuplicateEncode(word string) string {
+func DuplicateEncoder(word string) string {
 	word = strings.ToLower(word)
 	
 	freq := make(map[rune]int)
@@ -10,14 +10,14 @@ func DuplicateEncode(word string) string {
 		freq[char]++
 	}
 	
-	result := make([]rune, 0, len(word))
+	var result strings.Builder
 	for _, char := range word {
 		if freq[char] == 1 {
-			result = append(result, '(')
+			result.WriteRune('(')
 		} else {
-			result = append(result, ')')
+			result.WriteRune(')')
 		}
 	}
 	
-	return string(result)
+	return result.String()
 }
