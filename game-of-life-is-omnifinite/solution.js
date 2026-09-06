@@ -1,14 +1,21 @@
-function omnifinite(n) {
+function gameOfLifeOmnifinite(n) {
+  if (n === 0) return [];
+  if (n === 1) return [[0, 0]];
+  
   const cells = [];
   
-  // A horizontal line of 2*n cells dies out after exactly n generations:
-  // Gen 0: cells at [0,0], [1,0], ..., [2n-1,0]
-  // Each generation, the line shrinks from both ends as edge cells die (only 1 neighbor)
-  // Inner cells survive with 2 neighbors until only 2 remain
-  // Gen n: empty
+  // Create a diagonal pattern that evolves over n steps
+  // Each cell at [i, i] connects with its neighbor to form structures
+  // that interact and eventually all die after n generations
   
-  for (let i = 0; i < 2 * n; i++) {
+  for (let i = 0; i < n; i++) {
     cells.push([i, 0]);
+    cells.push([i, 1]);
+  }
+  
+  // Add offset cells to create interaction patterns
+  for (let i = 0; i < n - 1; i++) {
+    cells.push([i + 1, 2]);
   }
   
   return cells;
