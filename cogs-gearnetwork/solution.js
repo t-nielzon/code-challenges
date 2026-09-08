@@ -1,31 +1,32 @@
 function cogsebi(gears, connections, driver_id, driver_rpm) {
   const n = gears.length;
   const rpms = new Array(n).fill(0);
+  const visited = new Set();
   
-  // Build adjacency list from connections
+  // build adjacency list for the gear network
   const adj = Array.from({ length: n }, () => []);
   for (const [a, b] of connections) {
     adj[a].push(b);
     adj[b].push(a);
   }
   
-  // BFS from driver gear to propagate RPMs through the network
-  const queue = [driver_id];
+  // bfs to traverse and calculate rpms
+  const queue = [[driver_id, driver_rpm]];
+  visited.add(driver_id);
   rpms[driver_id] = driver_rpm;
-  const visited = new Set([driver_id]);
   
   while (queue.length > 0) {
-    const current = queue.shift();
-    const currentRpm = rpms[current];
-    const currentTeeth = gears[current];
+    const [current_id, current_rpm] = queue.shift();
     
-    for (const neighbor of adj[current]) {
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor);
-        const neighborTeeth = gears[neighbor];
-        // gear direction reverses when driven by another, ratio determined by teeth
-        rpms[neighbor] = -currentRpm * (currentTeeth / neighborTeeth);
-        queue.push(neighbor);
+    for (const next_id of adj[current_id]) {
+      if (!visited.has(next_id)) {
+        visited.add(next_id);
+        // ratio is based on tooth counts of driving vs driven gear
+        const ratio = gears[current_id] / gears[next_id];
+        // direction reverses each time a gear drives another
+        const next_rpm = -current_rpm * ratio;
+        rpms[next_id] = next_rpm;
+        queue.push([next_id, next_rpm]);
       }
     }
   }
