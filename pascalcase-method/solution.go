@@ -1,11 +1,13 @@
-package kata
+package main
 
 import "strings"
 
-func PascalCase(str string) string {
+func Camelcase(str string) string {
 	words := strings.Fields(str)
-	for i, w := range words {
-		words[i] = strings.ToUpper(w[:1]) + w[1:]
+	for i := range words {
+		if len(words[i]) > 0 {
+			words[i] = strings.ToUpper(string(words[i][0])) + strings.ToLower(words[i][1:])
+		}
 	}
 	return strings.Join(words, "")
 }
