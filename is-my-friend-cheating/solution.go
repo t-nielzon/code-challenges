@@ -1,42 +1,25 @@
 package main
 
-import "sort"
-
-func RemoveNb(n int) [][2]int {
-	sumAll := int64(n) * int64(n+1) / 2
-	target := sumAll + 1
+func RemoveNb(n int64) [][2]int64 {
+	// (a+1)(b+1) = n(n+1)/2 + 1
+	target := n*(n+1)/2 + 1
 	
-	var result [][2]int
+	var result [][2]int64
 	
-	// Find all divisors by iterating up to sqrt(target)
-	for d := int64(1); d*d <= target; d++ {
-		if target%d == 0 {
-			// Check divisor d: (d-1, target/d - 1)
-			a := d - 1
-			b := target/d - 1
-			if a >= 1 && a <= int64(n) && b >= 1 && b <= int64(n) && a != b {
-				result = append(result, [2]int{int(a), int(b)})
-			}
+	// find all divisor pairs
+	for d1 := int64(1); d1*d1 < target; d1++ {
+		if target%d1 == 0 {
+			d2 := target / d1
+			a := d1 - 1
+			b := d2 - 1
 			
-			// Check divisor target/d (if different from d): (target/d - 1, d - 1)
-			if d != target/d {
-				d2 := target / d
-				a2 := d2 - 1
-				b2 := d - 1
-				if a2 >= 1 && a2 <= int64(n) && b2 >= 1 && b2 <= int64(n) && a2 != b2 {
-					result = append(result, [2]int{int(a2), int(b2)})
-				}
+			// check if both are in valid range [1, n]
+			if a >= 1 && a <= n && b >= 1 && b <= n {
+				result = append(result, [2]int64{a, b})
+				result = append(result, [2]int64{b, a})
 			}
 		}
 	}
-	
-	if len(result) == 0 {
-		return nil
-	}
-	
-	sort.Slice(result, func(i, j int) bool {
-		return result[i][0] < result[j][0]
-	})
 	
 	return result
 }
