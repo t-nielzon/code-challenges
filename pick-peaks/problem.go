@@ -1,26 +1,25 @@
-package main
+package solution
 
 /*
-In this kata, you will write a function that returns the positions and the values of the "peaks" (or local maxima) of a numeric array.
+In this kata, you will write a function that returns the positions and the values
+of the "peaks" (or local maxima) of a numeric array.
 
-For example, the array [0, 1, 2, 5, 1, 0] has a peak at position 3 with a value of 5.
+For example, the array arr = [0, 1, 2, 5, 1, 0] has a peak at position 3 with a
+value of 5 (since arr[3] equals 5).
 
-The output will be returned as an object with two properties: pos and peaks. Both should be arrays.
-If there is no peak in the given array, return {pos: [], peaks: []}.
+The output will be returned as a map with two keys: "pos" and "peaks". Both should
+be integer slices. If there is no peak in the given array, then the output should
+be {"pos": [], "peaks": []}.
 
-Important notes:
-- The first and last elements are never considered peaks.
-- Be aware of plateaus! [1, 2, 2, 2, 1] has a peak, but [1, 2, 2, 2, 3] does not.
-- For plateau-peaks, return only the position and value of the beginning.
+The first and last elements of the array will not be considered as peaks.
 
-Example: pickPeaks([3, 2, 3, 6, 4, 1, 2, 3, 2, 1, 2, 3]) returns {pos: [3, 7], peaks: [6, 3]}
+Beware of plateaus! [1, 2, 2, 2, 1] has a peak while [1, 2, 2, 2, 3] and
+[1, 2, 2, 2, 2] do not. In case of a plateau-peak, only return the position and
+value of the beginning of the plateau.
+
+Example: PickPeaks([3, 2, 3, 6, 4, 1, 2, 3, 2, 1, 2, 3]) should return
+{pos: [3, 7], peaks: [6, 3]}
 */
 
-type Result struct {
-	Pos   []int
-	Peaks []int
-}
-
-func PickPeaks(arr []int) Result {
-	// implement here
+func PickPeaks(arr []int) map[string][]int {
 }
