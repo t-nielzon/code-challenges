@@ -1,22 +1,26 @@
 function ex_euler(n) {
   const h = 1 / n;
+  
+  let x = 0;
+  let y = 1;
+  
   const f = (x, y) => 2 - Math.exp(-4 * x) - 2 * y;
   const z = (x) => 1 + 0.5 * Math.exp(-4 * x) - 0.5 * Math.exp(-2 * x);
-
-  let y = 1;
-  let x = 0;
-  let sum = 0;
-
-  for (let k = 0; k <= n; k++) {
+  
+  let sumErrors = 0;
+  const z0 = z(0);
+  sumErrors += Math.abs(y - z0) / z0;
+  
+  for (let i = 0; i < n; i++) {
+    y = y + f(x, y) * h;
+    x = x + h;
+    
     const zk = z(x);
-    const err = zk === 0 ? 0 : Math.abs(y - zk) / zk;
-    sum += err;
-    if (k < n) {
-      y = y + f(x, y) * h;
-      x = x + h;
-    }
+    const error = Math.abs(y - zk) / zk;
+    sumErrors += error;
   }
-
-  const mean = sum / (n + 1);
-  return Math.trunc(mean * 1e6) / 1e6;
+  
+  const meanError = sumErrors / (n + 1);
+  
+  return Math.floor(meanError * 1000000) / 1000000;
 }
