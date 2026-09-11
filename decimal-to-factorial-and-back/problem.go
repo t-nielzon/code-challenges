@@ -1,28 +1,34 @@
-/*
-Decimal to Factorial and Back
-
-Coding decimal numbers with factorials is a way of writing out numbers 
-in a base system that depends on factorials, rather than powers of numbers.
-
-In this system, the last digit is always `0` and is in base 0!. The digit before that is either `0 or 1` and is in base 1!. The digit before that is either `0, 1, or 2` and is in base 2!, etc.
-More generally, the nth-to-last digit is always `0, 1, 2, ..., n` and is in base n!.
-
-Example: The decimal number `463` is encoded as `"341010"`, because:
-463 = 3×5! + 4×4! + 1×3! + 0×2! + 1×1! + 0×0!
-
-Digits 0-9 are used, then A-Z for 10-35, allowing encoding up to 36!-1.
-
-Task: Implement two functions:
-1. Convert decimal to factorial representation (string)
-2. Convert factorial representation to decimal
-*/
-
 package main
 
+/*
+Coding decimal numbers with factorials is a way of writing out numbers
+in a base system that depends on factorials, rather than powers of numbers.
+
+In this system, the last digit is always 0 and is in base 0!. The digit before
+that is either 0 or 1 and is in base 1!. The digit before that is either 0, 1,
+or 2 and is in base 2!, etc. More generally, the nth-to-last digit is always
+0, 1, 2, ..., n and is in base n!.
+
+Example:
+The decimal number 463 is encoded as "341010", because:
+463 = 3×5! + 4×4! + 1×3! + 0×2! + 1×1! + 0×0!
+
+If we are limited to digits 0..9, the biggest number we can encode is 10!-1
+(= 3628799). We extend 0..9 with letters A..Z. With these 36 digits we can
+encode numbers up to 36!-1.
+
+Task:
+Write two functions:
+1. Receive a decimal number and return a string with the factorial representation.
+2. Receive a string with a factorial representation and produce the decimal representation.
+
+Given numbers will always be positive.
+*/
+
 func DecimalToFactorial(n int) string {
-	return ""
+	// TODO: implement
 }
 
 func FactorialToDecimal(s string) int {
-	return 0
+	// TODO: implement
 }

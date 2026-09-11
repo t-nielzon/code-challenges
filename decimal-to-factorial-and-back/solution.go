@@ -5,48 +5,37 @@ func DecimalToFactorial(n int) string {
 		return "0"
 	}
 	
-	digits := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	var result []rune
+	digits := []rune{}
+	k := 2
+	digitChars := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	
-	position := 1
 	for n > 0 {
-		digit := n % (position + 1)
-		result = append(result, rune(digits[digit]))
-		n = n / (position + 1)
-		position++
+		digit := n % k
+		digits = append([]rune{rune(digitChars[digit])}, digits...)
+		n /= k
+		k++
 	}
 	
-	// Reverse the result
-	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
-		result[i], result[j] = result[j], result[i]
-	}
-	
-	// Add trailing 0 for 0! position
-	result = append(result, '0')
-	
-	return string(result)
+	digits = append(digits, '0')
+	return string(digits)
 }
 
 func FactorialToDecimal(s string) int {
-	digits := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	result := 0
+	factorials := []int{1}
+	
+	for i := 1; i < len(s); i++ {
+		factorials = append(factorials, factorials[len(factorials)-1]*i)
+	}
 	
 	for i, ch := range s {
-		digitValue := 0
-		for j, d := range digits {
-			if d == ch {
-				digitValue = j
-				break
-			}
+		var digit int
+		if ch >= '0' && ch <= '9' {
+			digit = int(ch - '0')
+		} else {
+			digit = int(ch - 'A' + 10)
 		}
-		
-		base := len(s) - 1 - i
-		baseFactorial := 1
-		for j := 1; j <= base; j++ {
-			baseFactorial *= j
-		}
-		
-		result += digitValue * baseFactorial
+		result += digit * factorials[len(s)-1-i]
 	}
 	
 	return result
