@@ -1,21 +1,18 @@
-/**
- * Fibo akin Kata - 5 kyu
+/*
+ * Fibo akin
  * 
- * Be u(n) a sequence beginning with:
- * u[1] = 1, u[2] = 1, u[3] = 2, u[4] = 3, u[5] = 3, u[6] = 4,
- * u[7] = 5, u[8] = 5, u[9] = 6, u[10] = 6, u[11] = 6, u[12] = 8,
- * u[13] = 8, u[14] = 8, u[15] = 10, u[16] = 9, u[17] = 10, u[18] = 11,
- * u[19] = 11, u[20] = 12, u[21] = 12, u[22] = 12, u[23] = 12, etc...
+ * Be u(n) a sequence where:
+ * u[1] = 1, u[2] = 1
+ * u[n] = u[n - u[n-1]] + u[n - u[n-2]] for n > 2
  * 
- * The recurrence relation is: u[n] = u[n - u[n-1]] + u[n - u[n-2]]
- * 
- * For example:
- * - u[8] = u[8 - u[7]] + u[8 - u[6]] = u[8 - 5] + u[8 - 4] = u[3] + u[4] = 2 + 3 = 5
- * - u[13] = u[13 - u[12]] + u[13 - u[11]] = u[13 - 8] + u[13 - 6] = u[5] + u[7] = 3 + 5 = 8
+ * Task 1: length_sup_u_k(n, k) - count terms u[i] >= k for 1 <= i <= n
+ * Task 2: comp(n) - count times where u[i] < u[i-1] up to u[n]
  */
 
 function length_sup_u_k(n, k) {
+  // implementation here
 }
 
 function comp(n) {
+  // implementation here
 }
