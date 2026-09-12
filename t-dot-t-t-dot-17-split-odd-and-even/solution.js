@@ -1,20 +1,20 @@
 function splitOddEven(n) {
   const str = String(n);
   const result = [];
-  let current = str[0];
+  let currentGroup = str[0];
   
   for (let i = 1; i < str.length; i++) {
     const currentDigit = parseInt(str[i]);
-    const lastDigit = parseInt(str[i - 1]);
+    const prevDigit = parseInt(str[i - 1]);
     
-    if ((currentDigit % 2) !== (lastDigit % 2)) {
-      result.push(parseInt(current));
-      current = str[i];
+    if ((currentDigit % 2) === (prevDigit % 2)) {
+      currentGroup += str[i];
     } else {
-      current += str[i];
+      result.push(parseInt(currentGroup));
+      currentGroup = str[i];
     }
   }
   
-  result.push(parseInt(current));
+  result.push(parseInt(currentGroup));
   return result;
 }
