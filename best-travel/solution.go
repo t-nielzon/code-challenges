@@ -1,22 +1,31 @@
-package kata
-
-func ChooseBestSum(t, k int, ls []int) int {
-	best := -1
-	combine(ls, k, 0, 0, t, &best)
-	return best
-}
-
-func combine(ls []int, k, start, sum, t int, best *int) {
-	if k == 0 {
-		if sum <= t && sum > *best {
-			*best = sum
-		}
-		return
+func chooseBestSum(t int, k int, ls []int) int {
+	if len(ls) < k {
+		return -1
 	}
-	for i := start; i <= len(ls)-k; i++ {
-		next := sum + ls[i]
-		if next <= t {
-			combine(ls, k-1, i+1, next, t, best)
+
+	maxSum := -1
+
+	var combinations func(index int, count int, currentSum int)
+	combinations = func(index int, count int, currentSum int) {
+		if count == k {
+			if currentSum <= t && currentSum > maxSum {
+				maxSum = currentSum
+			}
+			return
 		}
+
+		if index >= len(ls) || count+len(ls)-index < k {
+			return
+		}
+
+		// include current element
+		combinations(index+1, count+1, currentSum+ls[index])
+
+		// exclude current element
+		combinations(index+1, count, currentSum)
 	}
+
+	combinations(0, 0, 0)
+
+	return maxSum
 }
