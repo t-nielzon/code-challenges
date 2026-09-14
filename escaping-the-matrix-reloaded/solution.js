@@ -1,11 +1,10 @@
-// solution.js
 class Neo extends Error {
-  constructor() {
-    super('Escaped!');
+  constructor(message) {
+    super(message);
     this.name = 'Neo';
   }
 }
 
-function escapeTheMatrix() {
+function matrix() {
   throw new Neo();
 }
