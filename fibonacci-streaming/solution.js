@@ -1,8 +1,14 @@
 function* fibonacci() {
   let a = 1n;
   let b = 1n;
+  
+  yield a;
+  yield b;
+  
   while (true) {
-    yield a;
-    [a, b] = [b, a + b];
+    const next = a + b;
+    yield next;
+    a = b;
+    b = next;
   }
 }
