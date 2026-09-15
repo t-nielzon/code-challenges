@@ -1,32 +1,33 @@
-package main
-
-func LCS(s1, s2 string) string {
-	n, m := len(s1), len(s2)
-
-	// dp[i][j] = length of lcs of s1[0:i] and s2[0:j]
-	dp := make([][]int, n+1)
+func LCS(a, b string) string {
+	m, n := len(a), len(b)
+	
+	// DP table where dp[i][j] = length of LCS of a[0:i] and b[0:j]
+	dp := make([][]int, m+1)
 	for i := range dp {
-		dp[i] = make([]int, m+1)
+		dp[i] = make([]int, n+1)
 	}
-
-	// fill dp table
-	for i := 1; i <= n; i++ {
-		for j := 1; j <= m; j++ {
-			if s1[i-1] == s2[j-1] {
+	
+	// Fill the DP table
+	for i := 1; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			if a[i-1] == b[j-1] {
 				dp[i][j] = dp[i-1][j-1] + 1
 			} else {
-				dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+				if dp[i-1][j] > dp[i][j-1] {
+					dp[i][j] = dp[i-1][j]
+				} else {
+					dp[i][j] = dp[i][j-1]
+				}
 			}
 		}
 	}
-
-	// backtrack to build result
-	i, j := n, m
-	var result []byte
-
+	
+	// Backtrack to reconstruct the LCS
+	result := []byte{}
+	i, j := m, n
 	for i > 0 && j > 0 {
-		if s1[i-1] == s2[j-1] {
-			result = append([]byte{s1[i-1]}, result...)
+		if a[i-1] == b[j-1] {
+			result = append(result, a[i-1])
 			i--
 			j--
 		} else if dp[i-1][j] > dp[i][j-1] {
@@ -35,13 +36,11 @@ func LCS(s1, s2 string) string {
 			j--
 		}
 	}
-
-	return string(result)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
+	
+	// Reverse result since we built it backwards
+	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
+		result[i], result[j] = result[j], result[i]
 	}
-	return b
+	
+	return string(result)
 }
