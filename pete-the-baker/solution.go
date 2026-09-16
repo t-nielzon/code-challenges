@@ -1,20 +1,18 @@
 package main
 
-func cakes(recipe map[string]int, available map[string]int) int {
+func cakes(recipe, available map[string]int) int {
 	minCakes := -1
-	
-	for ingredient, needed := range recipe {
-		have := available[ingredient]
-		canMake := have / needed
-		
-		if minCakes == -1 || canMake < minCakes {
-			minCakes = canMake
+
+	for ingredient, required := range recipe {
+		possibleCakes := available[ingredient] / required
+		if minCakes == -1 || possibleCakes < minCakes {
+			minCakes = possibleCakes
 		}
 	}
-	
+
 	if minCakes == -1 {
 		return 0
 	}
-	
+
 	return minCakes
 }
