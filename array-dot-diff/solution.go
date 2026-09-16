@@ -1,15 +1,17 @@
-package kata
+package main
 
 func ArrayDiff(a, b []int) []int {
-	remove := make(map[int]struct{}, len(b))
+	bMap := make(map[int]bool)
 	for _, v := range b {
-		remove[v] = struct{}{}
+		bMap[v] = true
 	}
-	result := make([]int, 0, len(a))
+	
+	var result []int
 	for _, v := range a {
-		if _, ok := remove[v]; !ok {
+		if !bMap[v] {
 			result = append(result, v)
 		}
 	}
+	
 	return result
 }
