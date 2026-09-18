@@ -1,4 +1,4 @@
-package kata
+package main
 
 import (
 	"math"
@@ -6,51 +6,70 @@ import (
 	"strconv"
 )
 
-func SortByPerfSq(arr []int) []int {
-	counts := make(map[int]int, len(arr))
-	for _, n := range arr {
-		counts[n] = countPerfectSquares(n)
+func SortByPerfsq(arr []int) []int {
+	cache := make(map[int]int)
+	
+	for _, num := range arr {
+		cache[num] = countPerfectSquares(num)
 	}
-	result := make([]int, len(arr))
-	copy(result, arr)
-	sort.SliceStable(result, func(i, j int) bool {
-		ci, cj := counts[result[i]], counts[result[j]]
-		if ci != cj {
-			return ci > cj
+	
+	sort.Slice(arr, func(i, j int) bool {
+		countI := cache[arr[i]]
+		countJ := cache[arr[j]]
+		
+		if countI != countJ {
+			return countI > countJ
 		}
-		return result[i] < result[j]
+		return arr[i] < arr[j]
 	})
-	return result
+	
+	return arr
 }
 
-func countPerfectSquares(n int) int {
-	digits := strconv.Itoa(n)
+func countPerfectSquares(num int) int {
+	digits := strconv.Itoa(num)
+	perms := getPermutations(digits)
+	
+	perfSqs := make(map[int]bool)
+	for _, perm := range perms {
+		val, _ := strconv.Atoi(perm)
+		if isPerfectSquare(val) {
+			perfSqs[val] = true
+		}
+	}
+	
+	return len(perfSqs)
+}
+
+func getPermutations(s string) []string {
+	var result []string
+	permute([]rune(s), 0, len(s)-1, &result)
+	
 	seen := make(map[string]bool)
-	count := 0
-	permute([]byte(digits), 0, seen, &count, len(digits))
-	return count
+	var unique []string
+	for _, perm := range result {
+		if !seen[perm] {
+			seen[perm] = true
+			unique = append(unique, perm)
+		}
+	}
+	
+	return unique
 }
 
-func permute(digits []byte, idx int, seen map[string]bool, count *int, length int) {
-	if idx == length {
-		s := string(digits)
-		if seen[s] {
-			return
+func permute(runes []rune, l, r int, result *[]string) {
+	if l == r {
+		*result = append(*result, string(runes))
+	} else {
+		for i := l; i <= r; i++ {
+			runes[l], runes[i] = runes[i], runes[l]
+			permute(runes, l+1, r, result)
+			runes[l], runes[i] = runes[i], runes[l]
 		}
-		seen[s] = true
-		if digits[0] == '0' {
-			return
-		}
-		n, _ := strconv.Atoi(s)
-		sq := int(math.Round(math.Sqrt(float64(n))))
-		if sq*sq == n {
-			*count++
-		}
-		return
 	}
-	for i := idx; i < length; i++ {
-		digits[idx], digits[i] = digits[i], digits[idx]
-		permute(digits, idx+1, seen, count, length)
-		digits[idx], digits[i] = digits[i], digits[idx]
-	}
+}
+
+func isPerfectSquare(num int) bool {
+	sqrt := int(math.Sqrt(float64(num)))
+	return sqrt*sqrt == num
 }
