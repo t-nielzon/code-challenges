@@ -1,55 +1,50 @@
-function patternNumbers(n) {
-    const s = n.toString();
-    const patterns = [];
+function regexNumberLessThan(n) {
+  const s = n.toString();
+  const len = s.length;
+  const parts = [];
+  
+  // Add patterns for all numbers with fewer digits than n
+  for (let i = 1; i < len; i++) {
+    if (i === 1) {
+      parts.push('[1-9]');
+    } else {
+      parts.push('[1-9]' + '[0-9]'.repeat(i - 1));
+    }
+  }
+  
+  // Add patterns for numbers with same number of digits as n but strictly less than n
+  for (let i = 0; i < s.length; i++) {
+    const digit = parseInt(s[i]);
     
-    // Match all numbers with fewer digits than n
-    for (let len = 1; len < s.length; len++) {
-        if (len === 1) {
-            patterns.push("[1-9]");
-        } else {
-            patterns.push("[1-9][0-9]{" + (len - 1) + "}");
-        }
+    if (digit === 0) {
+      continue;
     }
     
-    // Match numbers with same digit count as n but less than n
-    const sameLenPatterns = [];
-    let prefix = "";
+    const prefix = s.substring(0, i);
+    let range;
     
-    for (let i = 0; i < s.length; i++) {
-        const digit = parseInt(s[i]);
-        const remaining = s.length - i - 1;
-        
-        if (digit > 0) {
-            if (i === 0) {
-                // First digit must be 1-9, can use digits less than current
-                if (digit > 1) {
-                    let pattern = "[1-" + (digit - 1) + "]";
-                    if (remaining > 0) {
-                        pattern += "[0-9]{" + remaining + "}";
-                    }
-                    sameLenPatterns.push(pattern);
-                }
-            } else {
-                // Middle/last digits can include 0
-                let pattern = prefix + "[0-" + (digit - 1) + "]";
-                if (remaining > 0) {
-                    pattern += "[0-9]{" + remaining + "}";
-                }
-                sameLenPatterns.push(pattern);
-            }
-        }
-        
-        prefix += digit;
+    if (i === 0) {
+      // First digit must be between 1 and digit-1
+      if (digit === 1) {
+        continue;
+      }
+      range = '[1-' + (digit - 1) + ']';
+    } else {
+      // Other digits can be between 0 and digit-1
+      if (digit === 1) {
+        range = '0';
+      } else {
+        range = '[0-' + (digit - 1) + ']';
+      }
     }
     
-    if (sameLenPatterns.length > 0) {
-        patterns.push(...sameLenPatterns);
-    }
-    
-    // Handle case where no valid numbers exist (n = 1)
-    if (patterns.length === 0) {
-        return "[^\\s\\S]";
-    }
-    
-    return patterns.join("|");
+    const suffix = '[0-9]'.repeat(s.length - i - 1);
+    parts.push(prefix + range + suffix);
+  }
+  
+  if (parts.length === 0) {
+    return '^$';
+  }
+  
+  return '^(' + parts.join('|') + ')$';
 }
