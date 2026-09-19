@@ -1,9 +1,14 @@
-package solution
+package main
 
-func PickPeaks(arr []int) map[string][]int {
-	result := map[string][]int{
-		"pos":   []int{},
-		"peaks": []int{},
+type PeakData struct {
+	Pos   []int
+	Peaks []int
+}
+
+func PickPeaks(arr []int) PeakData {
+	result := PeakData{
+		Pos:   []int{},
+		Peaks: []int{},
 	}
 
 	if len(arr) < 3 {
@@ -14,14 +19,14 @@ func PickPeaks(arr []int) map[string][]int {
 		if arr[i] > arr[i-1] {
 			// find end of plateau
 			j := i
-			for j < len(arr)-1 && arr[j] == arr[j+1] {
+			for j+1 < len(arr) && arr[j] == arr[j+1] {
 				j++
 			}
 
-			// peak if followed by smaller value
-			if j < len(arr)-1 && arr[j] > arr[j+1] {
-				result["pos"] = append(result["pos"], i)
-				result["peaks"] = append(result["peaks"], arr[i])
+			// check if value drops after plateau
+			if j+1 < len(arr) && arr[j] > arr[j+1] {
+				result.Pos = append(result.Pos, i)
+				result.Peaks = append(result.Peaks, arr[i])
 				i = j // skip past plateau
 			}
 		}
