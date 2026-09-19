@@ -1,5 +1,5 @@
 function lazyChain(value) {
-  const operations = [];
+  let operations = [];
   
   return {
     invoke(methodName, ...args) {
@@ -7,11 +7,9 @@ function lazyChain(value) {
       return this;
     },
     value() {
-      let result = value;
-      for (const operation of operations) {
-        result = result[operation.methodName](...operation.args);
-      }
-      return result;
+      return operations.reduce((val, op) => {
+        return val[op.methodName](...op.args);
+      }, value);
     }
   };
 }
