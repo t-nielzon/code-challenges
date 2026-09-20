@@ -1,9 +1,9 @@
-function comp(a, b){
-  if (!Array.isArray(a) || !Array.isArray(b)) return false;
+function comp(a, b) {
+  if (a == null || b == null) return false;
   if (a.length !== b.length) return false;
   
-  const squaredA = a.map(x => x * x).sort((x, y) => x - y);
-  const sortedB = b.sort((x, y) => x - y);
+  const aSorted = a.map(x => x * x).sort((x, y) => x - y);
+  const bSorted = [...b].sort((x, y) => x - y);
   
-  return squaredA.every((val, i) => val === sortedB[i]);
+  return aSorted.every((val, idx) => val === bSorted[idx]);
 }
