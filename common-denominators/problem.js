@@ -1,20 +1,21 @@
-/**
+/*
  * Common Denominators
- * 
- * You will have a list of rationals where each rational is represented as [numerator, denominator].
- * All numbers are positive integers.
- * 
- * You have to produce a result in the form [[N_1, D], [N_2, D], ... [N_n, D]]
- * where D is as small as possible and each fraction N_i/D equals the original numer_i/denom_i.
- * 
- * D should be the Least Common Multiple (LCM) of all denominators.
- * 
+ *
+ * You will have a list of rationals in the form:
+ * [ [numer_1, denom_1], ..., [numer_n, denom_n] ]
+ *
+ * You have to produce a result in the form:
+ * [ [N_1, D], ..., [N_n, D] ]
+ *
+ * where D is as small as possible and
+ * N_1/D == numer_1/denom_1 ... N_n/D == numer_n/denom_n
+ *
  * Example:
- * convertFracs([[1, 2], [1, 3], [1, 4]]) => [[6, 12], [4, 12], [3, 12]]
- * 
- * Note: Input fractions may not be in lowest terms. Simplify them before processing.
+ * convertFracs([(1, 2), (1, 3), (1, 4)]) => [(6, 12), (4, 12), (3, 12)]
+ *
+ * Note: Simplify input fractions first to find the minimal common denominator.
  */
 
-function convertFracs(lst) {
+function convertFracs(fracs) {
   // Your solution here
 }
