@@ -16,24 +16,29 @@ func PrizeDraw(st string, we []int, n int) string {
 		return "Not enough participants"
 	}
 
-	type participant struct {
+	type Participant struct {
 		name          string
 		winningNumber int
 	}
 
-	var participants []participant
+	participants := make([]Participant, len(names))
 
 	for i, name := range names {
 		som := len(name)
-		for _, char := range name {
-			if char >= 'A' && char <= 'Z' {
-				som += int(char - 'A' + 1)
-			} else if char >= 'a' && char <= 'z' {
-				som += int(char - 'a' + 1)
+		for _, ch := range name {
+			if ch >= 'A' && ch <= 'Z' {
+				som += int(ch - 'A' + 1)
+			} else if ch >= 'a' && ch <= 'z' {
+				som += int(ch - 'a' + 1)
 			}
 		}
+
 		winningNumber := som * we[i]
-		participants = append(participants, participant{name, winningNumber})
+
+		participants[i] = Participant{
+			name:          name,
+			winningNumber: winningNumber,
+		}
 	}
 
 	sort.Slice(participants, func(i, j int) bool {
