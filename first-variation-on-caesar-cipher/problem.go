@@ -7,19 +7,17 @@ If the shift is initially 1, the first character of the message to be encoded wi
 
 The function "movingShift" first codes the entire string and then returns an array of strings containing the coded string in 5 parts.
 
-If possible the message will be equally divided by message length between the five runners. If this is not possible, parts 1 to 5 will have subsequently non-increasing lengths, such that parts 1 to 4 are at least as long as when evenly divided, but at most 1 longer.
-
-The function "demovingShift" decodes the array of strings back to the original string.
+The function "demovingShift" takes an array of strings (five parts) and a shift value, and returns the original decoded string.
 */
 
 package main
 
 func movingShift(s string, shift int) []string {
-	// TODO: implement
+	// Placeholder - implement in solution
 	return []string{}
 }
 
 func demovingShift(s []string, shift int) string {
-	// TODO: implement
+	// Placeholder - implement in solution
 	return ""
 }
