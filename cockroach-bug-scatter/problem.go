@@ -3,8 +3,13 @@ package main
 /*
 Cockroach Bug Scatter
 
-The cockroaches run and hide in the numbered holes.
+Story:
+It was nearly midnight when I staggered sleepily into the kitchen to get a glass of milk...
+I turned on the light and... AARRRGGHHHHH!!!!
+Damn bugs scatter in all directions!
 
+Task:
+The cockroaches run and hide in the numbered holes.
 Return array/list showing how many cockroaches end up in each hole (index matches the hole number)
 
 About cockroaches:
@@ -23,7 +28,25 @@ Legend:
 - +, |, - = walls of the room
 - 0 - 9 = holes for cockroaches to hide in
 - U, D, L, R = cockroaches with initial directions facing UP, DOWN, LEFT, RIGHT
+
+Example:
+Input:
++----------------0---------------+
+|                                |
+|                                |
+|          U        D            |
+|     L                          |
+|              R                 |
+|           L                    |
+|  U                             1
+3        U    D                  |
+|         L              R       |
+|                                |
++----------------2---------------+
+
+Output: [1, 2, 2, 5, 0, 0, 0, 0, 0, 0]
 */
 
-func Cockroach(room []string) [10]int {
+func CockroachCount(grid []string) []int {
+	return nil
 }

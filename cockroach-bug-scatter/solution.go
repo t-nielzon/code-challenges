@@ -1,74 +1,70 @@
 package main
 
-import "fmt"
-
-func Cockroach(room []string) [10]int {
-	height := len(room)
-
+func CockroachCount(grid []string) []int {
+	result := make([]int, 10)
+	
+	// Parse grid to find all cockroaches
 	var cockroaches []struct {
-		x, y  int
-		dir   rune
+		row, col int
+		dir      rune
 	}
-
-	for y := 0; y < height; y++ {
-		for x := 0; x < len(room[y]); x++ {
-			ch := rune(room[y][x])
+	
+	for r, line := range grid {
+		for c, ch := range line {
 			if ch == 'U' || ch == 'D' || ch == 'L' || ch == 'R' {
 				cockroaches = append(cockroaches, struct {
-					x, y  int
-					dir   rune
-				}{x, y, ch})
+					row, col int
+					dir      rune
+				}{r, c, ch})
 			}
 		}
 	}
-
-	result := [10]int{}
-
+	
+	// Simulate each cockroach
 	for _, roach := range cockroaches {
-		holeNum := simulate(room, roach.x, roach.y, roach.dir)
-		if holeNum >= 0 {
-			result[holeNum]++
+		r, c := roach.row, roach.col
+		dir := roach.dir
+		
+		// Move until finding a hole
+		maxIter := 10000
+		for i := 0; i < maxIter; i++ {
+			// Calculate next position
+			var nr, nc int
+			switch dir {
+			case 'U':
+				nr, nc = r-1, c
+			case 'D':
+				nr, nc = r+1, c
+			case 'L':
+				nr, nc = r, c-1
+			case 'R':
+				nr, nc = r, c+1
+			}
+			
+			// Check bounds
+			if nr < 0 || nr >= len(grid) || nc < 0 || nc >= len(grid[nr]) {
+				dir = turnLeft(dir)
+				continue
+			}
+			
+			ch := grid[nr][nc]
+			
+			// Check if next cell is a wall
+			if ch == '+' || ch == '|' || ch == '-' {
+				dir = turnLeft(dir)
+			} else if ch >= '0' && ch <= '9' {
+				// Found a hole
+				holeNum := int(ch - '0')
+				result[holeNum]++
+				break
+			} else {
+				// Move forward
+				r, c = nr, nc
+			}
 		}
 	}
-
+	
 	return result
-}
-
-func simulate(room []string, startX, startY int, startDir rune) int {
-	x, y := startX, startY
-	dir := startDir
-
-	visited := make(map[string]bool)
-
-	for {
-		state := fmt.Sprintf("%d,%d,%c", x, y, dir)
-		if visited[state] {
-			return -1
-		}
-		visited[state] = true
-
-		nx, ny := x, y
-		switch dir {
-		case 'U':
-			ny--
-		case 'D':
-			ny++
-		case 'L':
-			nx--
-		case 'R':
-			nx++
-		}
-
-		ch := rune(room[ny][nx])
-
-		if ch == '+' || ch == '|' || ch == '-' {
-			dir = turnLeft(dir)
-		} else if ch >= '0' && ch <= '9' {
-			return int(ch - '0')
-		} else {
-			x, y = nx, ny
-		}
-	}
 }
 
 func turnLeft(dir rune) rune {
