@@ -1,26 +1,36 @@
-function berlinClock(time) {
-  const [hours, minutes, seconds] = time.split(':').map(Number);
+function berlinClock(timeString) {
+  const [hours, minutes, seconds] = timeString.split(':').map(Number);
   
-  const secondsLight = seconds % 2 === 0 ? 'Y' : 'O';
+  // Second indicator: Y for even, O for odd
+  const secondRow = seconds % 2 === 0 ? 'Y' : 'O';
   
+  // Five-hour indicator
   const fiveHours = Math.floor(hours / 5);
-  const firstRow = 'R'.repeat(fiveHours) + 'O'.repeat(4 - fiveHours);
+  const fiveHourRow = 'R'.repeat(fiveHours) + 'O'.repeat(4 - fiveHours);
   
+  // One-hour indicator
   const oneHours = hours % 5;
-  const secondRow = 'R'.repeat(oneHours) + 'O'.repeat(4 - oneHours);
+  const oneHourRow = 'R'.repeat(oneHours) + 'O'.repeat(4 - oneHours);
   
+  // Five-minute indicator
   const fiveMinutes = Math.floor(minutes / 5);
-  let thirdRow = '';
-  for (let i = 0; i < 11; i++) {
-    if (i < fiveMinutes) {
-      thirdRow += (i === 2 || i === 5 || i === 8) ? 'R' : 'Y';
+  let fiveMinuteRow = '';
+  for (let i = 1; i <= 11; i++) {
+    if (i <= fiveMinutes) {
+      // Red at positions 3, 6, 9 (15, 30, 45 minutes)
+      if (i === 3 || i === 6 || i === 9) {
+        fiveMinuteRow += 'R';
+      } else {
+        fiveMinuteRow += 'Y';
+      }
     } else {
-      thirdRow += 'O';
+      fiveMinuteRow += 'O';
     }
   }
   
+  // One-minute indicator
   const oneMinutes = minutes % 5;
-  const fourthRow = 'Y'.repeat(oneMinutes) + 'O'.repeat(4 - oneMinutes);
+  const oneMinuteRow = 'Y'.repeat(oneMinutes) + 'O'.repeat(4 - oneMinutes);
   
-  return `${secondsLight}\n${firstRow}\n${secondRow}\n${thirdRow}\n${fourthRow}`;
+  return [secondRow, fiveHourRow, oneHourRow, fiveMinuteRow, oneMinuteRow].join('\n');
 }
