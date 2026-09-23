@@ -1,15 +1,14 @@
-// solution.go
 package main
 
 func ProductFib(prod int64) [3]interface{} {
-	a, b := int64(0), int64(1)
+	fib1, fib2 := int64(0), int64(1)
 	
-	for a*b < prod {
-		a, b = b, a+b
+	for fib1*fib2 < prod {
+		fib1, fib2 = fib2, fib1+fib2
 	}
 	
-	if a*b == prod {
-		return [3]interface{}{a, b, true}
+	if fib1*fib2 == prod {
+		return [3]interface{}{fib1, fib2, true}
 	}
-	return [3]interface{}{a, b, false}
+	return [3]interface{}{fib1, fib2, false}
 }
