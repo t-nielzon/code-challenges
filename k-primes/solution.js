@@ -1,37 +1,70 @@
-function primeFactorCount(n) {
+function countPrimeFactors(n) {
+  if (n <= 1) return 0;
+  
   let count = 0;
-  let d = 2;
-  while (d * d <= n) {
-    while (n % d === 0) {
-      n /= d;
-      count++;
-    }
-    d++;
+  
+  while (n % 2 === 0) {
+    count++;
+    n = n / 2;
   }
-  if (n > 1) count++;
+  
+  for (let i = 3; i * i <= n; i += 2) {
+    while (n % i === 0) {
+      count++;
+      n = n / i;
+    }
+  }
+  
+  if (n > 1) {
+    count++;
+  }
+  
   return count;
 }
 
-function countKprimes(k, start, nd) {
+function countKprimes(k, start, end) {
   const result = [];
-  for (let n = start; n <= nd; n++) {
-    if (primeFactorCount(n) === k) result.push(n);
+  
+  for (let i = start; i <= end; i++) {
+    if (countPrimeFactors(i) === k) {
+      result.push(i);
+    }
   }
+  
   return result;
 }
 
 function puzzle(s) {
-  // a is 1-prime, b is 3-prime, c is 7-prime, a + b + c = s
-  const ones = countKprimes(1, 2, s);
-  const threes = new Set(countKprimes(3, 1, s));
-  const sevens = new Set(countKprimes(7, 1, s));
-
-  let total = 0;
-  for (const a of ones) {
-    for (const c of sevens) {
-      const b = s - a - c;
-      if (b > 0 && threes.has(b)) total++;
+  const kprimes = {
+    1: [],
+    3: [],
+    7: []
+  };
+  
+  for (let i = 2; i <= s; i++) {
+    const count = countPrimeFactors(i);
+    if (count === 1) {
+      kprimes[1].push(i);
+    } else if (count === 3) {
+      kprimes[3].push(i);
+    } else if (count === 7) {
+      kprimes[7].push(i);
     }
   }
-  return total;
+  
+  const sevenPrimes = new Set(kprimes[7]);
+  
+  let solutions = 0;
+  
+  for (let a of kprimes[1]) {
+    for (let b of kprimes[3]) {
+      const c = s - a - b;
+      
+      if (c > 0 && sevenPrimes.has(c)) {
+        solutions++;
+      }
+    }
+  }
+  
+  return solutions;
 }
