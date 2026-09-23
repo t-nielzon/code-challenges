@@ -1,16 +1,26 @@
 function sumLudic(n) {
-  if (n === 0) return 0;
-  
   const ludic = [1];
-  let numbers = Array.from({length: 240000}, (_, i) => i + 2);
+  let arr = [];
   
-  while (ludic.length < n && numbers.length > 0) {
-    const step = numbers[0];
-    ludic.push(step);
-    numbers = numbers.slice(1);
-    // Remove every step-th element: keep indices where index % step !== step - 1
-    numbers = numbers.filter((_, index) => index % step !== step - 1);
+  // Generate starting array [2, 3, 4, 5, ...]
+  for (let i = 2; i <= 300000; i++) {
+    arr.push(i);
   }
   
-  return ludic.slice(0, n).reduce((sum, x) => sum + x, 0);
+  while (ludic.length < n && arr.length > 0) {
+    const k = arr[0];
+    ludic.push(k);
+    
+    // Remove every kth element (indices 0, k, 2k, 3k, ...)
+    const newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (i % k !== 0) {
+        newArr.push(arr[i]);
+      }
+    }
+    arr = newArr;
+  }
+  
+  // Sum the first n ludic numbers
+  return ludic.slice(0, n).reduce((sum, num) => sum + num, 0);
 }
