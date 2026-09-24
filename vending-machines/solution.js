@@ -1,20 +1,18 @@
-// solution.js
 function findSpecialIdx(vms) {
-  // Collect candy bars: take i bars from machine i (0 from machine 0, 1 from machine 1, etc.)
+  // Vend i+1 bars from machine i (0-indexed)
   for (let i = 0; i < 100; i++) {
-    for (let j = 0; j < i; j++) {
+    for (let j = 0; j <= i; j++) {
       vms[i].vend();
     }
   }
   
-  // Weigh the entire pile
+  // Weigh the pile once
   const actualWeight = vms.weigh();
   
-  // If all bars weighed 100g: total bars = 0+1+2+...+99 = 4950
-  // Expected weight = 4950 * 100 = 495000 grams
-  const expectedWeight = 4950 * 100;
+  // Expected weight if all machines normal: 100g × (1+2+...+100) = 100 × 5050 = 505000g
+  // If machine j is special: actualWeight = 505000 + (j+1) extra grams
+  // Therefore: j = actualWeight - 505000 - 1
+  const specialIdx = actualWeight - 505000 - 1;
   
-  // The special machine with 101g bars contributes 1 extra gram per bar taken
-  // Since we took i bars from machine i, the extra weight equals i
-  return actualWeight - expectedWeight;
+  return specialIdx;
 }
