@@ -1,7 +1,12 @@
 function productFib(prod) {
-  let a = 0, b = 1;
-  while (a * b < prod) {
-    [a, b] = [b, a + b];
+  let fn = 0;
+  let fn1 = 1;
+  
+  while (fn * fn1 < prod) {
+    let temp = fn + fn1;
+    fn = fn1;
+    fn1 = temp;
   }
-  return [a, b, a * b === prod];
+  
+  return [fn, fn1, fn * fn1 === prod];
 }
