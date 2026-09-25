@@ -1,13 +1,14 @@
-package kata
+package main
 
-func Solution(s string) []string {
-	if len(s)%2 == 1 {
-		s += "_"
-	}
-	
+func Solution(str string) []string {
 	var result []string
-	for i := 0; i < len(s); i += 2 {
-		result = append(result, s[i:i+2])
+	
+	for i := 0; i < len(str); i += 2 {
+		if i+1 < len(str) {
+			result = append(result, str[i:i+2])
+		} else {
+			result = append(result, string(str[i])+"_")
+		}
 	}
 	
 	return result
