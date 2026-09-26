@@ -1,37 +1,49 @@
-package kata
+package main
 
-import "errors"
-
-func isBouncy(n int) bool {
-	increasing, decreasing := true, true
-	prev := n % 10
-	n /= 10
-	for n > 0 {
-		d := n % 10
-		if d > prev {
-			decreasing = false
-		}
-		if d < prev {
-			increasing = false
-		}
-		prev = d
-		n /= 10
-	}
-	return !increasing && !decreasing
-}
+import (
+  "errors"
+  "strconv"
+)
 
 func bouncyRatio(ratio float64) (int, error) {
-	if ratio < 0 || ratio > 0.99 {
-		return 0, errors.New("ratio must be between 0% and 99%")
-	}
+  if ratio < 0 || ratio > 99 {
+    return 0, errors.New("invalid ratio")
+  }
+  
+  bouncyCount := 0
+  
+  for n := 1; ; n++ {
+    if isBouncy(n) {
+      bouncyCount++
+    }
+    
+    currentRatio := float64(bouncyCount) / float64(n) * 100
+    if currentRatio >= ratio {
+      return n, nil
+    }
+  }
+}
 
-	bouncy := 0
-	for n := 1; ; n++ {
-		if isBouncy(n) {
-			bouncy++
-		}
-		if float64(bouncy)/float64(n) >= ratio {
-			return n, nil
-		}
-	}
+func isBouncy(n int) bool {
+  return !isIncreasing(n) && !isDecreasing(n)
+}
+
+func isIncreasing(n int) bool {
+  s := strconv.Itoa(n)
+  for i := 1; i < len(s); i++ {
+    if s[i] < s[i-1] {
+      return false
+    }
+  }
+  return true
+}
+
+func isDecreasing(n int) bool {
+  s := strconv.Itoa(n)
+  for i := 1; i < len(s); i++ {
+    if s[i] > s[i-1] {
+      return false
+    }
+  }
+  return true
 }
