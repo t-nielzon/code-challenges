@@ -1,6 +1,7 @@
-package main
+package kata
 
 // Split Strings
+//
 // Difficulty: 6 kyu
 //
 // Complete the solution so that it splits the string into strings of two characters
