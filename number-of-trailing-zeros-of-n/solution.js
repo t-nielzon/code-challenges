@@ -1,4 +1,3 @@
-// solution.js
 function trailingZeros(n) {
   let count = 0;
   let divisor = 5;
