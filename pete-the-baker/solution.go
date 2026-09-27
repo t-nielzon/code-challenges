@@ -1,18 +1,19 @@
 package main
 
-func cakes(recipe, available map[string]int) int {
-	minCakes := -1
+import "math"
+
+func cakes(recipe map[string]int, available map[string]int) int {
+	minCakes := math.MaxInt
 
 	for ingredient, required := range recipe {
 		possibleCakes := available[ingredient] / required
-		if minCakes == -1 || possibleCakes < minCakes {
+		if possibleCakes < minCakes {
 			minCakes = possibleCakes
 		}
 	}
 
-	if minCakes == -1 {
+	if minCakes == math.MaxInt {
 		return 0
 	}
-
 	return minCakes
 }
