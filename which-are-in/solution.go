@@ -1,25 +1,28 @@
-package kata
+package main
 
 import (
 	"sort"
 	"strings"
 )
 
-func InArray(array1 []string, array2 []string) []string {
-	var r []string
+func InArray(a1, a2 []string) []string {
+	result := make([]string, 0)
 	seen := make(map[string]bool)
-	for _, s1 := range array1 {
-		if seen[s1] {
+	
+	for _, str1 := range a1 {
+		if seen[str1] {
 			continue
 		}
-		for _, s2 := range array2 {
-			if strings.Contains(s2, s1) {
-				r = append(r, s1)
-				seen[s1] = true
+		
+		for _, str2 := range a2 {
+			if strings.Contains(str2, str1) {
+				result = append(result, str1)
+				seen[str1] = true
 				break
 			}
 		}
 	}
-	sort.Strings(r)
-	return r
+	
+	sort.Strings(result)
+	return result
 }
