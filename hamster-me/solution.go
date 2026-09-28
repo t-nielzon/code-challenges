@@ -1,34 +1,58 @@
-package kata
+package main
 
 import (
+	"sort"
 	"strconv"
 	"strings"
 )
 
-func HamsterMe(code, message string) string {
-	var isCode [26]bool
-	for _, c := range code {
-		isCode[c-'a'] = true
+func HamsterMe(code string, message string) string {
+	// Extract unique code letters and sort them
+	codeSet := make(map[rune]bool)
+	for _, ch := range code {
+		codeSet[ch] = true
 	}
-
-	header := make([]int, 26)
-	num := make([]int, 26)
-	for i := 0; i < 26; i++ {
-		for d := 0; d < 26; d++ {
-			p := ((i-d)%26 + 26) % 26
-			if isCode[p] {
-				header[i] = p
-				num[i] = d + 1
+	
+	var codeLetters []rune
+	for ch := range codeSet {
+		codeLetters = append(codeLetters, ch)
+	}
+	sort.Slice(codeLetters, func(i, j int) bool {
+		return codeLetters[i] < codeLetters[j]
+	})
+	
+	var result strings.Builder
+	
+	for _, char := range message {
+		// Find the closest preceding (or equal) code letter
+		var closest rune
+		found := false
+		
+		for i := len(codeLetters) - 1; i >= 0; i-- {
+			if codeLetters[i] <= char {
+				closest = codeLetters[i]
+				found = true
 				break
 			}
 		}
+		
+		// If no code letter found, wrap to the last one
+		if !found {
+			closest = codeLetters[len(codeLetters)-1]
+		}
+		
+		// Calculate distance and row number
+		var distance int
+		if char >= closest {
+			distance = int(char) - int(closest)
+		} else {
+			distance = 26 - int(closest) + int(char)
+		}
+		
+		row := distance + 1
+		result.WriteRune(closest)
+		result.WriteString(strconv.Itoa(row))
 	}
-
-	var sb strings.Builder
-	for _, ch := range message {
-		i := int(ch - 'a')
-		sb.WriteByte(byte('a' + header[i]))
-		sb.WriteString(strconv.Itoa(num[i]))
-	}
-	return sb.String()
+	
+	return result.String()
 }
