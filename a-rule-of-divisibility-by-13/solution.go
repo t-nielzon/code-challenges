@@ -1,31 +1,30 @@
 package main
 
-func DivisibleBy13(n int) int {
-	remainders := []int{1, 10, 9, 12, 3, 4}
+func DivisibilityRule13(n int64) int64 {
+	sequence := []int64{1, 10, 9, 12, 3, 4}
 	
 	for {
-		sum := 0
-		digits := getDigits(n)
+		sum := int64(0)
+		temp := n
+		seqIdx := 0
 		
-		for i, digit := range digits {
-			sum += digit * remainders[i%len(remainders)]
+		if temp == 0 {
+			return 0
 		}
 		
+		// Extract digits from right to left and apply the sequence
+		for temp > 0 {
+			digit := temp % 10
+			sum += digit * sequence[seqIdx%len(sequence)]
+			temp /= 10
+			seqIdx++
+		}
+		
+		// Stop when stationary
 		if sum == n {
 			return n
 		}
+		
 		n = sum
 	}
-}
-
-func getDigits(n int) []int {
-	if n == 0 {
-		return []int{0}
-	}
-	var digits []int
-	for n > 0 {
-		digits = append(digits, n%10)
-		n /= 10
-	}
-	return digits
 }
