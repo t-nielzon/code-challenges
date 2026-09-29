@@ -1,4 +1,3 @@
-// solution.go
 package kata
 
 import "sync"
@@ -6,27 +5,27 @@ import "sync"
 func Merge(a <-chan string, b <-chan string) <-chan string {
 	out := make(chan string)
 	var wg sync.WaitGroup
-	
+
 	wg.Add(2)
-	
+
 	go func() {
 		defer wg.Done()
-		for val := range a {
-			out <- val
+		for msg := range a {
+			out <- msg
 		}
 	}()
-	
+
 	go func() {
 		defer wg.Done()
-		for val := range b {
-			out <- val
+		for msg := range b {
+			out <- msg
 		}
 	}()
-	
+
 	go func() {
 		wg.Wait()
 		close(out)
 	}()
-	
+
 	return out
 }
