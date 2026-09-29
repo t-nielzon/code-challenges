@@ -12,39 +12,34 @@ function temps(v0, slope, dTot) {
   let d = 0;
   let watts = WATTS0;
   
+  const slopeRatio = slope / 100.0;
+  
   while (d < dTot) {
-    // Calculate acceleration components
-    const slopeRad = Math.atan(slope / 100);
-    const gravityComponent = -GRAVITY_ACC * Math.sin(slopeRad);
-    const dragComponent = -DRAG * Math.abs(v) * Math.abs(v) / MASS;
-    let thrustComponent = 0;
+    // calculate acceleration: gravity + air drag + pedaling thrust
+    let gamma = -GRAVITY_ACC * slopeRatio;
+    gamma -= DRAG * Math.abs(v) * Math.abs(v) / MASS;
     
-    if (v > 0 && watts > 0) {
-      thrustComponent = G_THRUST * watts / (v * MASS);
+    if (watts > 0 && v > 0) {
+      gamma += G_THRUST * watts / (v * MASS);
     }
     
-    let gamma = gravityComponent + dragComponent + thrustComponent;
-    
-    if (Math.abs(gamma) <= 1e-5) {
+    // threshold for near-zero acceleration
+    if (Math.abs(gamma) < 1e-5) {
       gamma = 0;
     }
     
-    // Update velocity
-    v = v + gamma * DELTA_T;
+    // update speed
+    v += gamma * DELTA_T;
     
-    // Check if John gives up
+    // check if John gives up
     if (v - 3.0 <= 1e-2) {
       return -1;
     }
     
-    // Update distance
-    d = d + v * DELTA_T / 60.0;
-    
-    // Update power
-    watts = watts - D_WATTS * DELTA_T;
-    
-    // Increment time
-    t = t + DELTA_T;
+    // update distance, power, and time
+    d += v * DELTA_T / 60.0;
+    watts -= D_WATTS * DELTA_T;
+    t += DELTA_T;
   }
   
   return Math.round(t);
