@@ -1,9 +1,9 @@
 package main
 
-func Josephus(n int, k int) int {
-	result := 0
+func Josephus(n, k int) int {
+	pos := 0
 	for i := 2; i <= n; i++ {
-		result = (result + k) % i
+		pos = (pos + k) % i
 	}
-	return result + 1
+	return pos + 1
 }

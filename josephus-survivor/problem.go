@@ -1,10 +1,13 @@
 package main
 
 /*
+Josephus Survivor
+
 In this kata you have to correctly return who is the "survivor", ie: the last element of a Josephus permutation.
 
-Basically you have to assume that n people are put into a circle and that they are eliminated in steps of k elements, like this:
+Basically you have to assume that n people are put into a circle and that they are eliminated in steps of k elements.
 
+For example:
 n=7, k=3 => means 7 people in a circle
 one every 3 is eliminated until one remains
 [1,2,3,4,5,6,7] - initial sequence
@@ -15,9 +18,11 @@ one every 3 is eliminated until one remains
 [1,4] => 5 is counted out
 [4] => 1 counted out, 4 is the last element - the survivor!
 
-Notes and tips: using an array/list to compute the number of the survivor may be too slow for larger numbers; you may assume that both n and k will always be >=1.
+Notes: using an array/list to compute the number of the survivor may be too slow for larger numbers.
+You may assume that both n and k will always be >=1.
 */
 
-func Josephus(n int, k int) int {
+func Josephus(n, k int) int {
 	// Your solution here
+	return 0
 }
