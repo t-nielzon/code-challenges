@@ -1,79 +1,61 @@
-(function () {
-  // treat the string as an array of chars for delegation to Array.prototype
-  function toArray(str) {
-    return str.split('');
-  }
+String.prototype.map = function(callback, thisArg) {
+  return Array.from(this).map(callback, thisArg).join('');
+};
 
-  // pure (non-mutating) methods return exactly what Array.prototype returns
-  String.prototype.map = function (callback, thisArg) {
-    return toArray(this).map(callback, thisArg);
-  };
+String.prototype.filter = function(callback, thisArg) {
+  return Array.from(this).filter(callback, thisArg).join('');
+};
 
-  String.prototype.join = function (separator) {
-    return toArray(this).join(separator);
-  };
+String.prototype.join = function(separator = ',') {
+  return Array.from(this).join(separator);
+};
 
-  String.prototype.filter = function (callback, thisArg) {
-    return toArray(this).filter(callback, thisArg);
-  };
+String.prototype.forEach = function(callback, thisArg) {
+  Array.from(this).forEach(callback, thisArg);
+};
 
-  String.prototype.forEach = function (callback, thisArg) {
-    return toArray(this).forEach(callback, thisArg);
-  };
+String.prototype.some = function(callback, thisArg) {
+  return Array.from(this).some(callback, thisArg);
+};
 
-  String.prototype.some = function (callback, thisArg) {
-    return toArray(this).some(callback, thisArg);
-  };
+String.prototype.every = function(callback, thisArg) {
+  return Array.from(this).every(callback, thisArg);
+};
 
-  String.prototype.every = function (callback, thisArg) {
-    return toArray(this).every(callback, thisArg);
-  };
+String.prototype.reduce = function(callback, initialValue) {
+  return Array.from(this).reduce(callback, initialValue);
+};
 
-  String.prototype.reduce = function () {
-    return Array.prototype.reduce.apply(toArray(this), arguments);
-  };
+String.prototype.reduceRight = function(callback, initialValue) {
+  return Array.from(this).reduceRight(callback, initialValue);
+};
 
-  String.prototype.reduceRight = function () {
-    return Array.prototype.reduceRight.apply(toArray(this), arguments);
-  };
+String.prototype.sort = function(compareFn) {
+  return Array.from(this).sort(compareFn).join('');
+};
 
-  // sort and reverse mutate the array but also return it; join back to a string
-  String.prototype.sort = function (compareFn) {
-    return toArray(this).sort(compareFn).join('');
-  };
+String.prototype.reverse = function() {
+  return Array.from(this).reverse().join('');
+};
 
-  String.prototype.reverse = function () {
-    return toArray(this).reverse().join('');
-  };
+String.prototype.push = function(...elements) {
+  return this + elements.join('');
+};
 
-  // mutable methods return the resulting string instead of the array's return value
-  String.prototype.push = function () {
-    var arr = toArray(this);
-    arr.push.apply(arr, arguments);
-    return arr.join('');
-  };
+String.prototype.pop = function() {
+  return this.slice(0, -1);
+};
 
-  String.prototype.pop = function () {
-    var arr = toArray(this);
-    arr.pop();
-    return arr.join('');
-  };
+String.prototype.shift = function() {
+  return this.slice(1);
+};
 
-  String.prototype.shift = function () {
-    var arr = toArray(this);
-    arr.shift();
-    return arr.join('');
-  };
+String.prototype.unshift = function(...elements) {
+  return elements.join('') + this;
+};
 
-  String.prototype.unshift = function () {
-    var arr = toArray(this);
-    arr.unshift.apply(arr, arguments);
-    return arr.join('');
-  };
-
-  String.prototype.splice = function () {
-    var arr = toArray(this);
-    Array.prototype.splice.apply(arr, arguments);
-    return arr.join('');
-  };
-})();
+String.prototype.splice = function(start, deleteCount, ...items) {
+  const arr = Array.from(this);
+  arr.splice(start, deleteCount, ...items);
+  return arr.join('');
+};
