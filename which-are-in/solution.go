@@ -5,24 +5,23 @@ import (
 	"strings"
 )
 
-func InArray(a1, a2 []string) []string {
-	result := make([]string, 0)
+func InArray(a1 []string, a2 []string) []string {
 	seen := make(map[string]bool)
-	
-	for _, str1 := range a1 {
-		if seen[str1] {
-			continue
-		}
-		
-		for _, str2 := range a2 {
-			if strings.Contains(str2, str1) {
-				result = append(result, str1)
-				seen[str1] = true
+
+	for _, s1 := range a1 {
+		for _, s2 := range a2 {
+			if strings.Contains(s2, s1) {
+				seen[s1] = true
 				break
 			}
 		}
 	}
-	
+
+	var result []string
+	for k := range seen {
+		result = append(result, k)
+	}
+
 	sort.Strings(result)
 	return result
 }
