@@ -1,30 +1,47 @@
-package kata
+package main
 
-// two-pointer sweep keeps it linear: water above any column is bounded by the
-// smaller of the tallest walls seen from each side, and we always advance the
-// side whose running max is provably the limiting one.
-func Flood(towers []int) int {
-	left, right := 0, len(towers)-1
-	leftMax, rightMax := 0, 0
+func FindWater(h []int) int {
+	if len(h) == 0 {
+		return 0
+	}
+
+	n := len(h)
+	maxLeft := make([]int, n)
+	maxRight := make([]int, n)
+
+	// precompute maximum height to the left of each position
+	maxLeft[0] = h[0]
+	for i := 1; i < n; i++ {
+		maxLeft[i] = max(maxLeft[i-1], h[i])
+	}
+
+	// precompute maximum height to the right of each position
+	maxRight[n-1] = h[n-1]
+	for i := n - 2; i >= 0; i-- {
+		maxRight[i] = max(maxRight[i+1], h[i])
+	}
+
+	// calculate trapped water: water level at position i is the minimum
+	// of the max heights on both sides, minus the tower height at i
 	water := 0
-
-	for left < right {
-		if towers[left] < towers[right] {
-			if towers[left] >= leftMax {
-				leftMax = towers[left]
-			} else {
-				water += leftMax - towers[left]
-			}
-			left++
-		} else {
-			if towers[right] >= rightMax {
-				rightMax = towers[right]
-			} else {
-				water += rightMax - towers[right]
-			}
-			right--
-		}
+	for i := 0; i < n; i++ {
+		waterLevel := min(maxLeft[i], maxRight[i])
+		water += waterLevel - h[i]
 	}
 
 	return water
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
