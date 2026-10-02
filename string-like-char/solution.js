@@ -1,45 +1,51 @@
-String.prototype.map = function(callback, thisArg) {
-  return Array.from(this).map(callback, thisArg).join('');
+String.prototype.map = function(callback) {
+  return Array.prototype.map.call(this, callback).join('');
 };
 
-String.prototype.filter = function(callback, thisArg) {
-  return Array.from(this).filter(callback, thisArg).join('');
+String.prototype.join = function(separator) {
+  return Array.prototype.join.call(this, separator);
 };
 
-String.prototype.join = function(separator = ',') {
-  return Array.from(this).join(separator);
+String.prototype.filter = function(callback) {
+  return Array.prototype.filter.call(this, callback).join('');
 };
 
-String.prototype.forEach = function(callback, thisArg) {
-  Array.from(this).forEach(callback, thisArg);
+String.prototype.forEach = function(callback) {
+  Array.prototype.forEach.call(this, callback);
 };
 
-String.prototype.some = function(callback, thisArg) {
-  return Array.from(this).some(callback, thisArg);
+String.prototype.some = function(callback) {
+  return Array.prototype.some.call(this, callback);
 };
 
-String.prototype.every = function(callback, thisArg) {
-  return Array.from(this).every(callback, thisArg);
+String.prototype.every = function(callback) {
+  return Array.prototype.every.call(this, callback);
 };
 
 String.prototype.reduce = function(callback, initialValue) {
-  return Array.from(this).reduce(callback, initialValue);
+  if (arguments.length > 1) {
+    return Array.prototype.reduce.call(this, callback, initialValue);
+  }
+  return Array.prototype.reduce.call(this, callback);
 };
 
 String.prototype.reduceRight = function(callback, initialValue) {
-  return Array.from(this).reduceRight(callback, initialValue);
+  if (arguments.length > 1) {
+    return Array.prototype.reduceRight.call(this, callback, initialValue);
+  }
+  return Array.prototype.reduceRight.call(this, callback);
 };
 
-String.prototype.sort = function(compareFn) {
-  return Array.from(this).sort(compareFn).join('');
+String.prototype.sort = function(callback) {
+  return Array.prototype.sort.call(this, callback).join('');
 };
 
 String.prototype.reverse = function() {
-  return Array.from(this).reverse().join('');
+  return Array.prototype.reverse.call(this).join('');
 };
 
-String.prototype.push = function(...elements) {
-  return this + elements.join('');
+String.prototype.push = function(...args) {
+  return this + args.join('');
 };
 
 String.prototype.pop = function() {
@@ -50,12 +56,12 @@ String.prototype.shift = function() {
   return this.slice(1);
 };
 
-String.prototype.unshift = function(...elements) {
-  return elements.join('') + this;
+String.prototype.unshift = function(...args) {
+  return args.join('') + this;
 };
 
 String.prototype.splice = function(start, deleteCount, ...items) {
-  const arr = Array.from(this);
+  const arr = this.split('');
   arr.splice(start, deleteCount, ...items);
   return arr.join('');
 };

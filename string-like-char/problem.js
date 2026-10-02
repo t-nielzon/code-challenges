@@ -1,33 +1,74 @@
 /*
-String like [Char] - Difficulty: 5 kyu
+ * Kata: String like [Char]
+ * Difficulty: 5 kyu
+ * 
+ * Add Array.prototype methods to String.prototype to allow strings to be
+ * used like arrays of characters.
+ * 
+ * Non-mutating methods to implement:
+ * - map, join, filter, forEach, some, every, reduce, reduceRight, sort, reverse
+ * 
+ * Mutable methods to implement (returning modified string instead of array mutation):
+ * - push, pop, shift, unshift, splice
+ */
 
-In some programming languages, strings internally are implemented like an array of chars.
+// Add Array methods to String.prototype
+String.prototype.map = function(callback) {
+  // TODO
+};
 
-The objective of this kata is to add to the String.prototype the next Array.prototype methods:
+String.prototype.join = function(separator) {
+  // TODO
+};
 
-Non-mutating methods:
-- Array.prototype.map()
-- Array.prototype.join()
-- Array.prototype.filter()
-- Array.prototype.forEach()
-- Array.prototype.some()
-- Array.prototype.every()
-- Array.prototype.reduce()
-- Array.prototype.reduceRight()
-- Array.prototype.sort()
-- Array.prototype.reverse()
+String.prototype.filter = function(callback) {
+  // TODO
+};
 
-Mutating methods (return modified string instead of array behavior):
-- Array.prototype.push()
-- Array.prototype.pop()
-- Array.prototype.shift()
-- Array.prototype.unshift()
-- Array.prototype.splice()
+String.prototype.forEach = function(callback) {
+  // TODO
+};
 
-Examples:
-"Hello".push(" World") // "Hello World"
-"Hello".pop() // "Hell"
-"Hello".map(c => c.toUpperCase()) // "HELLO"
-*/
+String.prototype.some = function(callback) {
+  // TODO
+};
 
-// Implement String methods that mirror Array prototype methods
+String.prototype.every = function(callback) {
+  // TODO
+};
+
+String.prototype.reduce = function(callback, initialValue) {
+  // TODO
+};
+
+String.prototype.reduceRight = function(callback, initialValue) {
+  // TODO
+};
+
+String.prototype.sort = function(callback) {
+  // TODO
+};
+
+String.prototype.reverse = function() {
+  // TODO
+};
+
+String.prototype.push = function(...args) {
+  // TODO
+};
+
+String.prototype.pop = function() {
+  // TODO
+};
+
+String.prototype.shift = function() {
+  // TODO
+};
+
+String.prototype.unshift = function(...args) {
+  // TODO
+};
+
+String.prototype.splice = function(start, deleteCount, ...items) {
+  // TODO
+};
