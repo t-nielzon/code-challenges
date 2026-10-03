@@ -1,37 +1,31 @@
-function handType(str) {
-  if (!str || str.trim() === '') return '';
+function typeCheck(str) {
+  const leftKeys = new Set('12345qwertasdfgzxcvb');
+  const rightKeys = new Set('67890yuiophjkl;\'nm,./');
   
-  const left = new Set('`12345qwertyasdfgzxcvb');
-  const right = new Set('67890-=yuiophjkl;\'[]\\nm,./?');
+  const chars = str.toLowerCase().split('').filter(c => c !== ' ');
   
-  const shiftMap = {
-    '!': '1', '@': '2', '#': '3', '$': '4', '%': '5',
-    '^': '6', '&': '7', '*': '8', '(': '9', ')': '0',
-    '_': '-', '+': '=', ':': ';', '"': "'", '{': '[', '}': ']', '|': '\\',
-    '<': ',', '>': '.', '?': '/', '~': '`'
-  };
+  if (chars.length === 0) {
+    return '';
+  }
   
   let hasLeft = false;
   let hasRight = false;
   
-  for (const char of str) {
-    if (char === ' ') continue;
-    
-    let key = char.toLowerCase();
-    
-    if (shiftMap[char]) {
-      key = shiftMap[char];
-    }
-    
-    if (left.has(key)) {
+  for (const char of chars) {
+    if (leftKeys.has(char)) {
       hasLeft = true;
-    } else if (right.has(key)) {
+    } else if (rightKeys.has(char)) {
       hasRight = true;
     }
   }
   
-  if (hasLeft && hasRight) return 'Both';
-  if (hasLeft) return 'Left';
-  if (hasRight) return 'Right';
+  if (hasLeft && hasRight) {
+    return 'Both';
+  } else if (hasLeft) {
+    return 'Left';
+  } else if (hasRight) {
+    return 'Right';
+  }
+  
   return '';
 }
