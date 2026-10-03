@@ -1,6 +1,6 @@
 function limitAsyncTasks(tasks, limit) {
   if (limit < 1) {
-    return Promise.reject(new Error('Invalid limit'));
+    return Promise.reject(new Error("Invalid limit"));
   }
   
   if (tasks.length === 0) {
@@ -9,49 +9,50 @@ function limitAsyncTasks(tasks, limit) {
   
   return new Promise((resolve, reject) => {
     const results = new Array(tasks.length);
-    let running = 0;
     let completed = 0;
-    let nextIndex = 0;
-    let rejected = false;
+    let running = 0;
+    let currentIndex = 0;
+    let failed = false;
     
-    function processTask(index) {
-      running++;
+    function tryStartTasks() {
+      if (failed) return;
       
-      try {
-        Promise.resolve(tasks[index]())
-          .then(result => {
-            if (rejected) return;
-            results[index] = result;
-            completed++;
-            running--;
-            
-            if (completed === tasks.length) {
-              resolve(results);
-            } else {
-              scheduleNext();
+      while (running < limit && currentIndex < tasks.length) {
+        const index = currentIndex++;
+        running++;
+        
+        try {
+          const result = tasks[index]();
+          
+          Promise.resolve(result).then(
+            (value) => {
+              results[index] = value;
+              completed++;
+              running--;
+              
+              if (completed === tasks.length) {
+                resolve(results);
+              } else {
+                tryStartTasks();
+              }
+            },
+            (error) => {
+              if (!failed) {
+                failed = true;
+                reject(error);
+              }
             }
-          })
-          .catch(error => {
-            if (!rejected) {
-              rejected = true;
-              reject(error);
-            }
-          });
-      } catch (error) {
-        if (!rejected) {
-          rejected = true;
-          reject(error);
+          );
+        } catch (error) {
+          if (!failed) {
+            failed = true;
+            reject(error);
+          }
+          return;
         }
       }
     }
     
-    function scheduleNext() {
-      if (rejected) return;
-      while (running < limit && nextIndex < tasks.length) {
-        processTask(nextIndex++);
-      }
-    }
-    
-    scheduleNext();
+    tryStartTasks();
   });
 }
