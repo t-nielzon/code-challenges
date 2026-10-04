@@ -1,17 +1,12 @@
 /*
- * (Ready for) Prime Time
- * 5 kyu
- *
- * We need prime numbers and we need them now!
- *
- * Write a method that takes a maximum bound and returns all primes
- * up to and including the maximum bound.
- *
- * For example:
- * 11 => [2, 3, 5, 7, 11]
- */
+We need prime numbers and we need them now!
 
-function prime(num) {
+Write a method that takes a maximum bound and returns all primes up to and including the maximum bound.
+
+For example:
+11 => [2, 3, 5, 7, 11]
+*/
+
+function getPrimes(n) {
+  
 }
-
-module.exports = prime;

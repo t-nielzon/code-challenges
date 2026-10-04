@@ -1,19 +1,24 @@
-function prime(num) {
-  if (num < 2) return [];
-  const sieve = new Array(num + 1).fill(true);
-  sieve[0] = sieve[1] = false;
-  for (let i = 2; i * i <= num; i++) {
+function getPrimes(n) {
+  if (n < 2) return [];
+  
+  const sieve = Array(n + 1).fill(true);
+  sieve[0] = false;
+  sieve[1] = false;
+  
+  for (let i = 2; i * i <= n; i++) {
     if (sieve[i]) {
-      for (let j = i * i; j <= num; j += i) {
+      for (let j = i * i; j <= n; j += i) {
         sieve[j] = false;
       }
     }
   }
+  
   const primes = [];
-  for (let i = 2; i <= num; i++) {
-    if (sieve[i]) primes.push(i);
+  for (let i = 2; i <= n; i++) {
+    if (sieve[i]) {
+      primes.push(i);
+    }
   }
+  
   return primes;
 }
-
-module.exports = prime;
