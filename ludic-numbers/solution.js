@@ -1,26 +1,24 @@
 function sumLudic(n) {
-  const ludic = [1];
-  let arr = [];
+  let ludic = [1];
+  let numbers = [];
   
-  // Generate starting array [2, 3, 4, 5, ...]
-  for (let i = 2; i <= 300000; i++) {
-    arr.push(i);
+  // Generate enough numbers to find the first n ludic numbers
+  for (let i = 2; i <= 250000; i++) {
+    numbers.push(i);
   }
   
-  while (ludic.length < n && arr.length > 0) {
-    const k = arr[0];
-    ludic.push(k);
-    
-    // Remove every kth element (indices 0, k, 2k, 3k, ...)
-    const newArr = [];
-    for (let i = 0; i < arr.length; i++) {
-      if (i % k !== 0) {
-        newArr.push(arr[i]);
-      }
-    }
-    arr = newArr;
+  // Generate ludic numbers using sieve
+  while (ludic.length < n && numbers.length > 0) {
+    const first = numbers[0];
+    ludic.push(first);
+    // Remove every first-th indexed element (keep indices where i % first !== 0)
+    numbers = numbers.filter((_, i) => i % first !== 0);
   }
   
   // Sum the first n ludic numbers
-  return ludic.slice(0, n).reduce((sum, num) => sum + num, 0);
+  let sum = 0;
+  for (let i = 0; i < n; i++) {
+    sum += ludic[i];
+  }
+  return sum;
 }
