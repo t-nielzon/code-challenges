@@ -1,16 +1,22 @@
 /*
-Financing Plan on Planet XY140Z-n
+Kata: Financing Plan on Planet XY140Z-n
+Difficulty: 6 kyu
 
-You save money over n weeks on planet XY140Z-n, where days are numbered 0 to n.
-On week w, day d (where d >= w), you save w + d currency units.
-Weeks are numbered 0 to n inclusive.
+On a planet XY140Z-n with n+1 days per week (numbered 0 to n) and n+1 weeks (numbered 0 to n),
+you save money according to a plan where on day d of week w, you save w + d (for d >= w).
 
-Example: On Earth (n=6), the table shows savings from week 0 to 6,
-and you save more each week as the pattern progresses.
+Calculate the total amount saved by the end of the financing plan.
 
-Determine the total amount saved across all weeks and days.
+Examples:
+- finance(5) --> 105
+- finance(6) --> 168
+- finance(7) --> 252
+- finance(5000) --> 62537505000
+
+Hint: Your solution will be nicer without loops.
 */
+package main
 
-func Finance(n int) int64 {
-	// your code here
+func finance(n int) int64 {
+	return 0 // stub
 }
