@@ -1,31 +1,42 @@
-function unsquareDigit(num) {
-  const squared = String(num);
-  const validSquares = ['0', '1', '4', '9', '16', '25', '36', '49', '64', '81'];
+function unsquare(num) {
+  const squared = num.toString();
+  const squareToDigit = {
+    '0': '0',
+    '1': '1',
+    '4': '2',
+    '9': '3',
+    '16': '4',
+    '25': '5',
+    '36': '6',
+    '49': '7',
+    '64': '8',
+    '81': '9'
+  };
   
-  function findPartitions(str, index, current) {
-    if (index === str.length) {
-      return [current];
+  const results = [];
+  
+  function backtrack(index, current) {
+    if (index === squared.length) {
+      results.push(parseInt(current));
+      return;
     }
     
-    const results = [];
+    // try single character
+    const oneChar = squared[index];
+    if (squareToDigit[oneChar]) {
+      backtrack(index + 1, current + squareToDigit[oneChar]);
+    }
     
-    for (let len = 1; len <= 2; len++) {
-      const chunk = str.substring(index, index + len);
-      if (validSquares.includes(chunk)) {
-        const digit = Math.sqrt(parseInt(chunk));
-        const nextResults = findPartitions(str, index + len, current + digit);
-        results.push(...nextResults);
+    // try two characters
+    if (index + 1 < squared.length) {
+      const twoChar = squared.substring(index, index + 2);
+      if (squareToDigit[twoChar]) {
+        backtrack(index + 2, current + squareToDigit[twoChar]);
       }
     }
-    
-    return results;
   }
   
-  const allPartitions = findPartitions(squared, 0, '');
+  backtrack(0, '');
   
-  if (allPartitions.length === 0) {
-    return null;
-  }
-  
-  return Math.min(...allPartitions.map(p => parseInt(p)));
+  return results.length === 0 ? null : Math.min(...results);
 }
