@@ -1,61 +1,72 @@
-package kprimes
+package main
 
-// countPrimeFactors returns the number of prime factors of n counted with
-// multiplicity.
 func countPrimeFactors(n int) int {
+	if n <= 1 {
+		return 0
+	}
+
 	count := 0
-	for d := 2; d*d <= n; d++ {
-		for n%d == 0 {
-			n /= d
+
+	for n%2 == 0 {
+		count++
+		n /= 2
+	}
+
+	for i := 3; i*i <= n; i += 2 {
+		for n%i == 0 {
 			count++
+			n /= i
 		}
 	}
+
 	if n > 1 {
 		count++
 	}
+
 	return count
 }
 
-func countKprimes(k, start, nd int) []int {
-	var res []int
-	for n := start; n <= nd; n++ {
+func countKprimes(k, start, end int) []int {
+	var result []int
+	for n := start; n <= end; n++ {
 		if countPrimeFactors(n) == k {
-			res = append(res, n)
+			result = append(result, n)
 		}
 	}
-	return res
+	return result
 }
 
 func puzzle(s int) int {
-	// kOf[i] holds the number of prime factors of i (with multiplicity),
-	// so membership in each k-prime set is a single lookup.
-	kOf := make([]int, s+1)
-	for i := 2; i <= s; i++ {
-		if kOf[i] == 0 { // i is prime
-			for j := i; j <= s; j += i {
-				m := j
-				for m%i == 0 {
-					m /= i
-					kOf[j]++
-				}
+	primes1 := countKprimes(1, 2, s)
+	primes3 := countKprimes(3, 2, s)
+	primes7 := countKprimes(7, 2, s)
+
+	set3 := make(map[int]bool)
+	for _, p := range primes3 {
+		set3[p] = true
+	}
+
+	set7 := make(map[int]bool)
+	for _, p := range primes7 {
+		set7[p] = true
+	}
+
+	count := 0
+
+	for _, a := range primes1 {
+		if a >= s {
+			break
+		}
+		for _, b := range primes3 {
+			if a+b >= s {
+				break
+			}
+			c := s - a - b
+			if c > 0 && set7[c] {
+				count++
 			}
 		}
 	}
 
-	total := 0
-	for a := 2; a <= s; a++ {
-		if kOf[a] != 1 {
-			continue
-		}
-		for b := 2; a+b <= s; b++ {
-			if kOf[b] != 3 {
-				continue
-			}
-			c := s - a - b
-			if c >= 2 && kOf[c] == 7 {
-				total++
-			}
-		}
-	}
-	return total
+	return count
 }
