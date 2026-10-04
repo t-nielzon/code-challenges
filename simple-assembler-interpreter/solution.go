@@ -1,37 +1,38 @@
-package kata
+package main
 
 import (
 	"strconv"
 	"strings"
 )
 
-func SimpleAssembler(program []string) map[string]int {
-	registers := map[string]int{}
+func SimpleAssemblerInterpreter(program []string) map[string]int {
+	registers := make(map[string]int)
 
-	value := func(s string) int {
-		if n, err := strconv.Atoi(s); err == nil {
-			return n
+	getValue := func(s string) int {
+		// check if it's a register (single lowercase letter)
+		if len(s) == 1 && s[0] >= 'a' && s[0] <= 'z' {
+			return registers[s]
 		}
-		return registers[s]
+		// otherwise parse as integer constant
+		val, _ := strconv.Atoi(s)
+		return val
 	}
 
-	for i := 0; i < len(program); {
+	for i := 0; i < len(program); i++ {
 		parts := strings.Fields(program[i])
-		switch parts[0] {
+		cmd := parts[0]
+
+		switch cmd {
 		case "mov":
-			registers[parts[1]] = value(parts[2])
-			i++
+			registers[parts[1]] = getValue(parts[2])
 		case "inc":
 			registers[parts[1]]++
-			i++
 		case "dec":
 			registers[parts[1]]--
-			i++
 		case "jnz":
-			if value(parts[1]) != 0 {
-				i += value(parts[2])
-			} else {
-				i++
+			if getValue(parts[1]) != 0 {
+				// jump y steps; adjust by -1 since loop increments i by 1
+				i += getValue(parts[2]) - 1
 			}
 		}
 	}
