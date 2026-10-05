@@ -1,23 +1,18 @@
-package main
-
+// solution.go
 func Amidakuji(ladder []string) []int {
-	if len(ladder) == 0 {
-		return []int{}
+	n := len(ladder[0])
+	arr := make([]int, n)
+	for i := 0; i < n; i++ {
+		arr[i] = i
 	}
 
-	width := len(ladder[0])
-	positions := make([]int, width)
-	for i := 0; i < width; i++ {
-		positions[i] = i
-	}
-
-	for _, level := range ladder {
-		for i := 0; i < len(level); i++ {
-			if level[i] == '1' && i+1 < len(positions) {
-				positions[i], positions[i+1] = positions[i+1], positions[i]
+	for _, row := range ladder {
+		for i := 0; i < n-1; i++ {
+			if row[i] == '1' {
+				arr[i], arr[i+1] = arr[i+1], arr[i]
 			}
 		}
 	}
 
-	return positions
+	return arr
 }
