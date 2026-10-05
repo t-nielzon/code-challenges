@@ -1,23 +1,27 @@
-function maxEarnings(earnings, k) {
-  if (earnings.length === 0) return 0;
-  
+function maximizeEarnings(earnings, k) {
   const n = earnings.length;
-  // dp[i][j] = max earnings from first i days
-  // j = 0: last day was a break (or at start)
-  // j = 1..k: last j consecutive days were worked
-  const dp = Array(n + 1).fill(null).map(() => Array(k + 1).fill(0));
+  if (n === 0) return 0;
   
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j <= k; j++) {
-      // Option 1: Skip day i (always possible, mandatory if j === k)
-      dp[i + 1][0] = Math.max(dp[i + 1][0], dp[i][j]);
-      
-      // Option 2: Work day i (only if j < k, because after k we must break)
-      if (j < k) {
-        dp[i + 1][j + 1] = Math.max(dp[i + 1][j + 1], dp[i][j] + earnings[i]);
-      }
+  // dp[j] = max earnings with j consecutive working days ending at current day
+  // j=0 means we took a break at current day
+  let dp = new Array(k + 1).fill(Number.NEGATIVE_INFINITY);
+  dp[0] = 0;
+  dp[1] = earnings[0];
+  
+  for (let i = 1; i < n; i++) {
+    let newDp = new Array(k + 1).fill(Number.NEGATIVE_INFINITY);
+    
+    // take a break on day i (can transition from any previous state)
+    newDp[0] = Math.max(...dp);
+    
+    // work on day i
+    newDp[1] = dp[0] + earnings[i];
+    for (let j = 2; j <= k; j++) {
+      newDp[j] = dp[j-1] + earnings[i];
     }
+    
+    dp = newDp;
   }
   
-  return Math.max(...dp[n]);
+  return Math.max(...dp);
 }
