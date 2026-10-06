@@ -1,4 +1,5 @@
-// problem.go
+package main
+
 /*
 Write a function that calculates the least common multiple of its arguments;
 each argument is assumed to be a non-negative integer. In the case that there
@@ -6,7 +7,5 @@ are no arguments (or the provided array in compiled languages is empty), return 
 If any argument is 0, return 0.
 */
 
-package kata
-
-func LCM(numbers ...int) int {
+func Lcm(numbers []int) int {
 }
