@@ -1,42 +1,34 @@
-function unsquare(num) {
-  const squared = num.toString();
-  const squareToDigit = {
-    '0': '0',
-    '1': '1',
-    '4': '2',
-    '9': '3',
-    '16': '4',
-    '25': '5',
-    '36': '6',
-    '49': '7',
-    '64': '8',
-    '81': '9'
-  };
-  
+function unsquareDigits(num) {
+  const str = String(num);
   const results = [];
+  const squares = {0: 0, 1: 1, 4: 2, 9: 3, 16: 4, 25: 5, 36: 6, 49: 7, 64: 8, 81: 9};
   
   function backtrack(index, current) {
-    if (index === squared.length) {
-      results.push(parseInt(current));
+    if (index === str.length) {
+      results.push(Number(current));
       return;
     }
     
-    // try single character
-    const oneChar = squared[index];
-    if (squareToDigit[oneChar]) {
-      backtrack(index + 1, current + squareToDigit[oneChar]);
+    // Try taking 1 digit
+    const oneDigit = Number(str[index]);
+    if (oneDigit in squares) {
+      backtrack(index + 1, current + squares[oneDigit]);
     }
     
-    // try two characters
-    if (index + 1 < squared.length) {
-      const twoChar = squared.substring(index, index + 2);
-      if (squareToDigit[twoChar]) {
-        backtrack(index + 2, current + squareToDigit[twoChar]);
+    // Try taking 2 digits (if available)
+    if (index + 1 < str.length) {
+      const twoDigits = Number(str.substring(index, index + 2));
+      if (twoDigits in squares) {
+        backtrack(index + 2, current + squares[twoDigits]);
       }
     }
   }
   
   backtrack(0, '');
   
-  return results.length === 0 ? null : Math.min(...results);
+  if (results.length === 0) {
+    return null;
+  }
+  
+  return Math.min(...results);
 }
