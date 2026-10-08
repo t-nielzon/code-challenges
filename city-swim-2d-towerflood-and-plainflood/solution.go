@@ -1,47 +1,43 @@
 package main
 
-func FindWater(h []int) int {
-	if len(h) == 0 {
+func GetWater(towers []int) int {
+	if len(towers) <= 2 {
 		return 0
 	}
 
-	n := len(h)
+	n := len(towers)
 	maxLeft := make([]int, n)
 	maxRight := make([]int, n)
 
-	// precompute maximum height to the left of each position
-	maxLeft[0] = h[0]
+	// calculate max height from start to each position
+	maxLeft[0] = towers[0]
 	for i := 1; i < n; i++ {
-		maxLeft[i] = max(maxLeft[i-1], h[i])
+		if towers[i] > maxLeft[i-1] {
+			maxLeft[i] = towers[i]
+		} else {
+			maxLeft[i] = maxLeft[i-1]
+		}
 	}
 
-	// precompute maximum height to the right of each position
-	maxRight[n-1] = h[n-1]
+	// calculate max height from each position to end
+	maxRight[n-1] = towers[n-1]
 	for i := n - 2; i >= 0; i-- {
-		maxRight[i] = max(maxRight[i+1], h[i])
+		if towers[i] > maxRight[i+1] {
+			maxRight[i] = towers[i]
+		} else {
+			maxRight[i] = maxRight[i+1]
+		}
 	}
 
-	// calculate trapped water: water level at position i is the minimum
-	// of the max heights on both sides, minus the tower height at i
-	water := 0
+	// calculate trapped water at each position
+	trapped := 0
 	for i := 0; i < n; i++ {
-		waterLevel := min(maxLeft[i], maxRight[i])
-		water += waterLevel - h[i]
+		waterLevel := maxLeft[i]
+		if maxRight[i] < waterLevel {
+			waterLevel = maxRight[i]
+		}
+		trapped += waterLevel - towers[i]
 	}
 
-	return water
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return trapped
 }
