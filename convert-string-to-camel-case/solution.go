@@ -1,27 +1,24 @@
-package main
+package kata
 
-import (
-	"strings"
-	"unicode"
-)
+import "strings"
 
 func ToCamelCase(str string) string {
 	if str == "" {
 		return str
 	}
-
-	// Replace underscores with dashes to have a single delimiter
+	
+	// Replace underscores with dashes for uniform splitting
 	str = strings.ReplaceAll(str, "_", "-")
-
-	// Split by dashes
+	
+	// Split by dash delimiter
 	words := strings.Split(str, "-")
-
-	// Capitalize the first letter of all words except the first one
+	
+	// Capitalize all words after the first one
 	for i := 1; i < len(words); i++ {
 		if len(words[i]) > 0 {
-			words[i] = string(unicode.ToUpper(rune(words[i][0]))) + words[i][1:]
+			words[i] = strings.ToUpper(string(words[i][0])) + strings.ToLower(words[i][1:])
 		}
 	}
-
+	
 	return strings.Join(words, "")
 }
