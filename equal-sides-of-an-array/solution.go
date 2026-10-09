@@ -1,18 +1,20 @@
-package kata
+// solution.go
+package main
 
 func FindEvenIndex(arr []int) int {
 	total := 0
 	for _, v := range arr {
 		total += v
 	}
-
-	left := 0
+	
+	leftSum := 0
 	for i, v := range arr {
-		if left == total-left-v {
+		rightSum := total - leftSum - v
+		if leftSum == rightSum {
 			return i
 		}
-		left += v
+		leftSum += v
 	}
-
+	
 	return -1
 }
