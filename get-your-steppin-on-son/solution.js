@@ -1,59 +1,44 @@
-function stepIt(words) {
-  const wordList = words.split(' ').filter(w => w.length > 0);
-  if (wordList.length === 0) return [];
+function stepIt(str) {
+  const words = str.split(' ');
   
-  // Calculate positions of each word
-  const positions = [];
+  // Calculate grid dimensions
   let row = 0, col = 0;
+  let maxRow = 0, maxCol = 0;
+  let goingRight = true;
   
-  for (let i = 0; i < wordList.length; i++) {
-    const word = wordList[i];
-    const isHorizontal = i % 2 === 0;
-    
-    positions.push({
-      word: word,
-      row: row,
-      col: col,
-      isHorizontal: isHorizontal
-    });
-    
-    // Move to next word's starting position
-    if (isHorizontal) {
+  for (let word of words) {
+    if (goingRight) {
+      maxCol = Math.max(maxCol, col + word.length - 1);
+      col += word.length - 1;
+      maxRow = Math.max(maxRow, row);
+    } else {
+      maxRow = Math.max(maxRow, row + word.length - 1);
+      row += word.length - 1;
+      maxCol = Math.max(maxCol, col);
+    }
+    goingRight = !goingRight;
+  }
+  
+  // Create grid filled with spaces
+  const grid = Array(maxRow + 1).fill(null).map(() => Array(maxCol + 1).fill(' '));
+  
+  // Place words in alternating directions (right, down, right, down, ...)
+  row = 0, col = 0;
+  goingRight = true;
+  
+  for (let word of words) {
+    if (goingRight) {
+      for (let i = 0; i < word.length; i++) {
+        grid[row][col + i] = word[i];
+      }
       col += word.length - 1;
     } else {
+      for (let i = 0; i < word.length; i++) {
+        grid[row + i][col] = word[i];
+      }
       row += word.length - 1;
     }
-  }
-  
-  // Determine grid dimensions
-  let maxRow = 0, maxCol = 0;
-  for (let pos of positions) {
-    if (pos.isHorizontal) {
-      maxRow = Math.max(maxRow, pos.row);
-      maxCol = Math.max(maxCol, pos.col + pos.word.length - 1);
-    } else {
-      maxRow = Math.max(maxRow, pos.row + pos.word.length - 1);
-      maxCol = Math.max(maxCol, pos.col);
-    }
-  }
-  
-  // Create and initialize grid with spaces
-  const grid = Array.from({ length: maxRow + 1 }, () => 
-    Array(maxCol + 1).fill(' ')
-  );
-  
-  // Place each word in the grid
-  for (let pos of positions) {
-    const word = pos.word;
-    if (pos.isHorizontal) {
-      for (let i = 0; i < word.length; i++) {
-        grid[pos.row][pos.col + i] = word[i];
-      }
-    } else {
-      for (let i = 0; i < word.length; i++) {
-        grid[pos.row + i][pos.col] = word[i];
-      }
-    }
+    goingRight = !goingRight;
   }
   
   return grid;

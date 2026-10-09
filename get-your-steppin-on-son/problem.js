@@ -6,16 +6,9 @@
 // All cells that are not occupied by a letter need to be a space ' '.
 //
 // Example:
-// stepIt("SNAKES SHOE EFFORT TRUMP POTATO") returns:
-// [['S','N','A','K','E','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-//  [' ',' ',' ',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-//  [' ',' ',' ',' ',' ','O',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-//  [' ',' ',' ',' ',' ','E','F','F','O','R','T',' ',' ',' ',' ',' '],
-//  [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','R',' ',' ',' ',' ',' '],
-//  [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','U',' ',' ',' ',' ',' '],
-//  [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','M',' ',' ',' ',' ',' '],
-//  [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','P','O','T','A','T','O']]
+// Input: "SNAKES SHOE EFFORT TRUMP POTATO"
+// Returns a 2D array where words form a stepping pattern
 
-function stepIt(words) {
+function stepIt(str) {
   
 }
