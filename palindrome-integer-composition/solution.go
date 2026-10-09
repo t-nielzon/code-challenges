@@ -1,30 +1,43 @@
-package kata
+package main
 
-import "strconv"
+import (
+	"math"
+	"strconv"
+)
 
-func isPalindrome(x uint64) bool {
-	s := strconv.FormatUint(x, 10)
-	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		if s[i] != s[j] {
+func values(n int) int {
+	sumSet := make(map[int]bool)
+	
+	maxStart := int(math.Sqrt(float64(n)))
+	for start := 1; start <= maxStart; start++ {
+		sum := 0
+		for current := start; ; current++ {
+			sum += current * current
+			if sum >= n {
+				break
+			}
+			if current > start {
+				sumSet[sum] = true
+			}
+		}
+	}
+	
+	count := 0
+	for num := range sumSet {
+		if isPalindrome(num) {
+			count++
+		}
+	}
+	
+	return count
+}
+
+func isPalindrome(n int) bool {
+	str := strconv.Itoa(n)
+	for i := 0; i < len(str)/2; i++ {
+		if str[i] != str[len(str)-1-i] {
 			return false
 		}
 	}
 	return true
-}
-
-func Values(n uint64) int {
-	found := make(map[uint64]struct{})
-	for i := uint64(1); i*i < n; i++ {
-		sum := i * i
-		for j := i + 1; ; j++ {
-			sum += j * j
-			if sum >= n {
-				break
-			}
-			if isPalindrome(sum) {
-				found[sum] = struct{}{}
-			}
-		}
-	}
-	return len(found)
 }
