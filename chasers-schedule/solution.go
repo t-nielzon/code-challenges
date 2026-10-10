@@ -1,41 +1,63 @@
 package main
 
-func chaserScore(s, t int) int {
-	memo := make(map[[3]int]int)
-	
-	var dp func(timeLeft, speed int, inRecovery bool) int
-	dp = func(timeLeft, speed int, inRecovery bool) int {
-		if timeLeft == 0 || speed <= 0 {
-			return 0
+func MaxDistance(s, t int) int {
+	// dp[i][speed][state]
+	// state 0 = can sprint, state 1 = must recover
+	dp := make([][][]int, t+1)
+	for i := 0; i <= t; i++ {
+		dp[i] = make([][]int, s+1)
+		for j := 0; j <= s; j++ {
+			dp[i][j] = []int{-1, -1}
 		}
-		
-		key := [3]int{timeLeft, speed, 0}
-		if inRecovery {
-			key[2] = 1
-		}
-		
-		if cached, exists := memo[key]; exists {
-			return cached
-		}
-		
-		var result int
-		if inRecovery {
-			// recovery phase: must run normally
-			result = speed + dp(timeLeft-1, speed, false)
-		} else {
-			// normal phase: choose between running normally or sprinting
-			runNormally := speed + dp(timeLeft-1, speed, false)
-			sprint := speed*2 + dp(timeLeft-1, speed-1, true)
-			
-			result = runNormally
-			if sprint > runNormally {
-				result = sprint
+	}
+
+	dp[0][s][0] = 0
+
+	for i := 0; i < t; i++ {
+		for speed := 0; speed <= s; speed++ {
+			// state 0: can sprint
+			if dp[i][speed][0] >= 0 {
+				// option 1: normal run
+				newDist := dp[i][speed][0] + speed
+				if dp[i+1][speed][0] < newDist {
+					dp[i+1][speed][0] = newDist
+				}
+
+				// option 2: sprint
+				if speed > 0 {
+					newDist = dp[i][speed][0] + speed*2
+					if dp[i+1][speed-1][1] < newDist {
+						dp[i+1][speed-1][1] = newDist
+					}
+				}
+			}
+
+			// state 1: must recover
+			if dp[i][speed][1] >= 0 {
+				newDist := dp[i][speed][1] + speed
+				if dp[i+1][speed][0] < newDist {
+					dp[i+1][speed][0] = newDist
+				}
 			}
 		}
-		
-		memo[key] = result
-		return result
 	}
-	
-	return dp(t, s, false)
+
+	result := 0
+	for speed := 0; speed <= s; speed++ {
+		if dp[t][speed][0] >= 0 {
+			result = max(result, dp[t][speed][0])
+		}
+		if dp[t][speed][1] >= 0 {
+			result = max(result, dp[t][speed][1])
+		}
+	}
+
+	return result
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
