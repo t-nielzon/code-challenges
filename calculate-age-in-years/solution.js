@@ -1,13 +1,12 @@
-function getAge(birthDate, now = new Date()) {
-  let age = now.getFullYear() - birthDate.getFullYear();
+function getAge(birthDate, nowDate = new Date()) {
+  let age = nowDate.getFullYear() - birthDate.getFullYear();
   
-  const birthdayThisYear = new Date(
-    now.getFullYear(),
-    birthDate.getMonth(),
-    birthDate.getDate()
-  );
+  const birthMonth = birthDate.getMonth();
+  const birthDay = birthDate.getDate();
+  const nowMonth = nowDate.getMonth();
+  const nowDay = nowDate.getDate();
   
-  if (now < birthdayThisYear) {
+  if (nowMonth < birthMonth || (nowMonth === birthMonth && nowDay < birthDay)) {
     age--;
   }
   
