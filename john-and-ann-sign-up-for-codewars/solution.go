@@ -1,7 +1,7 @@
-package main
+package solution
 
 func ann(n int) []int {
-	if n == 0 {
+	if n <= 0 {
 		return []int{}
 	}
 	
@@ -11,19 +11,16 @@ func ann(n int) []int {
 	a[0] = 1
 	j[0] = 0
 	
-	for day := 1; day < n; day++ {
-		t_ann := a[day-1]
-		t_john := j[day-1]
-		
-		a[day] = day - j[t_ann]
-		j[day] = day - a[t_john]
+	for i := 1; i < n; i++ {
+		j[i] = i - a[j[i-1]]
+		a[i] = i - j[a[i-1]]
 	}
 	
 	return a
 }
 
 func john(n int) []int {
-	if n == 0 {
+	if n <= 0 {
 		return []int{}
 	}
 	
@@ -33,19 +30,16 @@ func john(n int) []int {
 	a[0] = 1
 	j[0] = 0
 	
-	for day := 1; day < n; day++ {
-		t_ann := a[day-1]
-		t_john := j[day-1]
-		
-		a[day] = day - j[t_ann]
-		j[day] = day - a[t_john]
+	for i := 1; i < n; i++ {
+		j[i] = i - a[j[i-1]]
+		a[i] = i - j[a[i-1]]
 	}
 	
 	return j
 }
 
 func sum_ann(n int) int {
-	if n == 0 {
+	if n <= 0 {
 		return 0
 	}
 	
@@ -56,20 +50,17 @@ func sum_ann(n int) int {
 	j[0] = 0
 	sum := 1
 	
-	for day := 1; day < n; day++ {
-		t_ann := a[day-1]
-		t_john := j[day-1]
-		
-		a[day] = day - j[t_ann]
-		j[day] = day - a[t_john]
-		sum += a[day]
+	for i := 1; i < n; i++ {
+		j[i] = i - a[j[i-1]]
+		a[i] = i - j[a[i-1]]
+		sum += a[i]
 	}
 	
 	return sum
 }
 
 func sum_john(n int) int {
-	if n == 0 {
+	if n <= 0 {
 		return 0
 	}
 	
@@ -80,13 +71,10 @@ func sum_john(n int) int {
 	j[0] = 0
 	sum := 0
 	
-	for day := 1; day < n; day++ {
-		t_ann := a[day-1]
-		t_john := j[day-1]
-		
-		a[day] = day - j[t_ann]
-		j[day] = day - a[t_john]
-		sum += j[day]
+	for i := 1; i < n; i++ {
+		j[i] = i - a[j[i-1]]
+		a[i] = i - j[a[i-1]]
+		sum += j[i]
 	}
 	
 	return sum
