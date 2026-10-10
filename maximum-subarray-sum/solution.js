@@ -1,4 +1,4 @@
-function maxSubarraySum(arr) {
+function maxSequence(arr) {
   let maxCurrent = 0;
   let maxGlobal = 0;
   
