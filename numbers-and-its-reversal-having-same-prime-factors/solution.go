@@ -1,82 +1,80 @@
+// solution.go
 package main
 
-import "sort"
+import "strconv"
 
 func SameFactRev(nMax int) []int {
 	result := []int{}
 	
-	for n := 1; n < nMax; n++ {
-		if isPalindrome(n) {
+	for num := 2; num < nMax; num++ {
+		if isPalindrome(num) {
 			continue
 		}
 		
-		if sameFactors(n, reverseNumber(n)) {
-			result = append(result, n)
+		factors1 := getPrimeFactors(num)
+		factors2 := getPrimeFactors(reverseNumber(num))
+		
+		if haveSamePrimeFactors(factors1, factors2) {
+			result = append(result, num)
 		}
 	}
 	
-	sort.Ints(result)
 	return result
 }
 
-func getPrimeFactors(n int) map[int]bool {
+func isPalindrome(num int) bool {
+	s := strconv.Itoa(num)
+	for i := 0; i < len(s)/2; i++ {
+		if s[i] != s[len(s)-1-i] {
+			return false
+		}
+	}
+	return true
+}
+
+func reverseNumber(num int) int {
+	rev := 0
+	for num > 0 {
+		rev = rev*10 + num%10
+		num /= 10
+	}
+	return rev
+}
+
+func getPrimeFactors(num int) map[int]bool {
 	factors := make(map[int]bool)
 	
-	if n%2 == 0 {
+	if num%2 == 0 {
 		factors[2] = true
-		for n%2 == 0 {
-			n /= 2
+		for num%2 == 0 {
+			num /= 2
 		}
 	}
 	
-	for i := 3; i*i <= n; i += 2 {
-		if n%i == 0 {
+	for i := 3; i*i <= num; i += 2 {
+		if num%i == 0 {
 			factors[i] = true
-			for n%i == 0 {
-				n /= i
+			for num%i == 0 {
+				num /= i
 			}
 		}
 	}
 	
-	if n > 1 {
-		factors[n] = true
+	if num > 1 {
+		factors[num] = true
 	}
 	
 	return factors
 }
 
-func isPalindrome(n int) bool {
-	original := n
-	reversed := 0
-	for n > 0 {
-		reversed = reversed*10 + n%10
-		n /= 10
-	}
-	return original == reversed
-}
-
-func reverseNumber(n int) int {
-	reversed := 0
-	for n > 0 {
-		reversed = reversed*10 + n%10
-		n /= 10
-	}
-	return reversed
-}
-
-func sameFactors(n1, n2 int) bool {
-	factors1 := getPrimeFactors(n1)
-	factors2 := getPrimeFactors(n2)
-	
-	if len(factors1) != len(factors2) {
+func haveSamePrimeFactors(f1, f2 map[int]bool) bool {
+	if len(f1) != len(f2) {
 		return false
 	}
-	
-	for k := range factors1 {
-		if !factors2[k] {
+	for k := range f1 {
+		if !f2[k] {
 			return false
 		}
 	}
-	
 	return true
 }
