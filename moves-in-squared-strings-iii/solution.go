@@ -2,48 +2,44 @@ package main
 
 import "strings"
 
-func diag_1_sym(s string) string {
+func diag1Sym(s string) string {
 	lines := strings.Split(s, "\n")
 	n := len(lines)
+	
 	result := make([]string, n)
-	
-	for i := 0; i < n; i++ {
+	for col := 0; col < n; col++ {
 		row := ""
-		for j := 0; j < n; j++ {
-			row += string(lines[j][i])
+		for i := 0; i < n; i++ {
+			row += string(lines[i][col])
 		}
-		result[i] = row
+		result[col] = row
 	}
-	
 	return strings.Join(result, "\n")
 }
 
-func rot_90_clock(s string) string {
+func rot90Clock(s string) string {
 	lines := strings.Split(s, "\n")
 	n := len(lines)
+	
 	result := make([]string, n)
-	
-	for i := 0; i < n; i++ {
-		row := ""
-		for j := 0; j < n; j++ {
-			row += string(lines[n-1-j][i])
+	for row := 0; row < n; row++ {
+		line := ""
+		for col := n - 1; col >= 0; col-- {
+			line += string(lines[col][row])
 		}
-		result[i] = row
+		result[row] = line
 	}
-	
 	return strings.Join(result, "\n")
 }
 
-func selfie_and_diag1(s string) string {
-	diag := diag_1_sym(s)
-	sLines := strings.Split(s, "\n")
-	diagLines := strings.Split(diag, "\n")
-	result := make([]string, len(sLines))
+func selfieAndDiag1(s string) string {
+	lines := strings.Split(s, "\n")
+	diagLines := strings.Split(diag1Sym(s), "\n")
 	
-	for i := 0; i < len(sLines); i++ {
-		result[i] = sLines[i] + "|" + diagLines[i]
+	result := make([]string, len(lines))
+	for i := 0; i < len(lines); i++ {
+		result[i] = lines[i] + "|" + diagLines[i]
 	}
-	
 	return strings.Join(result, "\n")
 }
 
