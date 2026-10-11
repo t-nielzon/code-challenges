@@ -1,40 +1,32 @@
-package main
-
+// problem.go
 /*
-# Hamster me
+# Introduction
 
-Write a function that accepts two inputs: code and message and returns an encrypted string
-from message using the code. The code is a string that generates the key as shown below:
+Hamsters are rodents belonging to the subfamily Cricetinae. The subfamily contains about 25 species, classified in six or seven genera. They have become established as popular small house pets, and, partly because they are easy to breed in captivity, hamsters are often used as laboratory animals.
 
-All letters from code get number 1. All letters which directly follow letters from code
-get number 2 (unless they already have a smaller number assigned), etc.
+# Task
 
-Example key for code "hamster":
- 1  | h a m s t e r
- 2  | i b n   u f
- 3  | j c o   v g
- 4  | k d p   w
- 5  | l   q   x
- 6  |         y
- 7  |         z
+Write a function that accepts two inputs: code and message and returns an encrypted string from message using the code.
 
-Encoding works like:
-a => a1
-b => a2
-c => a3
-...
+The code is a string that generates the key where:
+- All letters from code get number 1
+- All letters which directly follow letters from code get number 2 (unless they already have a smaller number assigned), etc.
 
-hamsterMe('hamster', 'hamster')   => h1a1m1s1t1e1r1
-hamsterMe('hamster', 'helpme')    => h1e1h5m4m1e1
+For example, with code "hamster":
+  hamsterMe('hamster', 'hamster')   => h1a1m1s1t1e1r1
+  hamsterMe('hamster', 'helpme')    => h1e1h5m4m1e1
 
-If there is no 'a' in the code, add missing letters after the last available letter
-(in alphabetic order) in the code.
+If a letter is not in the code, it is added after the last available letter in the code (in alphabetic order).
 
-The code will have at least 1 letter. Duplication in code should be handled.
-Code and message consist of only lowercase letters.
+# Notes
+- The code will have at least 1 letter.
+- Duplication of letters in code is possible and should be handled.
+- The code and message consist of only lowercase letters.
 */
 
-func HamsterMe(code string, message string) string {
-	// Implementation goes here
+package main
+
+func hamsterMe(code string, message string) string {
+	// TODO: Implement the hamster encryption
 	return ""
 }
