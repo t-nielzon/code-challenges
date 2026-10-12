@@ -1,69 +1,89 @@
-package kata
+func MaxHexagonBeam(n int, seq []int) int {
+	grid := buildGrid(n, seq)
+	maxSum := -(1 << 31)
 
-func HexagonBeamMaxSum(n int, seq []int) int {
-	// Build the hexagonal grid
-	grid := make([][]int, 2*n-1)
-	seqIdx := 0
-	
-	for i := 0; i < 2*n-1; i++ {
-		var width int
-		if i < n {
-			width = n + i
-		} else {
-			width = 3*n - 2 - i
-		}
-		
-		grid[i] = make([]int, width)
-		for j := 0; j < width; j++ {
-			grid[i][j] = seq[seqIdx%len(seq)]
-			seqIdx++
-		}
-	}
-	
-	// Initialize with first horizontal beam
-	maxSum := 0
-	for j := 0; j < len(grid[0]); j++ {
-		maxSum += grid[0][j]
-	}
-	
-	// Check all horizontal beams (each row)
-	for i := 1; i < 2*n-1; i++ {
+	// horizontal beams (rows)
+	for _, row := range grid {
 		sum := 0
-		for j := 0; j < len(grid[i]); j++ {
-			sum += grid[i][j]
+		for _, val := range row {
+			sum += val
 		}
-		maxSum = max(maxSum, sum)
+		if sum > maxSum {
+			maxSum = sum
+		}
 	}
-	
-	// Check all beams in diagonal direction 1 (row - col = constant)
-	for k := -(2*n - 2); k <= 2*n-2; k++ {
+
+	// vertical beams (columns)
+	totalRows := 2*n - 1
+	maxCols := 0
+	for _, row := range grid {
+		if len(row) > maxCols {
+			maxCols = len(row)
+		}
+	}
+
+	for col := 0; col < maxCols; col++ {
 		sum := 0
-		for i := 0; i < 2*n-1; i++ {
-			j := i - k
-			if j >= 0 && j < len(grid[i]) {
-				sum += grid[i][j]
+		hasCell := false
+		for row := 0; row < totalRows; row++ {
+			if col < len(grid[row]) {
+				sum += grid[row][col]
+				hasCell = true
 			}
 		}
-		maxSum = max(maxSum, sum)
+		if hasCell && sum > maxSum {
+			maxSum = sum
+		}
 	}
-	
-	// Check all beams in diagonal direction 2 (row + col = constant)
-	for k := 0; k <= 4*n-4; k++ {
+
+	// diagonal beams going from upper-left to bottom-right
+	// pattern: col = start_col + min(row, totalRows - 1 - row)
+	for start_col := 0; start_col < n; start_col++ {
 		sum := 0
-		for i := 0; i < 2*n-1; i++ {
-			j := k - i
-			if j >= 0 && j < len(grid[i]) {
-				sum += grid[i][j]
+		hasCell := false
+		for row := 0; row < totalRows; row++ {
+			col := start_col + minInt(row, totalRows-1-row)
+			if col < len(grid[row]) {
+				sum += grid[row][col]
+				hasCell = true
 			}
 		}
-		maxSum = max(maxSum, sum)
+		if hasCell && sum > maxSum {
+			maxSum = sum
+		}
 	}
-	
+
 	return maxSum
 }
 
-func max(a, b int) int {
-	if a > b {
+func buildGrid(n int, seq []int) [][]int {
+	var grid [][]int
+	seqIndex := 0
+	totalRows := 2*n - 1
+
+	for row := 0; row < totalRows; row++ {
+		var r []int
+		var rowLen int
+
+		if row < n {
+			rowLen = n + row
+		} else {
+			rowLen = 3*n - 2 - row
+		}
+
+		for col := 0; col < rowLen; col++ {
+			r = append(r, seq[seqIndex%len(seq)])
+			seqIndex++
+		}
+
+		grid = append(grid, r)
+	}
+
+	return grid
+}
+
+func minInt(a, b int) int {
+	if a < b {
 		return a
 	}
 	return b
