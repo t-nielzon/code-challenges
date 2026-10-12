@@ -7,22 +7,25 @@ func IsValidISBN10(isbn string) bool {
 
 	sum := 0
 	for i := 0; i < 10; i++ {
-		char := isbn[i]
-		position := i + 1
-
 		var digit int
-		if char == 'X' {
-			if i != 9 {
+		c := isbn[i]
+
+		if i == 9 {
+			if c == 'X' {
+				digit = 10
+			} else if c >= '0' && c <= '9' {
+				digit = int(c - '0')
+			} else {
 				return false
 			}
-			digit = 10
-		} else if char >= '0' && char <= '9' {
-			digit = int(char - '0')
 		} else {
-			return false
+			if c < '0' || c > '9' {
+				return false
+			}
+			digit = int(c - '0')
 		}
 
-		sum += digit * position
+		sum += digit * (i + 1)
 	}
 
 	return sum%11 == 0
