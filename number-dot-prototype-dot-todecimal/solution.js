@@ -1,30 +1,44 @@
-Number.prototype.toDecimal = function () {
+Number.prototype.toDecimal = function() {
   let str = this.toString();
-  if (!/e/i.test(str)) return str;
-
-  let sign = '';
-  if (str[0] === '-') {
-    sign = '-';
-    str = str.slice(1);
+  
+  // If not in scientific notation, return as is
+  if (!/e/i.test(str)) {
+    return str;
   }
-
-  const [coef, expPart] = str.split(/e/i);
-  const exp = parseInt(expPart, 10);
-  const [intPart, fracPart = ''] = coef.split('.');
-
-  // all significant digits with the decimal point removed
-  const digits = intPart + fracPart;
-  // where the decimal point lands, measured from the start of the digits
-  const pointPos = intPart.length + exp;
-
+  
+  // Parse scientific notation
+  const [coefficient, exponentStr] = str.toLowerCase().split('e');
+  const exponent = parseInt(exponentStr, 10);
+  
+  // Extract sign and work with absolute value
+  const isNegative = coefficient[0] === '-';
+  const absCoefficient = isNegative ? coefficient.slice(1) : coefficient;
+  const [intPart, decPart = ''] = absCoefficient.split('.');
+  
+  // Combine all digits
+  const allDigits = intPart + decPart;
+  
+  // Calculate new decimal position
+  const oldDecimalPos = intPart.length;
+  const newDecimalPos = oldDecimalPos + exponent;
+  
   let result;
-  if (pointPos <= 0) {
-    result = '0.' + '0'.repeat(-pointPos) + digits;
-  } else if (pointPos >= digits.length) {
-    result = digits + '0'.repeat(pointPos - digits.length);
+  
+  if (newDecimalPos <= 0) {
+    // Need leading zeros
+    result = '0.' + '0'.repeat(-newDecimalPos) + allDigits;
+  } else if (newDecimalPos >= allDigits.length) {
+    // Need trailing zeros
+    result = allDigits + '0'.repeat(newDecimalPos - allDigits.length);
   } else {
-    result = digits.slice(0, pointPos) + '.' + digits.slice(pointPos);
+    // Decimal point is within the digits
+    result = allDigits.slice(0, newDecimalPos) + '.' + allDigits.slice(newDecimalPos);
   }
-
-  return sign + result;
+  
+  // Add back negative sign if needed
+  if (isNegative) {
+    result = '-' + result;
+  }
+  
+  return result;
 };
