@@ -1,44 +1,45 @@
 Number.prototype.toDecimal = function() {
   let str = this.toString();
   
-  // If not in scientific notation, return as is
-  if (!/e/i.test(str)) {
+  // Check if it's in scientific notation
+  if (!str.includes('e') && !str.includes('E')) {
     return str;
   }
   
   // Parse scientific notation
-  const [coefficient, exponentStr] = str.toLowerCase().split('e');
-  const exponent = parseInt(exponentStr, 10);
+  const match = str.match(/^([+-])?(\d+\.?\d*)[eE]([+-]?\d+)$/);
+  if (!match) {
+    return str;
+  }
   
-  // Extract sign and work with absolute value
-  const isNegative = coefficient[0] === '-';
-  const absCoefficient = isNegative ? coefficient.slice(1) : coefficient;
-  const [intPart, decPart = ''] = absCoefficient.split('.');
+  const sign = match[1] || '';
+  const coefficient = match[2];
+  const exponent = parseInt(match[3], 10);
   
-  // Combine all digits
-  const allDigits = intPart + decPart;
+  // Remove the decimal point from coefficient
+  const decimalIndex = coefficient.indexOf('.');
+  let digits, originalDecimalPos;
+  
+  if (decimalIndex === -1) {
+    digits = coefficient;
+    originalDecimalPos = coefficient.length;
+  } else {
+    digits = coefficient.replace('.', '');
+    originalDecimalPos = decimalIndex;
+  }
   
   // Calculate new decimal position
-  const oldDecimalPos = intPart.length;
-  const newDecimalPos = oldDecimalPos + exponent;
+  const newDecimalPos = originalDecimalPos + exponent;
   
   let result;
   
   if (newDecimalPos <= 0) {
-    // Need leading zeros
-    result = '0.' + '0'.repeat(-newDecimalPos) + allDigits;
-  } else if (newDecimalPos >= allDigits.length) {
-    // Need trailing zeros
-    result = allDigits + '0'.repeat(newDecimalPos - allDigits.length);
+    result = '0.' + '0'.repeat(-newDecimalPos) + digits;
+  } else if (newDecimalPos >= digits.length) {
+    result = digits + '0'.repeat(newDecimalPos - digits.length);
   } else {
-    // Decimal point is within the digits
-    result = allDigits.slice(0, newDecimalPos) + '.' + allDigits.slice(newDecimalPos);
+    result = digits.substring(0, newDecimalPos) + '.' + digits.substring(newDecimalPos);
   }
   
-  // Add back negative sign if needed
-  if (isNegative) {
-    result = '-' + result;
-  }
-  
-  return result;
+  return sign + result;
 };
