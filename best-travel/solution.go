@@ -1,35 +1,28 @@
 package main
 
 func chooseBestSum(t int, k int, ls []int) int {
-	bestSum := -1
-
-	var backtrack func(index int, remaining int, currentSum int)
-	backtrack = func(index int, remaining int, currentSum int) {
-		// prune if sum exceeds limit
-		if currentSum > t {
-			return
-		}
-
-		// found a valid combination of k elements
-		if remaining == 0 {
-			if currentSum > bestSum {
-				bestSum = currentSum
+	result := -1
+	
+	var findCombinations func(index int, count int, sum int)
+	findCombinations = func(index int, count int, sum int) {
+		if count == k {
+			if sum <= t && sum > result {
+				result = sum
 			}
 			return
 		}
-
-		// not enough elements left
-		if index >= len(ls) {
+		
+		if index >= len(ls) || len(ls)-index < k-count {
 			return
 		}
-
-		// include current element
-		backtrack(index+1, remaining-1, currentSum+ls[index])
-
-		// exclude current element
-		backtrack(index+1, remaining, currentSum)
+		
+		// include current distance
+		findCombinations(index+1, count+1, sum+ls[index])
+		
+		// exclude current distance
+		findCombinations(index+1, count, sum)
 	}
-
-	backtrack(0, k, 0)
-	return bestSum
+	
+	findCombinations(0, 0, 0)
+	return result
 }

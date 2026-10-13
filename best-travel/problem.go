@@ -1,34 +1,22 @@
 package main
 
 /*
-Best travel
+John and Mary want to travel between a few towns. Mary has a list of distances
+between towns. John doesn't want to drive more than t miles and will visit only
+k towns. The task is to find the maximum sum of k distances that doesn't exceed t.
 
-John and Mary want to travel between a few towns A, B, C ... Mary has on a sheet of paper a list of distances between these towns.
-ls = [50, 55, 57, 58, 60].
-John is tired of driving and he says to Mary that he doesn't want to drive more than t = 174 miles and he
-will visit only 3 towns.
+Example:
+ls = [50, 55, 57, 58, 60], t = 174, k = 3
+Possible sums: 162, 163, 165, 165, 167, 168, 170, 172, 173, 175
+Maximum sum ≤ 174 is 173 (distances [55, 58, 60])
 
-Which distances, hence which towns, they will choose so that the sum of the distances is the biggest possible to please Mary and John?
+Parameters:
+- t: maximum sum of distances (integer >= 0)
+- k: number of towns to visit (k >= 1)
+- ls: list of distances (all non-negative integers)
 
-The function chooseBestSum will take as parameters:
-- t (maximum sum of distances, integer >= 0)
-- k (number of towns to visit, k >= 1)
-- ls (list of distances, all distances are positive or zero integers)
-
-The function returns the biggest possible sum of k distances less than or equal to the given limit t,
-if that sum exists, or otherwise -1.
-
-Examples:
-ts = [50, 55, 56, 57, 58]
-chooseBestSum(163, 3, ts) -> 163
-
-xs = [50]
-chooseBestSum(163, 3, xs) -> -1
-
-ys = [91, 74, 73, 85, 73, 81, 87]
-chooseBestSum(230, 3, ys) -> 228
+Returns:
+- The largest sum of k distances ≤ t, or -1 if no such sum exists
 */
-
 func chooseBestSum(t int, k int, ls []int) int {
-	return 0
 }
