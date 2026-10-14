@@ -1,17 +1,17 @@
 /*
-Basics 08: Find next higher number with same Bits (1's)
-
-Your task is to find the next higher number (int) with the same number of bits set 
-in its binary representation, i.e. as many `1` bits as before, but next higher than input. 
+Your task is to find the next higher number (int) with the same number of bits set
+in its binary representation, i.e. as many 1 bits as before, but next higher than input.
 Input is always an int between 1 and 1<<30 (possibly inclusive). No bad cases or special tricks.
 
-Examples:
-Input: 129    => Output: 130    (10000001 => 10000010)
-Input: 127    => Output: 191    (01111111 => 10111111)
-Input: 1      => Output: 2      (01 => 10)
-Input: 323423 => Output: 323439 (1001110111101011111 => 1001110111101101111)
+Some easy examples:
+  Input: 129    => Output: 130    (10000001 => 10000010)
+  Input: 127    => Output: 191    (01111111 => 10111111)
+  Input: 1      => Output: 2      (01 => 10)
+  Input: 323423 => Output: 323439 (1001110111101011111 => 1001110111101101111)
 */
+package main
 
-func SameNumberOfBits(n int) int {
+func sameDigitsBitNumber(n int) int {
+	// Your solution here
 	return 0
 }
