@@ -1,49 +1,57 @@
-package main
+package kata
 
-func MirroredExponentialChunks(arr []int) [][]int {
+func ChunkExponentially(arr []int) [][]int {
 	n := len(arr)
 	if n == 0 {
 		return [][]int{}
 	}
-	if n == 1 {
-		return [][]int{{arr[0]}}
-	}
-	
-	maxPower := 0
-	for (1 << uint(maxPower)) < n {
-		maxPower++
-	}
-	
-	layers := make([]int, 0)
-	remaining := n
-	for power := maxPower; power >= 0; power-- {
-		chunkSize := 1 << uint(power)
-		if remaining >= 2*chunkSize+1 {
-			layers = append(layers, chunkSize)
-			remaining -= 2 * chunkSize
+
+	var sizes []int
+	total := 0
+
+	for d := 0; total < n; d++ {
+		var need int
+		if d == 0 {
+			need = 1
+		} else {
+			need = 2 * (1 << uint(d))
+		}
+
+		if total+need <= n {
+			if d == 0 {
+				sizes = append(sizes, 1)
+			} else {
+				sizes = append(sizes, 1<<uint(d))
+			}
+			total += need
+		} else {
+			break
 		}
 	}
-	
-	if remaining != 1 || len(layers) == 0 {
-		return [][]int{arr}
+
+	var result [][]int
+	idx := 0
+	numDist := len(sizes)
+
+	for d := numDist - 1; d >= 1; d-- {
+		size := sizes[d]
+		chunk := arr[idx : idx+size]
+		result = append(result, chunk)
+		idx += size
 	}
-	
-	result := make([][]int, 0, 2*len(layers)+1)
-	left := 0
-	
-	for _, chunkSize := range layers {
-		result = append(result, arr[left:left+chunkSize])
-		left += chunkSize
+
+	if numDist > 0 {
+		chunk := arr[idx : idx+1]
+		result = append(result, chunk)
+		idx += 1
 	}
-	
-	result = append(result, arr[left:left+1])
-	left++
-	
-	for i := len(layers) - 1; i >= 0; i-- {
-		chunkSize := layers[i]
-		result = append(result, arr[left:left+chunkSize])
-		left += chunkSize
+
+	for d := 1; d < numDist; d++ {
+		size := sizes[d]
+		chunk := arr[idx : idx+size]
+		result = append(result, chunk)
+		idx += size
 	}
-	
+
 	return result
 }
