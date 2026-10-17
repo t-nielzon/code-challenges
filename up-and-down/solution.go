@@ -1,29 +1,51 @@
-package kata
+package main
 
-import "strings"
+import (
+	"strings"
+	"unicode/utf8"
+)
 
-func Arrange(s string) string {
+func arrange(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	words := strings.Fields(s)
-	// single left-to-right pass: swapping a violating adjacent pair carries
-	// the moved word along, exactly matching the described process
-	for i := 0; i < len(words)-1; i++ {
-		a, b := len(words[i]), len(words[i+1])
-		if i%2 == 0 {
-			if a > b {
+	n := len(words)
+
+	if n == 1 {
+		return strings.ToLower(words[0])
+	}
+
+	// bubble sort with up-down constraint
+	for {
+		satisfied := true
+		for i := 0; i < n-1; i++ {
+			lenI := utf8.RuneCountInString(words[i])
+			lenI1 := utf8.RuneCountInString(words[i+1])
+
+			needLessOrEqual := i%2 == 0
+
+			if (needLessOrEqual && lenI > lenI1) || (!needLessOrEqual && lenI < lenI1) {
 				words[i], words[i+1] = words[i+1], words[i]
-			}
-		} else {
-			if a < b {
-				words[i], words[i+1] = words[i+1], words[i]
+				satisfied = false
+				break
 			}
 		}
-	}
-	for i, w := range words {
-		if i%2 == 0 {
-			words[i] = strings.ToLower(w)
-		} else {
-			words[i] = strings.ToUpper(w)
+
+		if satisfied {
+			break
 		}
 	}
+
+	// apply formatting
+	for i := 0; i < n; i++ {
+		if i%2 == 0 {
+			words[i] = strings.ToLower(words[i])
+		} else {
+			words[i] = strings.ToUpper(words[i])
+		}
+	}
+
 	return strings.Join(words, " ")
 }
