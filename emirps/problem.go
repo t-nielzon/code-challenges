@@ -1,28 +1,31 @@
 package main
 
 /*
-Emirp kata
+Emirps
 
-If you reverse the word "emirp" you will have the word "prime".
-An emirp is a prime number that when reversed is a different prime.
-Palindromic primes should be discarded.
+If you reverse the word "emirp" you will have the word "prime". That idea is related
+with the purpose of this kata: we should select all the primes that when reversed are
+a different prime (so palindromic primes should be discarded).
 
-Example: 13, 17 are primes and reversed are 31, 71 which are also primes,
-so 13 and 17 are emirps.
+For example: 13, 17 are prime numbers and the reversed respectively are 31, 71 which
+are also primes, so 13 and 17 are "emirps". But primes 757, 787, 797 are palindromic
+primes, meaning that the reversed number is the same as the original, so they are not
+considered as "emirps" and should be discarded.
 
-Your task: create a function that receives one argument n as an upper limit,
-and return [number_of_emirps_below_n, largest_emirp_below_n, sum_of_emirps_below_n]
+Your task: Create a function that receives one argument n, as an upper limit, and return
+the following array: [number_of_emirps_below_n, largest_emirp_below_n, sum_of_emirps_below_n]
 
 Examples:
-find_emirp(10) -> [0, 0, 0]
-find_emirp(50) -> [4, 37, 98]
-find_emirp(100) -> [8, 97, 418]
+  FindEmirp(10)   => [0, 0, 0]
+  FindEmirp(50)   => [4, 37, 98]
+  FindEmirp(100)  => [8, 97, 418]
 
-Advice: Use a prime generator (Sieve of Eratosthenes) and store primes in a set
-for faster lookup rather than testing primality for each number.
+Advice: Do not use a primality test. It will make your code very slow. Create a set of
+primes using a prime generator or a range of primes producer. Remember that search in
+a set is faster than in a sorted list or array.
 */
 
 func FindEmirp(n int) [3]int {
-	// TODO: implement
-	return [3]int{0, 0, 0}
+	// Your solution here
+	return [3]int{}
 }
