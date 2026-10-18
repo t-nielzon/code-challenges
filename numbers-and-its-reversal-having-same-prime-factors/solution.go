@@ -1,22 +1,27 @@
+// solution.go
 package main
 
-import (
-	"sort"
-	"strconv"
-)
+import "sort"
 
-func reverse(n int) int {
-	s := strconv.Itoa(n)
-	runes := []rune(s)
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
+func sameFactRev(nMax int) []int {
+	result := []int{}
+	
+	for n := 2; n < nMax; n++ {
+		if isPalindrome(n) {
+			continue
+		}
+		
+		factors := getPrimeFactors(n)
+		reversed := reverse(n)
+		reverseFactors := getPrimeFactors(reversed)
+		
+		if factorsEqual(factors, reverseFactors) {
+			result = append(result, n)
+		}
 	}
-	reversed, _ := strconv.Atoi(string(runes))
-	return reversed
-}
-
-func isPalindrome(n int) bool {
-	return n == reverse(n)
+	
+	sort.Ints(result)
+	return result
 }
 
 func getPrimeFactors(n int) map[int]bool {
@@ -45,31 +50,27 @@ func getPrimeFactors(n int) map[int]bool {
 	return factors
 }
 
-func SameFactRev(nMax int) []int {
-	result := []int{}
-	
-	for n := 2; n < nMax; n++ {
-		if isPalindrome(n) {
-			continue
-		}
-		
-		factorsN := getPrimeFactors(n)
-		factorsRev := getPrimeFactors(reverse(n))
-		
-		if len(factorsN) == len(factorsRev) {
-			same := true
-			for k := range factorsN {
-				if !factorsRev[k] {
-					same = false
-					break
-				}
-			}
-			if same {
-				result = append(result, n)
-			}
+func reverse(n int) int {
+	result := 0
+	for n > 0 {
+		result = result*10 + n%10
+		n /= 10
+	}
+	return result
+}
+
+func isPalindrome(n int) bool {
+	return n == reverse(n)
+}
+
+func factorsEqual(f1, f2 map[int]bool) bool {
+	if len(f1) != len(f2) {
+		return false
+	}
+	for key := range f1 {
+		if !f2[key] {
+			return false
 		}
 	}
-	
-	sort.Ints(result)
-	return result
+	return true
 }
