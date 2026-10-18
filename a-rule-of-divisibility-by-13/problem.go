@@ -1,27 +1,56 @@
-package main
-
 /*
 A Rule of Divisibility by 13
 
-A divisibility rule is a shorthand way of determining whether a given integer is divisible by a fixed divisor
-without performing the division, usually by examining its digits.
+From Wikipedia:
+"A divisibility rule is a shorthand way of determining whether a given integer is divisible by a fixed divisor without performing the division, usually by examining its digits."
 
-When you divide the successive powers of 10 by 13 you get the following remainders:
-1, 10, 9, 12, 3, 4 (and the pattern repeats)
+When you divide the successive powers of 10 by 13 you get the following remainders of the integer divisions:
+1, 10, 9, 12, 3, 4 because:
 
-The method:
-- Multiply the rightmost digit by 1, the second rightmost by 10, etc. (following the sequence)
-- Sum all these products
-- Repeat until the result is stationary (no longer changes)
-- Return the final stationary number
+10 ^ 0 ->  1 (mod 13)
+10 ^ 1 -> 10 (mod 13)
+10 ^ 2 ->  9 (mod 13)
+10 ^ 3 -> 12 (mod 13)
+10 ^ 4 ->  3 (mod 13)
+10 ^ 5 ->  4 (mod 13)
 
-Example: For 1234567
-- 7×1 + 6×10 + 5×9 + 4×12 + 3×3 + 2×4 + 1×1 = 178
-- 8×1 + 7×10 + 1×9 = 87
-- 7×1 + 8×10 = 87
-- Returns 87 (stationary)
+Then the whole pattern repeats. Hence the following method:
+
+Multiply
+- the right most digit of the number with the left most number in the sequence shown above,
+- the second right most digit with the second left most digit of the number in the sequence.
+
+The cycle goes on and you sum all these products. Repeat this process until the sequence of sums is stationary.
+
+Example:
+What is the remainder when 1234567 is divided by 13?
+
+7      6     5      4     3     2     1  (digits of 1234567 from the right)
+×      ×     ×      ×     ×     ×     ×  (multiplication)
+1     10     9     12     3     4     1  (the repeating sequence)
+
+Therefore following the method we get:
+7×1 + 6×10 + 5×9 + 4×12 + 3×3 + 2×4 + 1×1 = 178
+
+We repeat the process with the number 178:
+8x1 + 7x10 + 1x9 = 87
+
+and again with 87:
+7x1 + 8x10 = 87
+
+From now on the sequence is stationary (we always get 87) and the remainder of 1234567 by 13 is the same as the remainder of 87 by 13 (i.e 9).
+
+Task:
+Write a function which processes this sequence of operations on an integer n (>=0) and returns the stationary number.
+
+Examples:
+- for n = 1234567 it calculates 178, then 87, then 87 and returns 87.
+- for n = 321 it calculates 48, 48 and returns 48
 */
 
-func DivisibilityRule13(n int64) int64 {
-	// TODO
+package main
+
+func DivisibilityBy13(n int) int {
+	// TODO: implement
+	return 0
 }
