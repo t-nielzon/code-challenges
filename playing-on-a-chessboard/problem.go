@@ -1,9 +1,8 @@
-// Kata: Playing on a chessboard
-// Difficulty: 6 kyu
+// Playing on a chessboard
 //
 // With a friend we used to play the following game on a chessboard
 // (8 rows, 8 columns).
-// On the first row at the bottom we put numbers:
+// On the first row at the *bottom* we put numbers:
 //
 // 1/2, 2/3, 3/4, 4/5, 5/6, 6/7, 7/8, 8/9
 //
@@ -15,18 +14,17 @@
 //
 // 1/4, 2/5, 3/6, 4/7, 5/8, 6/9, 7/10, 8/11
 //
-// Until last row:
+// until last row:
 //
 // 1/9, 2/10, 3/11, 4/12, 5/13, 6/14, 7/15, 8/16
 //
-// When all numbers are on the chessboard, each in turn we toss a coin.
-// The one who gets "head" wins and the other gives him, in dollars,
+// When all numbers are on the chessboard each in turn we toss a coin.
+// The one who get "head" wins and the other gives him, in dollars,
 // the sum of the numbers on the chessboard.
 // We play for fun, the dollars come from a monopoly game!
 //
-// Task:
-// How much can I (or my friend) win or lose for each game if the
-// chessboard has n rows and n columns? Add all of the fractional
+// Task: How much can I (or my friend) win or lose for each game if
+// the chessboard has n rows and n columns? Add all of the fractional
 // values on an n by n sized board and give the answer as a simplified
 // fraction.
 //
@@ -37,5 +35,5 @@
 
 package main
 
-func game(n int) []interface{} {
+func game(n int) []int {
 }
