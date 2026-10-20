@@ -1,19 +1,21 @@
 function sumOfSequence(begin, end, step) {
-  // if begin equals end, return it regardless of step
+  // If begin equals end, return it
   if (begin === end) {
     return begin;
   }
   
-  // check for impossible sequences
-  if ((begin > end && step > 0) || (begin < end && step < 0)) {
+  // Check for impossible sequences
+  if ((step > 0 && begin > end) || (step < 0 && begin < end)) {
     return 0;
   }
   
-  // calculate the number of steps to reach or approach the limit
-  const numSteps = Math.floor((end - begin) / step);
-  const lastValue = begin + numSteps * step;
+  // Calculate the number of complete steps we can take
+  const k = Math.floor((end - begin) / step);
+  const numTerms = k + 1;
   
-  // use arithmetic sequence sum formula: n * (first + last) / 2
-  const numTerms = numSteps + 1;
-  return numTerms * (begin + lastValue) / 2;
+  // Calculate the actual last term in the sequence
+  const lastTerm = begin + k * step;
+  
+  // Use arithmetic sequence sum formula: n * (first + last) / 2
+  return (numTerms * (begin + lastTerm)) / 2;
 }
