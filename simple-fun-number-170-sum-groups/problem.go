@@ -3,7 +3,7 @@ package main
 /*
 Task
 
-Given an array of integers, sum consecutive even numbers and consecutive odd numbers. 
+Given an array of integers, sum consecutive even numbers and consecutive odd numbers.
 Repeat the process while it can be done and return the length of the final array.
 
 Example
@@ -24,11 +24,11 @@ Input/Output
 
 - [input] integer array arr
   A non-empty array, 1 ≤ arr.length ≤ 1000, 0 ≤ arr[i] ≤ 1000
-
 - [output] an integer
   The length of the final array
 */
 
-func sumGroups(arr []int) int {
-
+func SumGroups(arr []int) int {
+	// TODO: implement
+	return 0
 }
