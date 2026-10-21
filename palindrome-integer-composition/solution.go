@@ -1,43 +1,34 @@
 package main
 
-import (
-	"math"
-	"strconv"
-)
+import "strconv"
 
 func values(n int) int {
-	sumSet := make(map[int]bool)
-	
-	maxStart := int(math.Sqrt(float64(n)))
-	for start := 1; start <= maxStart; start++ {
-		sum := 0
-		for current := start; ; current++ {
-			sum += current * current
+	isPalindrome := func(num int) bool {
+		s := strconv.Itoa(num)
+		for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+			if s[i] != s[j] {
+				return false
+			}
+		}
+		return true
+	}
+
+	palindromes := make(map[int]bool)
+
+	// for each starting position of consecutive squares
+	for i := 1; i*i < n; i++ {
+		sum := i * i
+		// for each ending position (must be at least 2 consecutive squares)
+		for j := i + 1; sum < n; j++ {
+			sum += j * j
 			if sum >= n {
 				break
 			}
-			if current > start {
-				sumSet[sum] = true
+			if isPalindrome(sum) {
+				palindromes[sum] = true
 			}
 		}
 	}
-	
-	count := 0
-	for num := range sumSet {
-		if isPalindrome(num) {
-			count++
-		}
-	}
-	
-	return count
-}
 
-func isPalindrome(n int) bool {
-	str := strconv.Itoa(n)
-	for i := 0; i < len(str)/2; i++ {
-		if str[i] != str[len(str)-1-i] {
-			return false
-		}
-	}
-	return true
+	return len(palindromes)
 }
