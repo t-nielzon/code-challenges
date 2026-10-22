@@ -1,47 +1,50 @@
-package kata
+package main
 
-func Checkerboard(width, height, resolution int64) int64 {
+func CountBlackSquares(width, height, resolution uint64) uint64 {
 	if width == 0 || height == 0 {
 		return 0
 	}
-
-	full_w := width / resolution
-	full_h := height / resolution
-	rem_w := width % resolution
-	rem_h := height % resolution
-
-	var count int64 = 0
-
-	// full grid of resolution×resolution cells
-	if full_w > 0 && full_h > 0 {
-		full_grid_black := (full_w * full_h) / 2
-		count += full_grid_black * resolution * resolution
+	
+	fullCols := width / resolution
+	fullRows := height / resolution
+	partialColWidth := width % resolution
+	partialRowHeight := height % resolution
+	
+	numEvenRows := (fullRows + 1) / 2
+	numOddRows := fullRows / 2
+	numEvenCols := (fullCols + 1) / 2
+	numOddCols := fullCols / 2
+	
+	var blackPixels uint64 = 0
+	
+	// Even rows have black at odd columns
+	blackPixels += numEvenRows * numOddCols * resolution * resolution
+	if partialColWidth > 0 && fullCols%2 == 1 {
+		blackPixels += numEvenRows * partialColWidth * resolution
 	}
-
-	// partial column (if rem_w > 0)
-	if rem_w > 0 && full_h > 0 {
-		col_black := full_h / 2
-		if full_w%2 == 1 {
-			col_black = (full_h + 1) / 2
+	
+	// Odd rows have black at even columns
+	blackPixels += numOddRows * numEvenCols * resolution * resolution
+	if partialColWidth > 0 && fullCols%2 == 0 {
+		blackPixels += numOddRows * partialColWidth * resolution
+	}
+	
+	// Partial row (if it exists)
+	if partialRowHeight > 0 {
+		if fullRows%2 == 0 {
+			// Partial row is even
+			blackPixels += numOddCols * resolution * partialRowHeight
+			if partialColWidth > 0 && fullCols%2 == 1 {
+				blackPixels += partialColWidth * partialRowHeight
+			}
+		} else {
+			// Partial row is odd
+			blackPixels += numEvenCols * resolution * partialRowHeight
+			if partialColWidth > 0 && fullCols%2 == 0 {
+				blackPixels += partialColWidth * partialRowHeight
+			}
 		}
-		count += col_black * rem_w * resolution
 	}
-
-	// partial row (if rem_h > 0)
-	if rem_h > 0 && full_w > 0 {
-		row_black := full_w / 2
-		if full_h%2 == 1 {
-			row_black = (full_w + 1) / 2
-		}
-		count += row_black * resolution * rem_h
-	}
-
-	// partial corner cell (if both rem_w > 0 and rem_h > 0)
-	if rem_w > 0 && rem_h > 0 {
-		if (full_w+full_h)%2 == 1 {
-			count += rem_w * rem_h
-		}
-	}
-
-	return count
+	
+	return blackPixels
 }
