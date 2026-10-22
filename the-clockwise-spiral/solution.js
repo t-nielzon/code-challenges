@@ -1,42 +1,30 @@
 function createSpiral(N) {
-  if (!Number.isInteger(N) || N < 1) {
+  if (typeof N !== 'number' || !Number.isInteger(N) || N < 1) {
     return [];
   }
-
-  const spiral = Array(N).fill(null).map(() => Array(N).fill(0));
   
-  let num = 1;
-  let top = 0, bottom = N - 1, left = 0, right = N - 1;
+  const matrix = Array(N).fill(null).map(() => Array(N).fill(0));
+  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+  let dirIndex = 0;
+  let row = 0, col = 0;
   
-  while (top <= bottom && left <= right) {
-    // Move right
-    for (let i = left; i <= right; i++) {
-      spiral[top][i] = num++;
-    }
-    top++;
+  for (let num = 1; num <= N * N; num++) {
+    matrix[row][col] = num;
     
-    // Move down
-    for (let i = top; i <= bottom; i++) {
-      spiral[i][right] = num++;
-    }
-    right--;
-    
-    // Move left
-    if (top <= bottom) {
-      for (let i = right; i >= left; i--) {
-        spiral[bottom][i] = num++;
+    if (num < N * N) {
+      let nextRow = row + directions[dirIndex][0];
+      let nextCol = col + directions[dirIndex][1];
+      
+      if (nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N || matrix[nextRow][nextCol] !== 0) {
+        dirIndex = (dirIndex + 1) % 4;
+        nextRow = row + directions[dirIndex][0];
+        nextCol = col + directions[dirIndex][1];
       }
-      bottom--;
-    }
-    
-    // Move up
-    if (left <= right) {
-      for (let i = bottom; i >= top; i--) {
-        spiral[i][left] = num++;
-      }
-      left++;
+      
+      row = nextRow;
+      col = nextCol;
     }
   }
   
-  return spiral;
+  return matrix;
 }
