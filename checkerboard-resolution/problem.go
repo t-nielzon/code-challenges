@@ -1,25 +1,24 @@
+package kata
+
 /*
 Checkerboard Resolution
 
-In this kata we count black squares on a special checkerboard.
-The `resolution` determines the dimensions (in unit squares) of each colored square.
+In this kata we will be counting the black squares on a special checkerboard.
+It is special because it has a `resolution` which determines how the black and
+white squares are laid out.
 
-The board is width × height unit squares.
-Each colored square is resolution × resolution unit squares.
-The top-left colored square is always white.
-Colors alternate in a checkerboard pattern.
+The `resolution` refers to the dimensions of squares of a single colour.
+The top left square is always white, and we are counting the individual black
+squares on the board.
 
-Count all individual black unit squares on the board.
+Given three parameters:
+- width: The width of the board
+- height: The height of the board
+- resolution: The size of the coloured squares on the checkerboard
 
-Additional constraints:
-- 0 <= width <= 10**32
-- 0 <= height <= 10**32
-- 1 <= resolution <= 10**32
+Return the total count of all individual black squares.
 */
 
-package kata
-
-func CountBlackSquares(width, height, resolution int64) int64 {
-	// stub
+func Checkerboard(width, height, resolution int64) int64 {
 	return 0
 }
