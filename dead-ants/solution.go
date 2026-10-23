@@ -1,38 +1,26 @@
 package main
 
+import "strings"
+
 func DeadAnts(s string) int {
-	count_a := 0
-	count_n := 0
-	count_t := 0
-
-	for _, ch := range s {
-		switch ch {
-		case 'a':
-			count_a++
-		case 'n':
-			count_n++
-		case 't':
-			count_t++
-		}
+	// Remove all complete "ant" substrings (these ants survived)
+	for strings.Contains(s, "ant") {
+		s = strings.Replace(s, "ant", "", 1)
 	}
 
-	// maximum possible ants is determined by the letter that appears least
-	maxAnts := count_a
-	if count_n < maxAnts {
-		maxAnts = count_n
-	}
-	if count_t < maxAnts {
-		maxAnts = count_t
-	}
+	// Count remaining body parts from dead ants
+	a := strings.Count(s, "a")
+	n := strings.Count(s, "n")
+	t := strings.Count(s, "t")
 
-	// count living ants (non-overlapping "ant" substrings)
-	livingAnts := 0
-	for i := 0; i < len(s)-2; i++ {
-		if s[i:i+3] == "ant" {
-			livingAnts++
-			i += 2 // skip to avoid counting overlapping occurrences
-		}
+	// Each dead ant needs at least one of each character (a, n, t)
+	// The minimum count determines how many complete ants we can form
+	min := a
+	if n < min {
+		min = n
 	}
-
-	return maxAnts - livingAnts
+	if t < min {
+		min = t
+	}
+	return min
 }
