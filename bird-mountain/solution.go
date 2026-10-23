@@ -1,70 +1,98 @@
-package kata
+package main
 
-func PeakHeight(mountain []string) int {
-	rows := len(mountain)
-	if rows == 0 {
+import "strings"
+
+func BirdMountain(mountain string) int {
+	lines := strings.Split(strings.TrimSpace(mountain), "\n")
+	if len(lines) == 0 {
 		return 0
 	}
 
-	cols := 0
-	for _, r := range mountain {
-		if len(r) > cols {
-			cols = len(r)
+	height := len(lines)
+	width := 0
+	for _, line := range lines {
+		if len(line) > width {
+			width = len(line)
 		}
 	}
-	if cols == 0 {
-		return 0
-	}
 
-	// grid[r][c] is true where there is a '^' remaining
-	grid := make([][]bool, rows)
-	remaining := 0
-	for r := 0; r < rows; r++ {
-		grid[r] = make([]bool, cols)
-		for c := 0; c < cols; c++ {
-			if c < len(mountain[r]) && mountain[r][c] == '^' {
-				grid[r][c] = true
-				remaining++
+	// Create grid, padding shorter lines with spaces
+	grid := make([][]rune, height)
+	for i, line := range lines {
+		grid[i] = make([]rune, width)
+		for j := 0; j < width; j++ {
+			if j < len(line) {
+				grid[i][j] = rune(line[j])
+			} else {
+				grid[i][j] = ' '
 			}
 		}
 	}
 
-	// a cell is on the current outer layer if it is a peak that neighbours a
-	// non-peak cell or the edge of the grid (8-directional contact)
-	isExposed := func(r, c int) bool {
-		for dr := -1; dr <= 1; dr++ {
-			for dc := -1; dc <= 1; dc++ {
-				if dr == 0 && dc == 0 {
-					continue
-				}
-				nr, nc := r+dr, c+dc
-				if nr < 0 || nr >= rows || nc < 0 || nc >= cols {
-					return true
-				}
-				if !grid[nr][nc] {
-					return true
-				}
-			}
-		}
-		return false
-	}
+	// Distance map: -2 for peaks, -1 for unvisited non-peaks, 0+ for visited distances
+	dist := make([][]int, height)
+	queue := make([]struct{ i, j int }, 0)
 
-	height := 0
-	for remaining > 0 {
-		height++
-		var peel [][2]int
-		for r := 0; r < rows; r++ {
-			for c := 0; c < cols; c++ {
-				if grid[r][c] && isExposed(r, c) {
-					peel = append(peel, [2]int{r, c})
-				}
+	for i := range dist {
+		dist[i] = make([]int, width)
+		for j := range dist[i] {
+			if grid[i][j] == '^' {
+				dist[i][j] = -2
+			} else {
+				dist[i][j] = -1
 			}
-		}
-		for _, p := range peel {
-			grid[p[0]][p[1]] = false
-			remaining--
 		}
 	}
 
-	return height
+	// Initialize BFS: add all boundary and space cells with distance 0
+	for i := 0; i < height; i++ {
+		for j := 0; j < width; j++ {
+			if dist[i][j] == -1 && (i == 0 || i == height-1 || j == 0 || j == width-1 || grid[i][j] == ' ') {
+				dist[i][j] = 0
+				queue = append(queue, struct{ i, j int }{i, j})
+			}
+		}
+	}
+
+	// BFS to compute distances for all non-peak cells
+	for len(queue) > 0 {
+		curr := queue[0]
+		queue = queue[1:]
+		i, j := curr.i, curr.j
+
+		dirs := [][2]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}
+		for _, d := range dirs {
+			ni, nj := i+d[0], j+d[1]
+			if ni >= 0 && ni < height && nj >= 0 && nj < width {
+				if dist[ni][nj] == -1 { // unvisited non-peak
+					dist[ni][nj] = dist[i][j] + 1
+					queue = append(queue, struct{ i, j int }{ni, nj})
+				}
+			}
+		}
+	}
+
+	// Find maximum height: for each peak, get min neighbor distance, then max across all peaks
+	maxHeight := 0
+	for i := 0; i < height; i++ {
+		for j := 0; j < width; j++ {
+			if grid[i][j] == '^' {
+				minNeighbor := width + height
+				dirs := [][2]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}
+				for _, d := range dirs {
+					ni, nj := i+d[0], j+d[1]
+					if ni >= 0 && ni < height && nj >= 0 && nj < width {
+						if dist[ni][nj] >= 0 && dist[ni][nj] < minNeighbor {
+							minNeighbor = dist[ni][nj]
+						}
+					}
+				}
+				if minNeighbor < width+height && minNeighbor > maxHeight {
+					maxHeight = minNeighbor
+				}
+			}
+		}
+	}
+
+	return maxHeight
 }
