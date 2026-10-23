@@ -1,26 +1,31 @@
 /*
-Pigs in a Pen - Dots and Boxes Game Solver
+Dots and Boxes - Complete all possible squares
 
-Starting with an empty grid of dots, two players take turns adding lines
-between unjoined adjacent dots. The player who completes the fourth side
-of a 1×1 box earns one point. Complete all possible squares given a set
-of already-drawn lines.
+In the game of Dots and Boxes (also known as "Pigs in a Pen"), players take turns
+drawing lines between dots on a grid. When a player completes the fourth side of a
+1×1 box, they earn a point. 
 
-Complete the class called Game. You will be given the board size as an
-integer that will be between 1 and 26, representing a board x board grid.
-You will be given an array of lines that have already been taken, and you
-must complete all possible squares (when 3 out of 4 sides are complete).
+Your task is to complete a Game class that:
+1. Takes a board size (1-26) representing an n×n grid of boxes
+2. Receives an array of line numbers already drawn
+3. Automatically completes all possible squares (when 3 out of 4 sides are drawn)
+4. Returns all lines (original + completed) sorted and without duplicates
 
-Return an array of all lines (original + completed) sorted numerically
-with no duplicates.
+Rules:
+- The board size will be between 1 and 26
+- Lines array may be empty or unsorted
+- Can only complete a square if exactly 3 of its 4 sides are present
+- Must handle cascading completions (completing one square may enable others)
+
+Returns: Sorted array of all line numbers with no duplicates
 */
 
 class Game {
   constructor(board) {
-    this.board = board;
+    // Implementation here
   }
-
+  
   play(lines) {
-    
+    // Implementation here
   }
 }
