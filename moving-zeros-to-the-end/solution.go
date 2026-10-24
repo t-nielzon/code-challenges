@@ -1,20 +1,66 @@
-package main
+package kata
 
-func MoveZeros(arr []int) []int {
-	writeIdx := 0
-
-	// move all non-zero elements to the front
-	for readIdx := 0; readIdx < len(arr); readIdx++ {
-		if arr[readIdx] != 0 {
-			arr[writeIdx], arr[readIdx] = arr[readIdx], arr[writeIdx]
-			writeIdx++
+func MoveZeros(arr []interface{}) []interface{} {
+	zeroCount := 0
+	for _, v := range arr {
+		switch val := v.(type) {
+		case int:
+			if val == 0 {
+				zeroCount++
+			}
+		case int32:
+			if val == 0 {
+				zeroCount++
+			}
+		case int64:
+			if val == 0 {
+				zeroCount++
+			}
+		case float32:
+			if val == 0 {
+				zeroCount++
+			}
+		case float64:
+			if val == 0 {
+				zeroCount++
+			}
 		}
 	}
-
-	// fill remaining positions with zeros
-	for i := writeIdx; i < len(arr); i++ {
-		arr[i] = 0
+	
+	result := make([]interface{}, 0, len(arr))
+	for _, v := range arr {
+		isZero := false
+		switch val := v.(type) {
+		case int:
+			if val == 0 {
+				isZero = true
+			}
+		case int32:
+			if val == 0 {
+				isZero = true
+			}
+		case int64:
+			if val == 0 {
+				isZero = true
+			}
+		case float32:
+			if val == 0 {
+				isZero = true
+			}
+		case float64:
+			if val == 0 {
+				isZero = true
+			}
+		}
+		
+		if !isZero {
+			result = append(result, v)
+		}
 	}
-
-	return arr
+	
+	for i := 0; i < zeroCount; i++ {
+		result = append(result, 0)
+	}
+	
+	return result
 }
