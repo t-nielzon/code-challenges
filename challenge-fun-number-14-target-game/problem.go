@@ -1,7 +1,5 @@
-package main
-
 /*
-Challenge Fun #14: Target Game
+Target Game - Challenge Fun #14 (5 kyu)
 
 In your favorite game, you must shoot a target with a water-gun to gain points.
 Each target can be worth a different amount of points.
@@ -15,11 +13,14 @@ Given an array vals with the order of each target's point value, determine
 the maximum number of points that you can win.
 
 Examples:
-- vals = [1, 2, 3, 4] -> 6 (shoot indices 1 and 3: 2 + 4)
-- vals = [5, 5, 5, 5, 5] -> 15 (shoot indices 0, 2, 4: 5 + 5 + 5)
-- vals = [0, 0, -1, -1] -> 0 (don't shoot anything)
-- vals = [5, -2, -9, -4] -> 5 (shoot index 0 only)
+- vals = [1, 2, 3, 4] → 6 (shoot vals[1]=2 and vals[3]=4)
+- vals = [5, 5, 5, 5, 5] → 15 (shoot 1st, 3rd, 5th)
+- vals = [0, 0, -1, -1] → 0
+- vals = [5, -2, -9, -4] → 5 (shoot only 1st)
+
+Note: Don't shoot targets with zero or negative values.
 */
 
-func maxScore(vals []int) int {
+func TargetGame(vals []int) int {
+	// TODO: implement
 }
