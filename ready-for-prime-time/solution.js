@@ -1,20 +1,20 @@
-function getPrimes(n) {
-  if (n < 2) return [];
+function getPrimes(max) {
+  if (max < 2) return [];
   
-  const sieve = Array(n + 1).fill(true);
+  const sieve = new Array(max + 1).fill(true);
   sieve[0] = false;
   sieve[1] = false;
   
-  for (let i = 2; i * i <= n; i++) {
+  for (let i = 2; i * i <= max; i++) {
     if (sieve[i]) {
-      for (let j = i * i; j <= n; j += i) {
+      for (let j = i * i; j <= max; j += i) {
         sieve[j] = false;
       }
     }
   }
   
   const primes = [];
-  for (let i = 2; i <= n; i++) {
+  for (let i = 2; i <= max; i++) {
     if (sieve[i]) {
       primes.push(i);
     }
