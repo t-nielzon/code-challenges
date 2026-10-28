@@ -1,22 +1,46 @@
 package kata
 
-import "strconv"
+import (
+	"sort"
+	"strconv"
+)
 
-func MysteryRange(s string, n int) [2]int {
-	var target [10]int
-	for _, c := range s {
-		target[c-'0']++
-	}
-	for start := 1; start < 100; start++ {
-		var cnt [10]int
-		for i := start; i < start+n; i++ {
-			for _, c := range strconv.Itoa(i) {
-				cnt[c-'0']++
+func MysteryRange(inputString string, size int) [2]int {
+	var numbers []int
+	
+	var parse func(int, int) bool
+	parse = func(index int, remaining int) bool {
+		if remaining == 0 {
+			return index == len(inputString)
+		}
+		
+		if index >= len(inputString) {
+			return false
+		}
+		
+		for end := index + 1; end <= len(inputString); end++ {
+			numStr := inputString[index:end]
+			
+			// skip numbers with leading zeros (except "0" itself)
+			if len(numStr) > 1 && numStr[0] == '0' {
+				continue
 			}
+			
+			num, _ := strconv.Atoi(numStr)
+			numbers = append(numbers, num)
+			
+			if parse(end, remaining-1) {
+				return true
+			}
+			
+			numbers = numbers[:len(numbers)-1]
 		}
-		if cnt == target {
-			return [2]int{start, start + n - 1}
-		}
+		
+		return false
 	}
-	return [2]int{0, 0}
+	
+	parse(0, size)
+	
+	sort.Ints(numbers)
+	return [2]int{numbers[0], numbers[len(numbers)-1]}
 }
