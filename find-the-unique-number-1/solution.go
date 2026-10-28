@@ -1,16 +1,22 @@
-package kata
+package main
 
-func FindUniq(arr []float32) float32 {
-	if arr[0] != arr[1] {
-		if arr[0] == arr[2] {
-			return arr[1]
-		}
-		return arr[0]
+func FindUniq(arr []float64) float64 {
+	// determine the common value by checking first 3 elements
+	var common float64
+	if arr[0] == arr[1] {
+		common = arr[0]
+	} else if arr[0] == arr[2] {
+		common = arr[0]
+	} else {
+		common = arr[1]
 	}
-	for i := 2; i < len(arr); i++ {
-		if arr[i] != arr[0] {
-			return arr[i]
+	
+	// find and return the unique value
+	for _, num := range arr {
+		if num != common {
+			return num
 		}
 	}
-	return arr[0]
+	
+	return common
 }
