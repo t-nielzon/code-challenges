@@ -1,12 +1,13 @@
-package main
-
 /*
-# String -> N iterations -> String
+Welcome
 
-We have a string s and a number n.
+This kata is inspired by This Kata: https://www.codewars.com/kata/odd-even-string-sort
 
-We have a function that takes your string, concatenates the even-indexed chars to the front,
-odd-indexed chars to the back.
+We have a string s
+We have a number n
+
+Here is a function that takes your string, concatenates the even-indexed chars
+to the front, odd-indexed chars to the back.
 
 Examples:
 s = "Wow Example!"
@@ -16,16 +17,19 @@ s = "I'm Jomo Pipi"
 result = "ImJm ii' ooPp"
 
 The Task:
-Return the result of the string after applying the function to it n times.
+return the result of the string after applying the function to it n times.
 
-Example where s = "qwertyuio" and n = 2:
+example where s = "qwertyuio" and n = 2:
 after 1 iteration  s = "qetuowryi"
 after 2 iterations s = "qtorieuwy"
 return "qtorieuwy"
 
-Note: There are large strings and n can be greater than a billion, so optimization is needed.
+Note:
+there's a lot of tests, big strings, and n is greater than a billion
+so be ready to optimize.
 */
 
-func Transform(s string, n int) string {
-	// implement me
+package kata
+
+func Iterate(s string, n int) string {
 }
