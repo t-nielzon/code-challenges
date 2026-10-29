@@ -8,18 +8,11 @@ runner will enter recovery phase and can't sprint again.
 
 Your task, given base speed s and time t, is to find the maximum possible distance d.
 
-Input:
-1 <= s < 1000
-1 <= t < 1000
-
-Example:
-Given s = 2 and t = 4, the maximum distance is 10 (sequence RRRS).
-
-Where:
-- R: Normal Run / Recovery
-- S: Sprint
+Input: 1 <= s < 1000, 1 <= t < 1000
+Example: Given s = 2 and t = 4, the maximum distance is 10.
 */
 
-func chaserDistance(s int, t int) int {
-    // TODO
+func Distance(s, t int) int {
+	// Your solution here
+	return 0
 }
