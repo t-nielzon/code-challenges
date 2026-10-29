@@ -3,73 +3,86 @@ package main
 import "fmt"
 
 type SnakesLadders struct {
-	player1Pos    int
-	player2Pos    int
-	currentPlayer int
-	gameWon       bool
-	snakes        map[int]int
-	ladders       map[int]int
+	player1Pos int
+	player2Pos int
+	current    int
+	finished   bool
 }
 
-func NewSnakesLadders() *SnakesLadders {
+func New() *SnakesLadders {
 	return &SnakesLadders{
-		player1Pos:    0,
-		player2Pos:    0,
-		currentPlayer: 1,
-		gameWon:       false,
-		snakes: map[int]int{
-			17: 7, 54: 34, 62: 19, 88: 24, 93: 73, 95: 75, 98: 79, 99: 40,
-		},
-		ladders: map[int]int{
-			2: 38, 7: 14, 15: 26, 21: 42, 28: 84, 51: 67, 72: 91, 78: 98, 87: 94,
-		},
+		player1Pos: 0,
+		player2Pos: 0,
+		current:    1,
+		finished:   false,
 	}
+}
+
+var ladders = map[int]int{
+	1:  38,
+	4:  14,
+	9:  31,
+	21: 42,
+	28: 84,
+	51: 67,
+	72: 91,
+	80: 99,
+}
+
+var snakes = map[int]int{
+	17: 7,
+	54: 34,
+	62: 18,
+	88: 24,
+	95: 75,
+	98: 79,
 }
 
 func (sl *SnakesLadders) Play(die1, die2 int) string {
-	if sl.gameWon {
+	if sl.finished {
 		return "Game over!"
 	}
 
-	steps := die1 + die2
 	var pos int
-
-	if sl.currentPlayer == 1 {
+	if sl.current == 1 {
 		pos = sl.player1Pos
 	} else {
 		pos = sl.player2Pos
 	}
 
-	movedPlayer := sl.currentPlayer
-
+	steps := die1 + die2
 	pos += steps
 
-	// bounce off 100
 	if pos > 100 {
 		pos = 100 - (pos - 100)
 	}
 
-	// apply snake or ladder
-	if snake, ok := sl.snakes[pos]; ok {
-		pos = snake
-	} else if ladder, ok := sl.ladders[pos]; ok {
-		pos = ladder
+	if newPos, exists := ladders[pos]; exists {
+		pos = newPos
+	} else if newPos, exists := snakes[pos]; exists {
+		pos = newPos
 	}
 
-	if sl.currentPlayer == 1 {
+	if sl.current == 1 {
 		sl.player1Pos = pos
 	} else {
 		sl.player2Pos = pos
 	}
 
 	if pos == 100 {
-		sl.gameWon = true
-		return fmt.Sprintf("Player %d Wins!", movedPlayer)
+		sl.finished = true
+		return fmt.Sprintf("Player %d Wins!", sl.current)
 	}
+
+	result := fmt.Sprintf("Player %d is on square %d", sl.current, pos)
 
 	if die1 != die2 {
-		sl.currentPlayer = 3 - sl.currentPlayer
+		if sl.current == 1 {
+			sl.current = 2
+		} else {
+			sl.current = 1
+		}
 	}
 
-	return fmt.Sprintf("Player %d is on square %d", movedPlayer, pos)
+	return result
 }
