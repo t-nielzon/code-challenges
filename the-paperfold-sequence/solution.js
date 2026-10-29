@@ -1,31 +1,25 @@
 function* paperFold() {
-  const cache = new Map();
+  const memo = {};
   
   function getValue(n) {
-    if (cache.has(n)) return cache.get(n);
+    if (n in memo) return memo[n];
     
     let result;
-    if (n === 0) {
+    if (n % 2 === 0) {
+      // even positions refer to earlier positions: a(2n) = a(n)
+      result = getValue(n / 2);
+    } else if (n % 4 === 1) {
+      // odd positions where n ≡ 1 (mod 4) are always 1
       result = 1;
     } else {
-      const level = Math.ceil(Math.log2(n + 2));
-      const sizeOfLevel = (1 << level) - 1;
-      const sizeOfPrevLevel = (1 << (level - 1)) - 1;
-      const midPos = sizeOfPrevLevel;
-      
-      if (n === midPos) {
-        result = 1;
-      } else {
-        const mirrorPos = sizeOfLevel - 1 - n;
-        result = 1 - getValue(mirrorPos);
-      }
+      // odd positions where n ≡ 3 (mod 4) are always 0
+      result = 0;
     }
-    
-    cache.set(n, result);
+    memo[n] = result;
     return result;
   }
   
-  let n = 0;
+  let n = 1;
   while (true) {
     yield getValue(n);
     n++;
