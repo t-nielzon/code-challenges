@@ -1,7 +1,8 @@
-const cons = x => list => c => n => c(x)(list(c)(n));
+const cons = element => list => c => n => c(element)(list(c)(n));
 
-const snoc = x => list => c => n => list(c)(c(x)(n));
+const snoc = element => list => c => n => list(c)(c(element)(n));
 
-const map = f => list => c => n => list(x => c(f(x)))(n);
+const map = transform => list => c => n => list(x => c(transform(x)))(n);
 
-const filter = p => list => c => n => list(x => rest => p(x)(c(x)(rest))(rest))(n);
+const filter = predicate => list => c => n => 
+  list(x => r => predicate(x)(c(x)(r))(r))(n);
