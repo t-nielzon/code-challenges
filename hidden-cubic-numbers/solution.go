@@ -1,44 +1,34 @@
-package kata
+package main
 
 import (
 	"regexp"
 	"strconv"
+	"strings"
 )
 
-func SumOfCubic(s string) string {
-	isCubic := func(n int) bool {
-		sum := 0
-		temp := n
-		for temp > 0 {
-			digit := temp % 10
-			sum += digit * digit * digit
-			temp /= 10
-		}
-		return sum == n
-	}
-
+func FindCubic(s string) string {
+	// Extract all groups of consecutive digits
 	re := regexp.MustCompile(`\d+`)
 	digitGroups := re.FindAllString(s, -1)
 
 	var cubicNumbers []int
-	total := 0
+	sum := 0
 
+	// For each group of digits, split into chunks of at most 3
 	for _, group := range digitGroups {
-		for len(group) > 3 {
-			chunk := group[:3]
-			num, _ := strconv.Atoi(chunk)
-			if isCubic(num) {
-				cubicNumbers = append(cubicNumbers, num)
-				total += num
+		// Split group into chunks of 3 from the left
+		for i := 0; i < len(group); i += 3 {
+			end := i + 3
+			if end > len(group) {
+				end = len(group)
 			}
-			group = group[3:]
-		}
+			chunk := group[i:end]
+			num, _ := strconv.Atoi(chunk)
 
-		if len(group) > 0 {
-			num, _ := strconv.Atoi(group)
+			// Check if it's cubic
 			if isCubic(num) {
 				cubicNumbers = append(cubicNumbers, num)
-				total += num
+				sum += num
 			}
 		}
 	}
@@ -47,10 +37,29 @@ func SumOfCubic(s string) string {
 		return "Unlucky"
 	}
 
-	result := ""
+	// Build result
+	var result []string
 	for _, num := range cubicNumbers {
-		result += strconv.Itoa(num) + " "
+		result = append(result, strconv.Itoa(num))
 	}
-	result += strconv.Itoa(total) + " Lucky"
-	return result
+	result = append(result, strconv.Itoa(sum), "Lucky")
+
+	return strings.Join(result, " ")
+}
+
+func isCubic(n int) bool {
+	if n < 0 || n > 999 {
+		return false
+	}
+
+	sum := 0
+	temp := n
+
+	for temp > 0 {
+		digit := temp % 10
+		sum += digit * digit * digit
+		temp /= 10
+	}
+
+	return sum == n
 }
