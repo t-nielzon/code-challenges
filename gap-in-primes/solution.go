@@ -1,6 +1,6 @@
 package main
 
-func gap(g int, m int, n int) []int {
+func Gap(g int, m int, n int) []int {
 	isPrime := func(num int) bool {
 		if num < 2 {
 			return false
@@ -19,14 +19,18 @@ func gap(g int, m int, n int) []int {
 		return true
 	}
 
-	var prev int
+	var prevPrime int
+	found := false
+
 	for i := m; i <= n; i++ {
 		if isPrime(i) {
-			if prev != 0 && i-prev == g {
-				return []int{prev, i}
+			if found && i-prevPrime == g {
+				return []int{prevPrime, i}
 			}
-			prev = i
+			prevPrime = i
+			found = true
 		}
 	}
+
 	return nil
 }
