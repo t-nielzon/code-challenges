@@ -1,10 +1,10 @@
 package main
 
 /*
-The Fibonacci numbers are the numbers in the following integer sequence:
+The Fibonacci numbers are the numbers in the following integer sequence (Fn):
 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, ...
 
-Such that:
+such that:
 F(0) = 0
 F(1) = 1
 F(n) = F(n-1) + F(n-2)
@@ -14,19 +14,19 @@ F(n) * F(n+1) = prod
 
 Your function takes an integer (prod) and returns an array/tuple:
 * if F(n) * F(n+1) = prod:
-  return (F(n), F(n+1), true)
-
+  (F(n), F(n+1), true)
 * If you do not find two consecutive F(n) verifying F(n) * F(n+1) = prod:
-  return (F(n), F(n+1), false)
+  (F(n), F(n+1), false)
   where F(n) is the smallest one such as F(n) * F(n+1) > prod
 
 Examples:
 714 ---> (21, 34, true)
-  since F(8) = 21, F(9) = 34 and 714 = 21 * 34
+--> since F(8) = 21, F(9) = 34 and 714 = 21 * 34
 
 800 ---> (34, 55, false)
-  since F(8) = 21, F(9) = 34, F(10) = 55 and 21 * 34 < 800 < 34 * 55
+--> since F(8) = 21, F(9) = 34, F(10) = 55 and 21 * 34 < 800 < 34 * 55
 */
 
-func ProductFib(prod int64) [3]interface{} {
+func ProductFib(prod int64) [3]int64 {
+	return [3]int64{}
 }
