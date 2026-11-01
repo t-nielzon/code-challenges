@@ -1,27 +1,26 @@
+// solution.go
 package main
 
 import "math"
 
-func fortune(f0 float64, p float64, c0 float64, n int, i float64) bool {
-	f := f0
-	c := c0
+func fortune(f0 int, p int, c0 int, n int, i int) bool {
+	f := float64(f0)
+	c := float64(c0)
+	pRate := float64(p) / 100.0
+	iRate := float64(i) / 100.0
 
-	// Convert percentages to decimal form
-	p = p / 100
-	i = i / 100
-
-	// Simulate n-1 years
 	for year := 1; year < n; year++ {
-		// Apply interest and withdraw
-		f = math.Floor(f*(1+p) - c)
+		// apply interest and withdraw
+		f = f + f*pRate - c
+		f = math.Floor(f)
 
-		// If balance is negative, plan fails
 		if f < 0 {
 			return false
 		}
 
-		// Adjust withdrawal for inflation
-		c = math.Floor(c * (1 + i))
+		// apply inflation to withdrawal amount for next year
+		c = c + c*iRate
+		c = math.Floor(c)
 	}
 
 	return true
