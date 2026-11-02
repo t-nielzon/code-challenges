@@ -1,4 +1,6 @@
-func Modpow(x int64, y int64, n int64) int64 {
+package main
+
+func Modpow(x, y, n int64) int64 {
 	result := int64(1)
 	x = x % n
 	
