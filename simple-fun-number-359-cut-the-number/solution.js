@@ -1,26 +1,31 @@
-function maxSum(number, target) {
+function cutTheNumber(number, target) {
   const n = number.length;
+  let maxSum = -1;
   
-  // dp[i] = set of all possible sums using first i characters that don't exceed target
-  const dp = Array.from({ length: n + 1 }, () => new Set());
-  dp[0].add(0);
-  
-  for (let i = 1; i <= n; i++) {
-    // try all possible positions to cut before position i
-    for (let j = 0; j < i; j++) {
-      const piece = parseInt(number.slice(j, i));
-      for (const sum of dp[j]) {
-        const newSum = sum + piece;
-        if (newSum <= target) {
-          dp[i].add(newSum);
-        }
+  // Iterate through all 2^(n-1) possible partitions using bitmask
+  // Each bit i represents whether to cut after position i
+  for (let mask = 0; mask < (1 << (n - 1)); mask++) {
+    let sum = 0;
+    let currentPiece = number[0];
+    
+    for (let i = 1; i < n; i++) {
+      if (mask & (1 << (i - 1))) {
+        // Cut after position i-1
+        sum += parseInt(currentPiece);
+        currentPiece = number[i];
+      } else {
+        // No cut, append to current piece
+        currentPiece += number[i];
       }
+    }
+    // Add the last piece
+    sum += parseInt(currentPiece);
+    
+    // Track the maximum sum that doesn't exceed target
+    if (sum <= target && sum > maxSum) {
+      maxSum = sum;
     }
   }
   
-  if (dp[n].size === 0) {
-    return -1;
-  }
-  
-  return Math.max(...dp[n]);
+  return maxSum;
 }
