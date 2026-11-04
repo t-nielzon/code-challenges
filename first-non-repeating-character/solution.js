@@ -1,17 +1,20 @@
+// solution.js
 function firstNonRepeatingLetter(s) {
-  const chars = [...s];
-  const counts = new Map();
-
-  for (const ch of chars) {
-    const lower = ch.toLowerCase();
-    counts.set(lower, (counts.get(lower) || 0) + 1);
+  const lowerStr = s.toLowerCase();
+  const charCount = {};
+  
+  // count frequency of each character (case-insensitive)
+  for (const char of lowerStr) {
+    charCount[char] = (charCount[char] || 0) + 1;
   }
-
-  for (const ch of chars) {
-    if (counts.get(ch.toLowerCase()) === 1) return ch;
+  
+  // find first character with count of 1, preserving original case
+  for (const char of s) {
+    if (charCount[char.toLowerCase()] === 1) {
+      return char;
+    }
   }
-
-  return "";
+  
+  // no non-repeating character found
+  return '';
 }
-
-module.exports = firstNonRepeatingLetter;
