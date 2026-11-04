@@ -1,4 +1,5 @@
-// Package kata provides solution to the int32 to IPv4 kata.
+package main
+
 /*
 Take the following IPv4 address: 128.32.10.1
 
@@ -20,8 +21,9 @@ Examples:
 32         ==> "0.0.0.32"
 0          ==> "0.0.0.0"
 */
-package kata
 
-func IntToIPv4(num uint32) string {
-	// TODO
+import "fmt"
+
+func IntToIP(num uint32) string {
+	// TODO: Implement
 }
