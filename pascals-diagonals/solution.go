@@ -1,23 +1,16 @@
-package kata
+package main
 
-func Generate(n, l int) []uint64 {
-	result := make([]uint64, 0, l)
+func PascalsDiagonal(n, l int) []int {
 	if l == 0 {
-		return result
+		return []int{}
 	}
-	for i := 0; i < l; i++ {
-		result = append(result, binomial(n+i, n))
-	}
-	return result
-}
 
-func binomial(n, k int) uint64 {
-	if k > n-k {
-		k = n - k
+	result := make([]int, l)
+	result[0] = 1
+
+	for i := 1; i < l; i++ {
+		result[i] = result[i-1] * (n + i) / i
 	}
-	var c uint64 = 1
-	for i := 0; i < k; i++ {
-		c = c * uint64(n-i) / uint64(i+1)
-	}
-	return c
+
+	return result
 }
