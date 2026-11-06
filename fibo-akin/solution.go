@@ -1,6 +1,6 @@
 package main
 
-func lengthSupUK(n int, k int) int {
+func lengthSupUK(n, k int) int {
 	u := make([]int, n+1)
 	u[1] = 1
 	if n >= 2 {
@@ -17,7 +17,6 @@ func lengthSupUK(n int, k int) int {
 			count++
 		}
 	}
-
 	return count
 }
 
@@ -38,6 +37,5 @@ func comp(n int) int {
 			count++
 		}
 	}
-
 	return count
 }
