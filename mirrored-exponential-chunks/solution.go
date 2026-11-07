@@ -1,47 +1,57 @@
 package kata
 
-func MirroredExponentialChunks(arr []int) [][]int {
-	if len(arr) == 0 {
-		return [][]int{}
+func MirroredExponentialChunks(array []interface{}) [][]interface{} {
+	if len(array) == 0 {
+		return [][]interface{}{}
 	}
-	
-	n := len(arr)
+
+	n := len(array)
+
+	// Calculate chunk sizes that form symmetric pairs
 	var chunkSizes []int
-	
-	remaining := n
-	
-	// center chunk of size 1 (2^0)
-	chunkSizes = append(chunkSizes, 1)
-	remaining--
-	
-	// add layers symmetrically around center
-	layer := 1
-	for remaining > 0 {
-		size := 1 << uint(layer) // 2^layer
-		
-		// add full symmetric layer only if we have enough elements for both sides
-		if 2*size <= remaining {
-			chunkSizes = append([]int{size}, chunkSizes...)
-			chunkSizes = append(chunkSizes, size)
-			remaining -= 2 * size
-			layer++
-		} else {
-			break
+	total := 1 // center chunk count
+	size := 1
+	for total+size*2 <= n {
+		size *= 2
+		chunkSizes = append(chunkSizes, size)
+		total += size * 2
+	}
+
+	result := make([][]interface{}, 0)
+	pos := 0
+
+	// Left chunks (from largest to smallest)
+	for i := len(chunkSizes) - 1; i >= 0; i-- {
+		sz := chunkSizes[i]
+		chunk := make([]interface{}, 0)
+		for j := 0; j < sz && pos < n; j++ {
+			chunk = append(chunk, array[pos])
+			pos++
+		}
+		if len(chunk) > 0 {
+			result = append(result, chunk)
 		}
 	}
-	
-	// add any remaining elements as final chunk
-	if remaining > 0 {
-		chunkSizes = append(chunkSizes, remaining)
+
+	// Center chunk
+	if pos < n {
+		chunk := []interface{}{array[pos]}
+		result = append(result, chunk)
+		pos++
 	}
-	
-	// create chunks from sizes
-	var result [][]int
-	idx := 0
-	for _, size := range chunkSizes {
-		result = append(result, arr[idx:idx+size])
-		idx += size
+
+	// Right chunks (from smallest to largest)
+	for i := 0; i < len(chunkSizes); i++ {
+		sz := chunkSizes[i]
+		chunk := make([]interface{}, 0)
+		for j := 0; j < sz && pos < n; j++ {
+			chunk = append(chunk, array[pos])
+			pos++
+		}
+		if len(chunk) > 0 {
+			result = append(result, chunk)
+		}
 	}
-	
+
 	return result
 }
