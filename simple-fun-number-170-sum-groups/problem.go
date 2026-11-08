@@ -1,12 +1,12 @@
 package main
 
 /*
-Task
+# Task
 
 Given an array of integers, sum consecutive even numbers and consecutive odd numbers.
 Repeat the process while it can be done and return the length of the final array.
 
-Example
+# Example
 
 For arr = [2, 1, 2, 2, 6, 5, 0, 2, 0, 5, 5, 7, 7, 4, 3, 3, 9]
 
@@ -20,15 +20,16 @@ The result should be 6.
 
 The length of final array is 6
 
-Input/Output
+# Input/Output
 
 - [input] integer array arr
   A non-empty array, 1 ≤ arr.length ≤ 1000, 0 ≤ arr[i] ≤ 1000
+
 - [output] an integer
   The length of the final array
 */
 
 func SumGroups(arr []int) int {
-	// TODO: implement
+	// TODO
 	return 0
 }

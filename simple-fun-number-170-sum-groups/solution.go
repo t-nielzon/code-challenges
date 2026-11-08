@@ -7,9 +7,10 @@ func SumGroups(arr []int) int {
 
 		for i < len(arr) {
 			sum := arr[i]
+			isEven := arr[i]%2 == 0
 			j := i + 1
 
-			for j < len(arr) && (arr[i]%2 == arr[j]%2) {
+			for j < len(arr) && (arr[j]%2 == 0) == isEven {
 				sum += arr[j]
 				j++
 			}
@@ -19,7 +20,7 @@ func SumGroups(arr []int) int {
 		}
 
 		if len(newArr) == len(arr) {
-			return len(newArr)
+			return len(arr)
 		}
 
 		arr = newArr
