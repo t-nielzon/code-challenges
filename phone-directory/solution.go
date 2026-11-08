@@ -1,4 +1,4 @@
-package kata
+package main
 
 import (
 	"fmt"
@@ -6,24 +6,50 @@ import (
 	"strings"
 )
 
-var (
-	nameRe    = regexp.MustCompile(`<(.+?)>`)
-	cleanRe   = regexp.MustCompile(`[^a-zA-Z0-9 .]`)
-	spacesRe  = regexp.MustCompile(`\s+`)
-	dotSpaceR = regexp.MustCompile(`\s+\.`)
-)
+func phone(s string, num string) string {
+	lines := strings.Split(s, "\n")
 
-func phone(strng string, num string) string {
-	var matches []string
-	for _, line := range strings.Split(strng, "\n") {
-		if strings.Contains(line, "+"+num+" ") ||
-			strings.Contains(line, "+"+num+"\t") ||
-			strings.HasSuffix(strings.TrimRight(line, "!;., \t"), "+"+num) ||
-			strings.Contains(line, "+"+num+"!") ||
-			strings.Contains(line, "+"+num+";") ||
-			strings.Contains(line, "+"+num+",") {
-			matches = append(matches, line)
+	var matches []map[string]string
+
+	phoneRegex := regexp.MustCompile(`\+(\d{1,2}-[\d\-]+)`)
+	nameRegex := regexp.MustCompile(`<([^>]+)>`)
+
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
 		}
+
+		// Extract phone number
+		phoneMatches := phoneRegex.FindStringSubmatch(line)
+		if phoneMatches == nil {
+			continue
+		}
+
+		phoneNum := phoneMatches[1]
+		if phoneNum != num {
+			continue
+		}
+
+		// Extract name
+		nameMatches := nameRegex.FindStringSubmatch(line)
+		if nameMatches == nil {
+			continue
+		}
+		name := strings.TrimSpace(nameMatches[1])
+
+		// Extract and clean address
+		address := line
+		address = phoneRegex.ReplaceAllString(address, " ")
+		address = nameRegex.ReplaceAllString(address, " ")
+		address = regexp.MustCompile(`[^a-zA-Z0-9\s.]`).ReplaceAllString(address, " ")
+		address = regexp.MustCompile(`\s+`).ReplaceAllString(address, " ")
+		address = strings.TrimSpace(address)
+
+		matches = append(matches, map[string]string{
+			"phone":   num,
+			"name":    name,
+			"address": address,
+		})
 	}
 
 	if len(matches) == 0 {
@@ -33,22 +59,6 @@ func phone(strng string, num string) string {
 		return fmt.Sprintf("Error => Too many people: %s", num)
 	}
 
-	line := matches[0]
-
-	name := ""
-	if m := nameRe.FindStringSubmatch(line); m != nil {
-		name = m[1]
-	}
-
-	// strip the phone number and the <name> block, leaving only the address.
-	addr := line
-	addr = strings.Replace(addr, "+"+num, " ", 1)
-	addr = nameRe.ReplaceAllString(addr, " ")
-
-	addr = cleanRe.ReplaceAllString(addr, " ")
-	addr = spacesRe.ReplaceAllString(addr, " ")
-	addr = dotSpaceR.ReplaceAllString(addr, ".")
-	addr = strings.TrimSpace(addr)
-
-	return fmt.Sprintf("Phone => %s, Name => %s, Address => %s", num, name, addr)
+	m := matches[0]
+	return fmt.Sprintf("Phone => %s, Name => %s, Address => %s", m["phone"], m["name"], m["address"])
 }
