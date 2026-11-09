@@ -1,25 +1,24 @@
-// # foldr - Introducing reduceRight with lazy evaluation
-//
-// JavaScript `reduceRight` will, given a `Function` and an initial value,
-// reduce an `Array` to a single value by iterating it right to left and
-// folding it with the given `Function`.
-//
-// The task is to define `Array` method `foldr`, which takes a function and
-// an initial value as arguments, and returns a lazily evaluated fold over
-// its `this`-argument.
-//
-// Also define `String` method `foldr`, which treats `String`s as `Array`s
-// of characters.
-//
-// The key difference from eager evaluation is that the second argument to
-// the folding function should be lazy - evaluated only if and when required.
-// This allows the recursion to terminate early if the function doesn't
-// evaluate its second argument.
+/*
+# foldr - Lazy Fold Right
+
+Implement Array.prototype.foldr and String.prototype.foldr with lazy evaluation.
+
+foldr takes a function and initial value, and folds them right to left.
+The key feature is lazy evaluation: the second argument to fn is only evaluated
+if and when required. This allows early termination of recursion before processing
+the entire list.
+
+Example:
+  [1,2,3].foldr((a, b) => a + b(), 0) 
+  // Recursively folds from left, passing accumulated result as thunk
+
+String.prototype.foldr treats the string as an array of characters.
+*/
 
 Array.prototype.foldr = function(fn, z) {
-  // implementation
+  // TODO: implement lazy fold right
 };
 
 String.prototype.foldr = function(fn, z) {
-  // implementation
+  // TODO: implement lazy fold right for strings
 };
