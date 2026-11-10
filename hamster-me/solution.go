@@ -1,63 +1,49 @@
-// solution.go
 package main
 
-import (
-	"sort"
-	"strconv"
-	"strings"
-)
+import "strconv"
 
-func hamsterMe(code string, message string) string {
-	// Extract unique letters from code and sort them
-	codeMap := make(map[rune]bool)
+func HamsterMe(code, message string) string {
+	// Extract unique code letters
+	codeSet := make(map[rune]bool)
 	for _, ch := range code {
-		codeMap[ch] = true
+		codeSet[ch] = true
 	}
 
 	var codeLetters []rune
-	for ch := range codeMap {
-		codeLetters = append(codeLetters, ch)
-	}
-	sort.Slice(codeLetters, func(i, j int) bool {
-		return codeLetters[i] < codeLetters[j]
-	})
-
-	// Build mapping using BFS expansion
-	type Mapping struct {
-		codeLetter rune
-		distance   int
-	}
-	mapping := make(map[rune]Mapping)
-
-	// Initialize code letters at distance 1
-	currentLevel := make(map[rune]rune)
-	for _, ch := range codeLetters {
-		currentLevel[ch] = ch
-		mapping[ch] = Mapping{ch, 1}
+	for ch := 'a'; ch <= 'z'; ch++ {
+		if codeSet[ch] {
+			codeLetters = append(codeLetters, ch)
+		}
 	}
 
-	// Expand level by level until all 26 letters are assigned
-	distance := 1
-	for len(mapping) < 26 {
-		nextLevel := make(map[rune]rune)
-		for letter, codeLetterOrigin := range currentLevel {
-			nextLetter := rune(((int(letter) - int('a') + 1) % 26) + int('a'))
-			if _, exists := mapping[nextLetter]; !exists {
-				nextLevel[nextLetter] = codeLetterOrigin
-				mapping[nextLetter] = Mapping{codeLetterOrigin, distance + 1}
+	// Build cipher mapping for each letter a-z
+	cipher := make(map[rune]string)
+	for letterIdx := 0; letterIdx < 26; letterIdx++ {
+		letter := rune('a' + letterIdx)
+
+		// Find the largest code letter <= letter
+		codeBase := codeLetters[len(codeLetters)-1] // default to last code letter
+		for _, cb := range codeLetters {
+			if cb <= letter {
+				codeBase = cb
 			}
 		}
-		currentLevel = nextLevel
-		distance++
+
+		// Calculate level as 1-indexed distance from code base letter
+		diff := (int(letter) - int(codeBase)) % 26
+		if diff < 0 {
+			diff += 26
+		}
+		level := diff + 1
+
+		cipher[letter] = string(codeBase) + strconv.Itoa(level)
 	}
 
-	// Encode the message
-	var result strings.Builder
+	// Encode message using cipher
+	var result string
 	for _, ch := range message {
-		m := mapping[ch]
-		result.WriteRune(m.codeLetter)
-		result.WriteString(strconv.Itoa(m.distance))
+		result += cipher[ch]
 	}
 
-	return result.String()
+	return result
 }
