@@ -1,24 +1,22 @@
 package main
 
-func Dirreduc(arr []string) []string {
-	result := []string{}
+func DirReduc(arr []string) []string {
+	stack := []string{}
 	
 	for _, dir := range arr {
-		if len(result) > 0 {
-			last := result[len(result)-1]
-			
-			if (last == "NORTH" && dir == "SOUTH") ||
-				(last == "SOUTH" && dir == "NORTH") ||
-				(last == "EAST" && dir == "WEST") ||
-				(last == "WEST" && dir == "EAST") {
-				result = result[:len(result)-1]
-			} else {
-				result = append(result, dir)
-			}
+		if len(stack) > 0 && isOpposite(stack[len(stack)-1], dir) {
+			stack = stack[:len(stack)-1]
 		} else {
-			result = append(result, dir)
+			stack = append(stack, dir)
 		}
 	}
 	
-	return result
+	return stack
+}
+
+func isOpposite(a, b string) bool {
+	return (a == "NORTH" && b == "SOUTH") ||
+		(a == "SOUTH" && b == "NORTH") ||
+		(a == "WEST" && b == "EAST") ||
+		(a == "EAST" && b == "WEST")
 }
