@@ -1,31 +1,51 @@
 /*
-Dots and Boxes - Complete all possible squares
-
-In the game of Dots and Boxes (also known as "Pigs in a Pen"), players take turns
-drawing lines between dots on a grid. When a player completes the fourth side of a
-1×1 box, they earn a point. 
-
-Your task is to complete a Game class that:
-1. Takes a board size (1-26) representing an n×n grid of boxes
-2. Receives an array of line numbers already drawn
-3. Automatically completes all possible squares (when 3 out of 4 sides are drawn)
-4. Returns all lines (original + completed) sorted and without duplicates
-
-Rules:
-- The board size will be between 1 and 26
-- Lines array may be empty or unsorted
-- Can only complete a square if exactly 3 of its 4 sides are present
-- Must handle cascading completions (completing one square may enable others)
-
-Returns: Sorted array of all line numbers with no duplicates
-*/
+ * Pigs in a Pen (Dots and Boxes Game Solver)
+ * 
+ * Given a board size and a list of already-drawn lines, find all squares
+ * that can be completed (where 3 out of 4 sides are already drawn).
+ * A square can only be completed if exactly 3 of its 4 sides are present.
+ * Return all lines including the original ones, sorted numerically with no duplicates.
+ */
 
 class Game {
   constructor(board) {
-    // Implementation here
+    this.board = board;
   }
-  
+
   play(lines) {
-    // Implementation here
+    const completed = new Set(lines);
+    let changed = true;
+    
+    while (changed) {
+      changed = false;
+      for (let i = 0; i < this.board; i++) {
+        for (let j = 0; j < this.board; j++) {
+          const sides = this.getSidesOfSquare(i, j);
+          const presentCount = sides.filter(s => completed.has(s)).length;
+          
+          if (presentCount === 3) {
+            const missingSide = sides.find(s => !completed.has(s));
+            if (missingSide && !completed.has(missingSide)) {
+              completed.add(missingSide);
+              changed = true;
+            }
+          }
+        }
+      }
+    }
+    
+    return Array.from(completed).sort((a, b) => a - b);
+  }
+
+  getSidesOfSquare(i, j) {
+    const n = this.board;
+    const total = n * (n + 1);
+    
+    const top = i * (n + 1) + j + 1;
+    const bottom = (i + 1) * (n + 1) + j + 1;
+    const left = total + i * (n + 1) + j + 1;
+    const right = total + i * (n + 1) + (j + 1) + 1;
+    
+    return [top, bottom, left, right];
   }
 }

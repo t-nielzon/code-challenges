@@ -1,38 +1,45 @@
+/*
+ * Pigs in a Pen (Dots and Boxes Game Solver) - Solution
+ */
+
 class Game {
   constructor(board) {
     this.board = board;
   }
-  
+
   play(lines) {
-    let result = new Set(lines);
+    const completed = new Set(lines);
     let changed = true;
     
     while (changed) {
       changed = false;
-      
-      for (let row = 0; row < this.board; row++) {
-        for (let col = 0; col < this.board; col++) {
-          const squareLines = this.getSquareLines(row, col);
-          const present = squareLines.filter(line => result.has(line));
+      for (let i = 0; i < this.board; i++) {
+        for (let j = 0; j < this.board; j++) {
+          const sides = this.getSidesOfSquare(i, j);
+          const presentCount = sides.filter(s => completed.has(s)).length;
           
-          if (present.length === 3) {
-            const missing = squareLines.find(line => !result.has(line));
-            result.add(missing);
-            changed = true;
+          if (presentCount === 3) {
+            const missingSide = sides.find(s => !completed.has(s));
+            if (missingSide && !completed.has(missingSide)) {
+              completed.add(missingSide);
+              changed = true;
+            }
           }
         }
       }
     }
     
-    return Array.from(result).sort((a, b) => a - b);
+    return Array.from(completed).sort((a, b) => a - b);
   }
-  
-  getSquareLines(row, col) {
-    const levelSize = 2 * this.board + 1;
-    const top = 1 + row * levelSize + col;
-    const bottom = 1 + (row + 1) * levelSize + col;
-    const left = this.board + 1 + row * levelSize + col;
-    const right = this.board + 1 + row * levelSize + col + 1;
+
+  getSidesOfSquare(i, j) {
+    const n = this.board;
+    const total = n * (n + 1);
+    
+    const top = i * (n + 1) + j + 1;
+    const bottom = (i + 1) * (n + 1) + j + 1;
+    const left = total + i * (n + 1) + j + 1;
+    const right = total + i * (n + 1) + (j + 1) + 1;
     
     return [top, bottom, left, right];
   }
