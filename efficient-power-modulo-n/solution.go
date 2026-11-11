@@ -1,6 +1,8 @@
-package main
-
-func Modpow(x, y, n int64) int64 {
+func ModPow(x, y, n int64) int64 {
+	if n == 1 {
+		return 0
+	}
+	
 	result := int64(1)
 	x = x % n
 	
