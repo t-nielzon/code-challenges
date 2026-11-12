@@ -1,46 +1,43 @@
-/*
- * Pigs in a Pen (Dots and Boxes Game Solver) - Solution
- */
-
 class Game {
   constructor(board) {
     this.board = board;
   }
 
   play(lines) {
-    const completed = new Set(lines);
+    const filled = new Set(lines);
     let changed = true;
-    
+
     while (changed) {
       changed = false;
-      for (let i = 0; i < this.board; i++) {
-        for (let j = 0; j < this.board; j++) {
-          const sides = this.getSidesOfSquare(i, j);
-          const presentCount = sides.filter(s => completed.has(s)).length;
+      
+      for (let brow = 0; brow < this.board; brow++) {
+        for (let bcol = 0; bcol < this.board; bcol++) {
+          const [top, right, bottom, left] = this.getBoxEdges(brow, bcol);
+          const edges = [top, right, bottom, left];
           
-          if (presentCount === 3) {
-            const missingSide = sides.find(s => !completed.has(s));
-            if (missingSide && !completed.has(missingSide)) {
-              completed.add(missingSide);
-              changed = true;
-            }
+          const filledCount = edges.filter(e => filled.has(e)).length;
+          
+          if (filledCount === 3) {
+            const missing = edges.find(e => !filled.has(e));
+            filled.add(missing);
+            changed = true;
           }
         }
       }
     }
-    
-    return Array.from(completed).sort((a, b) => a - b);
+
+    return Array.from(filled).sort((a, b) => a - b);
   }
 
-  getSidesOfSquare(i, j) {
+  getBoxEdges(brow, bcol) {
     const n = this.board;
-    const total = n * (n + 1);
+    // horizontal lines: 1 to n(n+1), numbered by row then column
+    // vertical lines: n(n+1)+1 to 2n(n+1), numbered by row then column
+    const top = 1 + brow * n + bcol;
+    const bottom = 1 + (brow + 1) * n + bcol;
+    const left = 1 + n * (n + 1) + brow * (n + 1) + bcol;
+    const right = 1 + n * (n + 1) + brow * (n + 1) + (bcol + 1);
     
-    const top = i * (n + 1) + j + 1;
-    const bottom = (i + 1) * (n + 1) + j + 1;
-    const left = total + i * (n + 1) + j + 1;
-    const right = total + i * (n + 1) + (j + 1) + 1;
-    
-    return [top, bottom, left, right];
+    return [top, right, bottom, left];
   }
 }
