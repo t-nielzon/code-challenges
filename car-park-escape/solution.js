@@ -1,57 +1,44 @@
-function parkingEscape(carpark) {
-  const moves = [];
-  
-  // find starting position (value 2)
-  let currentLevel = -1;
+function carParkEscape(carpark) {
+  const result = [];
+  let currentFloor = -1;
   let currentPos = -1;
   
-  for (let i = 0; i < carpark.length; i++) {
-    for (let j = 0; j < carpark[i].length; j++) {
-      if (carpark[i][j] === 2) {
-        currentLevel = i;
-        currentPos = j;
-        break;
-      }
+  // find starting position (where 2 is located)
+  for (let floor = 0; floor < carpark.length; floor++) {
+    const pos = carpark[floor].indexOf(2);
+    if (pos !== -1) {
+      currentFloor = floor;
+      currentPos = pos;
+      break;
     }
-    if (currentLevel !== -1) break;
   }
   
-  // move down levels until reaching ground floor
-  while (currentLevel > 0) {
-    // find staircase on current floor
-    let staircasePos = -1;
-    for (let j = 0; j < carpark[currentLevel].length; j++) {
-      if (carpark[currentLevel][j] === 1) {
-        staircasePos = j;
-        break;
-      }
+  // move down floors until reaching ground floor
+  while (currentFloor < carpark.length - 1) {
+    // find staircase position on current floor
+    const stairPos = carpark[currentFloor].indexOf(1);
+    
+    // move to staircase
+    if (currentPos < stairPos) {
+      result.push(`R${stairPos - currentPos}`);
+    } else if (currentPos > stairPos) {
+      result.push(`L${currentPos - stairPos}`);
     }
     
-    // move horizontally to staircase
-    if (staircasePos < currentPos) {
-      const distance = currentPos - staircasePos;
-      moves.push(`L${distance}`);
-      currentPos = staircasePos;
-    } else if (staircasePos > currentPos) {
-      const distance = staircasePos - currentPos;
-      moves.push(`R${distance}`);
-      currentPos = staircasePos;
-    }
+    currentPos = stairPos;
     
-    // go down one level
-    moves.push("D1");
-    currentLevel++;
+    // move down one level
+    result.push("D1");
+    currentFloor++;
   }
   
-  // move to exit (far right of ground floor)
-  const exitPos = carpark[currentLevel].length - 1;
-  if (exitPos > currentPos) {
-    const distance = exitPos - currentPos;
-    moves.push(`R${distance}`);
-  } else if (exitPos < currentPos) {
-    const distance = currentPos - exitPos;
-    moves.push(`L${distance}`);
+  // move to exit on ground floor (far right)
+  const exitPos = carpark[carpark.length - 1].length - 1;
+  if (currentPos < exitPos) {
+    result.push(`R${exitPos - currentPos}`);
+  } else if (currentPos > exitPos) {
+    result.push(`L${currentPos - exitPos}`);
   }
   
-  return moves;
+  return result;
 }
