@@ -1,54 +1,43 @@
 package main
 
-import "fmt"
+func ConnectingValues(arr [][]int, val int, coord [2]int) [][2]int {
+	rows := len(arr)
+	if rows == 0 {
+		return [][2]int{}
+	}
+	cols := len(arr[0])
 
-func ConnectingValues(arr [][]int, val int, coord []int) [][]int {
-	result := [][]int{}
-	
-	if len(arr) == 0 || len(coord) < 2 {
-		return result
-	}
-	
 	row, col := coord[0], coord[1]
-	
-	if row < 0 || row >= len(arr) || col < 0 || col >= len(arr[row]) {
-		return result
+	if row < 0 || row >= rows || col < 0 || col >= cols || arr[row][col] != val {
+		return [][2]int{}
 	}
-	
-	if arr[row][col] != val {
-		return result
-	}
-	
-	visited := make(map[string]bool)
-	queue := [][]int{{row, col}}
-	visited[fmt.Sprintf("%d,%d", row, col)] = true
-	
-	directions := [][]int{
+
+	visited := make(map[[2]int]bool)
+	result := [][2]int{}
+	queue := [][2]int{{row, col}}
+	visited[[2]int{row, col}] = true
+
+	directions := [][2]int{
 		{-1, -1}, {-1, 0}, {-1, 1},
-		{0, -1},           {0, 1},
-		{1, -1},  {1, 0},  {1, 1},
+		{0, -1}, {0, 1},
+		{1, -1}, {1, 0}, {1, 1},
 	}
-	
+
 	for len(queue) > 0 {
 		current := queue[0]
 		queue = queue[1:]
-		
-		r, c := current[0], current[1]
-		result = append(result, []int{r, c})
-		
+		result = append(result, current)
+
 		for _, dir := range directions {
-			nr, nc := r+dir[0], c+dir[1]
-			
-			if nr >= 0 && nr < len(arr) && nc >= 0 && nc < len(arr[nr]) {
-				key := fmt.Sprintf("%d,%d", nr, nc)
-				
-				if !visited[key] && arr[nr][nc] == val {
-					visited[key] = true
-					queue = append(queue, []int{nr, nc})
-				}
+			nr := current[0] + dir[0]
+			nc := current[1] + dir[1]
+
+			if nr >= 0 && nr < rows && nc >= 0 && nc < cols && !visited[[2]int{nr, nc}] && arr[nr][nc] == val {
+				visited[[2]int{nr, nc}] = true
+				queue = append(queue, [2]int{nr, nc})
 			}
 		}
 	}
-	
+
 	return result
 }
