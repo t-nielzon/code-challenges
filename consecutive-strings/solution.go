@@ -3,7 +3,7 @@ package main
 func LongestConsec(strarr []string, k int) string {
 	n := len(strarr)
 	
-	if n == 0 || k <= 0 || k > n {
+	if n == 0 || k > n || k <= 0 {
 		return ""
 	}
 	
@@ -11,15 +11,14 @@ func LongestConsec(strarr []string, k int) string {
 	maxLen := 0
 	
 	for i := 0; i <= n-k; i++ {
-		var current string
-		
-		for j := 0; j < k; j++ {
-			current += strarr[i+j]
+		var concat string
+		for j := i; j < i+k; j++ {
+			concat += strarr[j]
 		}
 		
-		if len(current) > maxLen {
-			maxLen = len(current)
-			longestStr = current
+		if len(concat) > maxLen {
+			maxLen = len(concat)
+			longestStr = concat
 		}
 	}
 	
