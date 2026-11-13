@@ -1,15 +1,14 @@
-package solution
+package main
 
 import "math"
 
-func Solve(m float64) float64 {
-	// the infinite series sum k*x^k from k=1 to infinity equals x/(1-x)^2
-	// given m, we solve: m = x/(1-x)^2
-	// let y = 1-x, then: m*y^2 + y - 1 = 0
-	// using quadratic formula: y = (-1 + sqrt(1 + 4m)) / (2m)
-	// therefore: x = 1 - y
+func solve(m float64) float64 {
+	// the infinite series U(∞, x) = Σ(n=1 to ∞) n*x^n = x/(1-x)²
+	// given m = x/(1-x)², solve for x
+	// let y = 1-x: m*y² = 1-y → m*y² + y - 1 = 0
+	// quadratic formula: y = (-1 + √(1 + 4m)) / (2m)
+	// therefore: x = 1 - y = (2m + 1 - √(1 + 4m)) / (2m)
 	
-	discriminant := 1.0 + 4.0*m
-	y := (-1.0 + math.Sqrt(discriminant)) / (2.0 * m)
-	return 1.0 - y
+	sqrtTerm := math.Sqrt(1 + 4*m)
+	return (2*m + 1 - sqrtTerm) / (2 * m)
 }
