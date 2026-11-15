@@ -1,15 +1,25 @@
 package main
 
-import "math"
+func ballUpwards(v0 float64) int {
+	const g = 9.81
+	v0_ms := v0 / 3.6 // convert km/h to m/s
 
-func BallUpwards(v0 int) int {
-	// convert velocity from km/h to m/s
-	v0_ms := float64(v0) * 5 / 18
-	g := 9.81
+	maxHeight := 0.0
+	maxTime := 0
 
-	// the maximum height occurs at t = v0 / g (in seconds)
-	t_max_seconds := v0_ms / g
+	for t := 0; ; t++ {
+		actualTime := float64(t) / 10.0 // convert tenths to seconds
+		height := v0_ms*actualTime - 0.5*g*actualTime*actualTime
 
-	// convert to tenths of seconds and round to nearest recording time
-	return int(math.Round(t_max_seconds * 10))
+		if height < 0 {
+			break
+		}
+
+		if height > maxHeight {
+			maxHeight = height
+			maxTime = t
+		}
+	}
+
+	return maxTime
 }
