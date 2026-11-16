@@ -1,19 +1,16 @@
 /*
- * Basic Markdown to HTML
+ * Kata: Basic markdown to HTML
  * 
- * Transform the given markdown string to HTML. The function should handle:
- * 1. Headers - marked with 1-6 hashtags at the start, always followed by space
- *    (if more than 6, ignore hashtags beyond the 6th)
- * 2. List items - marked with a single asterisk followed by space at the start
- * 3. Strong emphasis - text surrounded by double asterisks with non-greedy matching
- * 4. Paragraphs - any text that doesn't match the above categories
+ * Transform markdown to HTML:
+ * - Bullet points: * text -> <li>text</li>
+ * - Headers: # text -> <h1>text</h1> (levels 1-6, cap at 6)
+ * - Bold emphasis: **text** -> <strong>text</strong> (non-greedy, smallest match)
+ * - Default: wrap in <p> tags
  * 
- * Important:
- * - Input is a single line (no newlines)
- * - No spaces between HTML opening/closing tags and the content
- * - HTML tags have an extra space inside (e.g., < strong>, < /strong>)
+ * Input: single line of markdown (no newlines)
+ * Output: formatted HTML string
  */
 
-function format(str) {
-  
+function format(text) {
+  // Your solution here
 }

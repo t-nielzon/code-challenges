@@ -1,25 +1,25 @@
-function format(str) {
-  // Check for headers (1-6 hashtags followed by space)
-  const headerMatch = str.match(/^(#+)\s+(.+)$/);
+function format(text) {
+  // Check for headers (1 or more # followed by space, cap at 6 levels)
+  const headerMatch = text.match(/^(#+) /);
   if (headerMatch) {
     const level = Math.min(headerMatch[1].length, 6);
-    const content = applyStrong(headerMatch[2]);
-    return `< h${level}>${content}< /h${level}>`;
+    const content = text.slice(headerMatch[0].length);
+    const processedContent = processBold(content);
+    return `<h${level}>${processedContent}</h${level}>`;
   }
   
-  // Check for list items (asterisk followed by space)
-  const listMatch = str.match(/^\*\s+(.+)$/);
-  if (listMatch) {
-    const content = applyStrong(listMatch[1]);
-    return `< li>${content}< /li>`;
+  // Check for list items (* followed by space)
+  if (text.startsWith('* ')) {
+    const content = text.slice(2);
+    const processedContent = processBold(content);
+    return `<li>${processedContent}</li>`;
   }
   
-  // Default to paragraph
-  const content = applyStrong(str);
-  return `< p>${content}< /p>`;
+  // Default: paragraph
+  const processedContent = processBold(text);
+  return `<p>${processedContent}</p>`;
 }
 
-function applyStrong(text) {
-  // Replace **text** with < strong>text< /strong> (non-greedy matching)
-  return text.replace(/\*\*(.+?)\*\*/g, '< strong>$1< /strong>');
+function processBold(text) {
+  return text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 }
