@@ -1,93 +1,87 @@
 package main
 
-func modPow(base, exp, mod int64) int64 {
-	result := int64(1)
-	base = base % mod
-	for exp > 0 {
-		if exp%2 == 1 {
-			result = (result * base) % mod
+func KthLastDigPrime(k int) [2]int {
+	modPow := func(base, exp, mod int64) int64 {
+		result := int64(1)
+		base = base % mod
+		for exp > 0 {
+			if exp%2 == 1 {
+				result = (result * base) % mod
+			}
+			exp = exp >> 1
+			base = (base * base) % mod
 		}
-		exp = exp >> 1
-		base = (base * base) % mod
-	}
-	return result
-}
-
-func isPrime(n int64) bool {
-	if n < 2 {
-		return false
-	}
-	if n == 2 || n == 3 {
-		return true
-	}
-	if n%2 == 0 {
-		return false
+		return result
 	}
 
-	// write n-1 as 2^r * d
-	r := 0
-	d := n - 1
-	for d%2 == 0 {
-		r++
-		d /= 2
-	}
-
-	// test against these witnesses for deterministic result up to 2^64
-	witnesses := []int64{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}
-
-	for _, a := range witnesses {
-		if a >= n {
-			continue
+	isPrime := func(n int64) bool {
+		if n < 2 {
+			return false
+		}
+		if n == 2 || n == 3 {
+			return true
+		}
+		if n%2 == 0 {
+			return false
 		}
 
-		x := modPow(a, d, n)
-		if x == 1 || x == n-1 {
-			continue
+		d := n - 1
+		r := 0
+		for d%2 == 0 {
+			d /= 2
+			r++
 		}
 
-		composite := true
-		for i := 0; i < r-1; i++ {
-			x = (x * x) % n
-			if x == n-1 {
-				composite = false
-				break
+		witnesses := []int64{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}
+
+		for _, a := range witnesses {
+			if a >= n {
+				continue
+			}
+
+			x := modPow(a, d, n)
+			if x == 1 || x == n-1 {
+				continue
+			}
+
+			composite := true
+			for i := 0; i < r-1; i++ {
+				x = (x * x) % n
+				if x == n-1 {
+					composite = false
+					break
+				}
+			}
+
+			if composite {
+				return false
 			}
 		}
 
-		if composite {
-			return false
-		}
+		return true
 	}
 
-	return true
-}
+	const MOD int64 = 1000000000
 
-func kthLastDigPrime(k int) []int64 {
-	const MOD = int64(1000000000) // 10^9
+	f0, f1, f2, f3, f4 := int64(0), int64(1), int64(1), int64(2), int64(4)
 
-	f := [5]int64{0, 1, 1, 2, 4}
 	count := 0
 	n := 5
 
 	for {
-		// f(n) = f(n-1) + f(n-2) - f(n-3) + f(n-4) - f(n-5)
-		next := (f[4] + f[3] - f[2] + f[1] - f[0]) % MOD
-		if next < 0 {
-			next += MOD
+		fn := (f4 + f3 - f2 + f1 - f0) % MOD
+		if fn < 0 {
+			fn += MOD
 		}
 
-		if isPrime(next) {
+		f0, f1, f2, f3, f4 = f1, f2, f3, f4, fn
+
+		if isPrime(f4) {
 			count++
 			if count == k {
-				return []int64{int64(n), next}
+				return [2]int{n, int(f4)}
 			}
 		}
-
-		f[0] = f[1]
-		f[1] = f[2]
-		f[2] = f[3]
-		f[3] = f[4]
-		f[4] = next
 
 		n++
 	}
