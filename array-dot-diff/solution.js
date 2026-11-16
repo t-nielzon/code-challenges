@@ -1,4 +1,4 @@
-function arrayDiff(a, b) {
+function diff(a, b) {
   const bSet = new Set(b);
   return a.filter(x => !bSet.has(x));
 }
