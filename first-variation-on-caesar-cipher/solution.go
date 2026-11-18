@@ -1,73 +1,98 @@
-package main
+package kata
+
+import "unicode"
 
 func movingShift(s string, shift int) []string {
-	encoded := ""
-	shift_counter := shift
-	
-	for _, char := range s {
-		if 'a' <= char && char <= 'z' {
-			offset := (int(char-'a') + shift_counter) % 26
-			encoded += string('a' + rune(offset))
-		} else if 'A' <= char && char <= 'Z' {
-			offset := (int(char-'A') + shift_counter) % 26
-			encoded += string('A' + rune(offset))
-		} else {
-			encoded += string(char)
-		}
-		shift_counter++
-	}
-	
+	encoded := encode(s, shift)
 	return splitMessage(encoded)
 }
 
 func demovingShift(s []string, shift int) string {
-	encoded := ""
+	joined := ""
 	for _, part := range s {
-		encoded += part
+		joined += part
 	}
-	
-	decoded := ""
-	shift_counter := shift
-	
-	for _, char := range encoded {
-		if 'a' <= char && char <= 'z' {
-			offset := ((int(char-'a') - shift_counter%26) % 26 + 26) % 26
-			decoded += string('a' + rune(offset))
-		} else if 'A' <= char && char <= 'Z' {
-			offset := ((int(char-'A') - shift_counter%26) % 26 + 26) % 26
-			decoded += string('A' + rune(offset))
-		} else {
-			decoded += string(char)
-		}
-		shift_counter++
-	}
-	
-	return decoded
+	return decode(joined, shift)
 }
 
-func splitMessage(msg string) []string {
-	length := len(msg)
-	ceil_size := (length + 4) / 5
+func encode(s string, initialShift int) string {
+	result := ""
+	currentShift := initialShift
 	
-	sizes := []int{ceil_size, ceil_size, ceil_size, ceil_size, ceil_size}
-	
-	total := 5 * ceil_size
-	for total > length {
-		for i := 4; i >= 0; i-- {
-			if sizes[i] > 0 {
-				sizes[i]--
-				total--
-				break
+	for _, ch := range s {
+		if unicode.IsLetter(ch) {
+			if unicode.IsUpper(ch) {
+				shifted := rune((int(ch-'A') + currentShift) % 26)
+				result += string('A' + shifted)
+			} else {
+				shifted := rune((int(ch-'a') + currentShift) % 26)
+				result += string('a' + shifted)
 			}
+		} else {
+			result += string(ch)
 		}
-	}
-	
-	result := make([]string, 5)
-	pos := 0
-	for i := 0; i < 5; i++ {
-		result[i] = msg[pos : pos+sizes[i]]
-		pos += sizes[i]
+		currentShift++
 	}
 	
 	return result
+}
+
+func decode(s string, initialShift int) string {
+	result := ""
+	currentShift := initialShift
+	
+	for _, ch := range s {
+		if unicode.IsLetter(ch) {
+			if unicode.IsUpper(ch) {
+				shifted := rune((int(ch-'A') - currentShift%26 + 26) % 26)
+				result += string('A' + shifted)
+			} else {
+				shifted := rune((int(ch-'a') - currentShift%26 + 26) % 26)
+				result += string('a' + shifted)
+			}
+		} else {
+			result += string(ch)
+		}
+		currentShift++
+	}
+	
+	return result
+}
+
+func splitMessage(s string) []string {
+	n := len(s)
+	base := n / 5
+	extraForParts1To4 := min(n - 4*base, 4)
+	
+	parts := make([]string, 5)
+	idx := 0
+	
+	for i := 0; i < 5; i++ {
+		var partLen int
+		
+		if i < extraForParts1To4 {
+			partLen = base + 1
+		} else if i < 4 {
+			partLen = base
+		} else {
+			// part 5 gets whatever is left
+			partLen = n - idx
+		}
+		
+		if partLen > 0 {
+			parts[i] = s[idx : idx+partLen]
+		} else {
+			parts[i] = ""
+		}
+		idx += partLen
+	}
+	
+	return parts
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }

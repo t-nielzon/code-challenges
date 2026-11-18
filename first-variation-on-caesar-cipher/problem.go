@@ -1,23 +1,24 @@
+package kata
+
 /*
-The action of a Caesar cipher is to replace each plaintext letter (plaintext letters are from 'a' to 'z' or from 'A' to 'Z') with a different one a fixed number of places up or down the alphabet.
+Caesar Cipher Variation - First Variation
 
-This program performs a variation of the Caesar shift. The shift increases by 1 for each character (on each iteration).
+The action of a Caesar cipher is to replace each plaintext letter with a different one
+a fixed number of places up or down the alphabet.
 
-If the shift is initially 1, the first character of the message to be encoded will be shifted by 1, the second character will be shifted by 2, etc...
+This program performs a variation of the Caesar shift. The shift increases by 1 for each character.
+If the shift is initially 1, the first character will be shifted by 1, the second by 2, etc.
 
-The function "movingShift" first codes the entire string and then returns an array of strings containing the coded string in 5 parts.
+The movingShift function encodes a string with the increasing shift and returns an array of
+5 strings containing the coded message split into parts with specific length distribution rules.
 
-The function "demovingShift" takes an array of strings (five parts) and a shift value, and returns the original decoded string.
+The demovingShift function decodes the array of 5 strings back to the original message.
 */
 
-package main
-
 func movingShift(s string, shift int) []string {
-	// Placeholder - implement in solution
-	return []string{}
+	// TODO: Implement
 }
 
 func demovingShift(s []string, shift int) string {
-	// Placeholder - implement in solution
-	return ""
+	// TODO: Implement
 }
