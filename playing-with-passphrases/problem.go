@@ -1,3 +1,4 @@
+// problem.go
 /*
 Everyone knows passphrases. One can choose passphrases from poems, songs, movies names and so on but frequently
 they can be guessed due to common cultural references.
@@ -15,11 +16,12 @@ Example:
 your text: "BORN IN 2015!", shift 1
 
 1 + 2 + 3 -> "CPSO JO 7984!"
-4 -> "CpSo jO 7984!"
-5 -> "!4897 Oj oSpC"
+4 "CpSo jO 7984!"
+5 "!4897 Oj oSpC"
 */
+
 package main
 
-func PlayPassphrase(s string, shift int) string {
-
+func PassphraseEncoder(text string, shift int) string {
+	return ""
 }
