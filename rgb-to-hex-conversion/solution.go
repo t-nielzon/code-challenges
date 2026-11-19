@@ -1,19 +1,21 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func rgb(r, g, b int) string {
-	clamp := func(v int) int {
-		if v < 0 {
+	clamp := func(val int) int {
+		if val < 0 {
 			return 0
 		}
-		if v > 255 {
+		if val > 255 {
 			return 255
 		}
-		return v
+		return val
 	}
 	
-	return fmt.Sprintf("%02X%02X%02X", clamp(r), clamp(g), clamp(b))
+	r = clamp(r)
+	g = clamp(g)
+	b = clamp(b)
+	
+	return fmt.Sprintf("%02X%02X%02X", r, g, b)
 }

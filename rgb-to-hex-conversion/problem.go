@@ -1,6 +1,5 @@
-// Kata: RGB To Hex Conversion
-// Difficulty: 5 kyu
-//
+package main
+
 // The rgb function is incomplete. Complete it so that passing in RGB decimal
 // values will result in a hexadecimal representation being returned. Valid
 // decimal values for RGB are 0 - 255. Any values that fall out of that range
@@ -15,9 +14,7 @@
 // 0, 0, 0       --> "000000"
 // 148, 0, 211   --> "9400D3"
 
-package main
-
 func rgb(r, g, b int) string {
-	// TODO: Implement
+	// TODO: Implement conversion from RGB to hex
 	return ""
 }
