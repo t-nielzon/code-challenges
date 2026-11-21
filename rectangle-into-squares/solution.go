@@ -1,20 +1,24 @@
-func SqInRect(lng, wdth int) []int {
+package main
+
+func sqInRect(lng, wdth int) []int {
 	if lng == wdth {
 		return nil
 	}
 
 	var result []int
-	l, w := lng, wdth
+	for lng > 0 && wdth > 0 {
+		if lng == wdth {
+			result = append(result, lng)
+			break
+		}
 
-	for w > 0 {
-		if l < w {
-			l, w = w, l
+		if lng > wdth {
+			result = append(result, wdth)
+			lng -= wdth
+		} else {
+			result = append(result, lng)
+			wdth -= lng
 		}
-		count := l / w
-		for i := 0; i < count; i++ {
-			result = append(result, w)
-		}
-		l = l % w
 	}
 
 	return result
