@@ -2,32 +2,32 @@ package main
 
 /*
 A natural number is called k-prime if it has exactly k prime factors, counted with multiplicity.
+For example:
+  k = 2  -->  4, 6, 9, 10, 14, 15, 21, 22, ...
+  k = 3  -->  8, 12, 18, 20, 27, 28, 30, ...
+  k = 5  -->  32, 48, 72, 80, 108, 112, ...
 
-Examples:
-k = 2  -->  4, 6, 9, 10, 14, 15, 21, 22, ...
-k = 3  -->  8, 12, 18, 20, 27, 28, 30, ...
-k = 5  -->  32, 48, 72, 80, 108, 112, ...
-
-Task 1:
-Complete the function countKprimes which is given parameters k, start, end
+Task 1: Complete the function countKprimes which is given parameters k, start, end
 and returns an array of the k-primes between start (inclusive) and end (inclusive).
-For Go: nil slice is expected when there are no k-primes between start and end.
 
 Example: countKprimes(5, 500, 600) --> [500, 520, 552, 567, 588, 592, 594]
 
-Task 2:
-Given a positive integer s, find the total number of solutions of the equation
+For Go: nil slice is expected when there are no k-primes between start and end.
+
+Task 2: Given a positive integer s, find the total number of solutions of the equation
 a + b + c = s, where a is 1-prime, b is 3-prime, and c is 7-prime.
 
 Examples:
-puzzle(138)  -->  1  because [2 + 8 + 128] is the only solution
-puzzle(143)  -->  2  because [3 + 12 + 128] and [7 + 8 + 128] are the solutions
+  puzzle(138)  -->  1  because [2 + 8 + 128]
+  puzzle(143)  -->  2  because [3 + 12 + 128] and [7 + 8 + 128]
 */
 
 func countKprimes(k, start, end int) []int {
+	// TODO: implement
 	return nil
 }
 
 func puzzle(s int) int {
+	// TODO: implement
 	return 0
 }
