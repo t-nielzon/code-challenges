@@ -1,19 +1,20 @@
 package main
 
-import "math"
-
 func cakes(recipe map[string]int, available map[string]int) int {
-	minCakes := math.MaxInt
-
-	for ingredient, required := range recipe {
-		possibleCakes := available[ingredient] / required
-		if possibleCakes < minCakes {
-			minCakes = possibleCakes
+	var maxCakes int
+	first := true
+	
+	for ingredient, needed := range recipe {
+		have := available[ingredient]
+		canMake := have / needed
+		
+		if first {
+			maxCakes = canMake
+			first = false
+		} else if canMake < maxCakes {
+			maxCakes = canMake
 		}
 	}
-
-	if minCakes == math.MaxInt {
-		return 0
-	}
-	return minCakes
+	
+	return maxCakes
 }
