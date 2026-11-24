@@ -1,21 +1,26 @@
-package kata
+package main
 
-import "strings"
+import (
+	"strings"
+)
 
-func DecodeMorse(morseCode string) string {
-	morseCode = strings.TrimSpace(morseCode)
-	words := strings.Split(morseCode, "   ")
-	decodedWords := make([]string, 0, len(words))
-	for _, word := range words {
-		letters := strings.Split(word, " ")
-		var sb strings.Builder
-		for _, letter := range letters {
-			if letter == "" {
-				continue
-			}
-			sb.WriteString(MORSE_CODE[letter])
+func DecodeMorse(morse string) string {
+	result := ""
+	words := strings.Split(strings.TrimSpace(morse), "   ")
+	
+	for i, word := range words {
+		if i > 0 {
+			result += " "
 		}
-		decodedWords = append(decodedWords, sb.String())
+		codes := strings.Split(word, " ")
+		for _, code := range codes {
+			if code != "" {
+				if char, ok := MORSE_CODE[code]; ok {
+					result += char
+				}
+			}
+		}
 	}
-	return strings.Join(decodedWords, " ")
+	
+	return result
 }
