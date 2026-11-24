@@ -1,18 +1,17 @@
 function findSpecialIdx(vms) {
-  // Vend i+1 bars from machine i (0-indexed)
-  for (let i = 0; i < 100; i++) {
-    for (let j = 0; j <= i; j++) {
-      vms[i].vend();
+  for (let weighingIdx = 0; weighingIdx < 10; weighingIdx++) {
+    // Test machines [10*weighingIdx, 10*weighingIdx+9]
+    for (let j = 0; j < 10; j++) {
+      const machineIdx = 10 * weighingIdx + j;
+      vms[machineIdx].vend(j + 1);
+    }
+    
+    const weight = vms.weigh();
+    const expectedWeight = 55 * 100; // (1+2+...+10) * 100
+    const delta = weight - expectedWeight;
+    
+    if (delta > 0) {
+      return 10 * weighingIdx + (delta - 1);
     }
   }
-  
-  // Weigh the pile once
-  const actualWeight = vms.weigh();
-  
-  // Expected weight if all machines normal: 100g × (1+2+...+100) = 100 × 5050 = 505000g
-  // If machine j is special: actualWeight = 505000 + (j+1) extra grams
-  // Therefore: j = actualWeight - 505000 - 1
-  const specialIdx = actualWeight - 505000 - 1;
-  
-  return specialIdx;
 }
