@@ -20,15 +20,27 @@ func Gap(g int, m int, n int) []int {
 	}
 
 	var prevPrime int
-	found := false
 
+	// find the first prime >= m
 	for i := m; i <= n; i++ {
 		if isPrime(i) {
-			if found && i-prevPrime == g {
+			prevPrime = i
+			break
+		}
+	}
+
+	// if no first prime found, return nil
+	if prevPrime == 0 {
+		return nil
+	}
+
+	// look for the next prime with the desired gap
+	for i := prevPrime + 1; i <= n; i++ {
+		if isPrime(i) {
+			if i-prevPrime == g {
 				return []int{prevPrime, i}
 			}
 			prevPrime = i
-			found = true
 		}
 	}
 
