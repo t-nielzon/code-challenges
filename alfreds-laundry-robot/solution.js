@@ -1,22 +1,14 @@
-function isAtLaunderette(commands) {
-  const launderette1 = ['e', 'n', 'e', 'e', 'n'];
-  const launderette2 = ['w', 'n', 'w', 'n', 'w', 'w', 'n'];
+// solution.js
+function alfredLaundryRobot(commands) {
+  let x = 0, y = 0;
   
-  function getPosition(path) {
-    let x = 0, y = 0;
-    for (const cmd of path) {
-      if (cmd === 'n') y++;
-      else if (cmd === 's') y--;
-      else if (cmd === 'e') x++;
-      else if (cmd === 'w') x--;
-    }
-    return [x, y];
+  for (let cmd of commands) {
+    if (cmd === 'n') y++;
+    else if (cmd === 's') y--;
+    else if (cmd === 'e') x++;
+    else if (cmd === 'w') x--;
   }
   
-  const robotPos = getPosition(commands);
-  const laundPos1 = getPosition(launderette1);
-  const laundPos2 = getPosition(launderette2);
-  
-  return (robotPos[0] === laundPos1[0] && robotPos[1] === laundPos1[1]) ||
-         (robotPos[0] === laundPos2[0] && robotPos[1] === laundPos2[1]);
+  // Launderette 1 is at (3, 2), Launderette 2 is at (-4, 3)
+  return (x === 3 && y === 2) || (x === -4 && y === 3);
 }
