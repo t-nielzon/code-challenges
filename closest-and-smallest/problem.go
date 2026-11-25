@@ -1,21 +1,22 @@
+package solution
+
 /*
 Closest and Smallest
 
 Input: a string of n positive numbers (n = 0 or n >= 2)
+Weight of a number: sum of its digits (e.g., 99 -> 18, 100 -> 1)
 
-Weight of a number = sum of its digits
+Task: Find two numbers in the string that are:
+1. Closest: smallest difference of weights
+2. With smallest weights (tiebreaker)
+3. With smallest indices (tiebreaker)
 
-Task: Find two numbers that have:
-- the smallest difference of weights
-- with the smallest weights
-- and with the smallest indices in the string
+Output: [[weight1, index1, num1], [weight2, index2, num2]]
+Sorted by weight (ascending), then by index (ascending).
 
-Output: array of two arrays [weight, index, number]
-sorted by weight (or index if weights are equal)
+If input is empty, return [].
 */
 
-package main
-
 func Closest(strng string) [][]interface{} {
-	// stub
+	return nil
 }
