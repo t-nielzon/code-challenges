@@ -1,28 +1,47 @@
-package main
+package kata
 
-import "strings"
+/*
+Moves in squared strings (IV)
 
-// Moves in squared strings (IV)
-//
-// You are given a string of n lines, each substring being n characters long.
-// We study transformations of this square of strings.
-//
-// - Symmetry with respect to the antidiagonal: diag_2_sym
-// - Counterclockwise rotation 90 degrees: rot_90_counter
-// - selfie_diag2_counterclock: concatenation of original, diag_2_sym, and rot_90_counter
+You are given a string of n lines, each substring being n characters long.
+For example: s = "abcd\nefgh\nijkl\nmnop"
 
-func diag_2_sym(s string) string {
-	// TODO
+We will study some transformations of this square of strings.
+
+- Symmetry with respect to the antidiagonal: Diag2Sym
+  Diag2Sym(s) => "plhd\nokgc\nnjfb\nmiea"
+
+- Counterclockwise rotation 90 degrees: Rot90Counter
+  Rot90Counter(s) => "dhlp\ncgko\nbfjn\naeim"
+
+- SelfieDiag2Counterclock
+  It is initial string + string obtained by symmetry with respect to the antidiagonal + counterclockwise rotation 90 degrees.
+  s = "abcd\nefgh\nijkl\nmnop" -->
+  "abcd|plhd|dhlp\nefgh|okgc|cgko\nijkl|njfb|bfjn\nmnop|miea|aeim"
+
+Task:
+- Write functions Diag2Sym, Rot90Counter, SelfieDiag2Counterclock
+- Write higher-order function Oper(fct, s) where fct is a function to apply to string s
+*/
+
+func Diag2Sym(s string) string {
+	// stub
+	return ""
 }
 
-func rot_90_counter(s string) string {
-	// TODO
+func Rot90Counter(s string) string {
+	// stub
+	return ""
 }
 
-func selfie_diag2_counterclock(s string) string {
-	// TODO
+func SelfieDiag2Counterclock(s string) string {
+	// stub
+	return ""
 }
 
-func oper(fct func(string) string, s string) string {
-	// TODO
+type TransformFunc func(string) string
+
+func Oper(fct TransformFunc, s string) string {
+	// stub
+	return ""
 }

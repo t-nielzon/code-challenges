@@ -1,70 +1,77 @@
-package main
+package kata
 
 import "strings"
 
-func diag_2_sym(s string) string {
-	lines := strings.Split(s, "\n")
-	n := len(lines)
-	
-	result := make([][]byte, n)
+func Diag2Sym(s string) string {
+	grid := stringToGrid(s)
+	n := len(grid)
+	result := make([][]rune, n)
 	for i := 0; i < n; i++ {
-		result[i] = make([]byte, n)
+		result[i] = make([]rune, n)
 	}
-	
+
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
-			result[i][j] = lines[n-1-j][n-1-i]
+			result[i][j] = grid[n-1-j][n-1-i]
 		}
 	}
-	
-	var res []string
-	for i := 0; i < n; i++ {
-		res = append(res, string(result[i]))
-	}
-	
-	return strings.Join(res, "\n")
+
+	return gridToString(result)
 }
 
-func rot_90_counter(s string) string {
-	lines := strings.Split(s, "\n")
-	n := len(lines)
-	
-	result := make([][]byte, n)
+func Rot90Counter(s string) string {
+	grid := stringToGrid(s)
+	n := len(grid)
+	result := make([][]rune, n)
 	for i := 0; i < n; i++ {
-		result[i] = make([]byte, n)
+		result[i] = make([]rune, n)
 	}
-	
+
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
-			result[i][j] = lines[j][n-1-i]
+			result[i][j] = grid[j][n-1-i]
 		}
 	}
-	
-	var res []string
-	for i := 0; i < n; i++ {
-		res = append(res, string(result[i]))
-	}
-	
-	return strings.Join(res, "\n")
+
+	return gridToString(result)
 }
 
-func selfie_diag2_counterclock(s string) string {
-	lines := strings.Split(s, "\n")
-	diag := diag_2_sym(s)
-	rot := rot_90_counter(s)
-	
+func SelfieDiag2Counterclock(s string) string {
+	diag := Diag2Sym(s)
+	rot := Rot90Counter(s)
+
+	originalLines := strings.Split(s, "\n")
 	diagLines := strings.Split(diag, "\n")
 	rotLines := strings.Split(rot, "\n")
-	
-	var result []string
-	for i := 0; i < len(lines); i++ {
-		combined := lines[i] + "|" + diagLines[i] + "|" + rotLines[i]
-		result = append(result, combined)
+
+	result := make([]string, len(originalLines))
+	for i := 0; i < len(originalLines); i++ {
+		result[i] = originalLines[i] + "|" + diagLines[i] + "|" + rotLines[i]
 	}
-	
+
 	return strings.Join(result, "\n")
 }
 
-func oper(fct func(string) string, s string) string {
+type TransformFunc func(string) string
+
+func Oper(fct TransformFunc, s string) string {
 	return fct(s)
+}
+
+func stringToGrid(s string) [][]rune {
+	lines := strings.Split(s, "\n")
+	n := len(lines)
+	grid := make([][]rune, n)
+	for i := 0; i < n; i++ {
+		grid[i] = []rune(lines[i])
+	}
+	return grid
+}
+
+func gridToString(grid [][]rune) string {
+	lines := make([]string, len(grid))
+	for i := 0; i < len(grid); i++ {
+		lines[i] = string(grid[i])
+	}
+	return strings.Join(lines, "\n")
 }
