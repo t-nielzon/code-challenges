@@ -1,9 +1,9 @@
 function queueTime(customers, n) {
-  const tills = Array(n).fill(0);
+  const tills = new Array(n).fill(0);
   
-  for (const customer of customers) {
+  for (const time of customers) {
     const minIndex = tills.indexOf(Math.min(...tills));
-    tills[minIndex] += customer;
+    tills[minIndex] += time;
   }
   
   return Math.max(...tills);
