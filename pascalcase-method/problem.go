@@ -1,4 +1,7 @@
 /*
+PascalCase Method
+Difficulty: 6 kyu
+
 Write a method (or function, depending on the language) that converts a string to PascalCase,
 that is, all words must have their first letter capitalized and spaces must be removed.
 
@@ -9,5 +12,8 @@ Examples (input --> output):
 
 package main
 
-func Camelcase(str string) string {
+import "strings"
+
+func PascalCase(str string) string {
+
 }
