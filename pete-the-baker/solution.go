@@ -1,20 +1,17 @@
-package main
+package kata
 
-func cakes(recipe map[string]int, available map[string]int) int {
-	var maxCakes int
-	first := true
-	
+func Cakes(recipe map[string]int, available map[string]int) int {
+	minCakes := -1
+
 	for ingredient, needed := range recipe {
-		have := available[ingredient]
-		canMake := have / needed
-		
-		if first {
-			maxCakes = canMake
-			first = false
-		} else if canMake < maxCakes {
-			maxCakes = canMake
+		cakesFromThis := available[ingredient] / needed
+		if minCakes == -1 || cakesFromThis < minCakes {
+			minCakes = cakesFromThis
 		}
 	}
-	
-	return maxCakes
+
+	if minCakes < 0 {
+		return 0
+	}
+	return minCakes
 }
