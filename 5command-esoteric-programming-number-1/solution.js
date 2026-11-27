@@ -7,44 +7,37 @@ class Output {
 
 class FiveCommands {
   read(input, debug) {
-    let tape = [0];
+    const tape = {}; // sparse array using object for unlimited tape
     let pointer = 0;
     let output = '';
-
-    for (const cmd of input) {
-      switch (cmd) {
+    
+    for (let cmd of input) {
+      switch(cmd) {
         case '+':
           pointer++;
-          if (pointer >= tape.length) {
-            tape.push(0);
-          }
           break;
         case '-':
-          if (pointer === 0) {
-            tape.unshift(0);
-          } else {
-            pointer--;
-          }
+          pointer--;
           break;
         case '^':
-          tape[pointer]++;
+          tape[pointer] = (tape[pointer] || 0) + 1;
           break;
         case 'v':
-          tape[pointer]--;
+          tape[pointer] = (tape[pointer] || 0) - 1;
           break;
         case '*':
-          output += tape[pointer].toString();
+          const val = tape[pointer] || 0;
+          output += val;
           break;
       }
     }
-
-    let debugArray = [];
+    
+    let debugOutput = [];
     if (debug) {
-      for (let i = 0; i < tape.length; i++) {
-        debugArray.push(`${i}->${tape[i]}`);
-      }
+      const keys = Object.keys(tape).sort((a, b) => a - b);
+      debugOutput = keys.map(k => `${k}->${tape[k]}`);
     }
-
-    return new Output(output, debugArray);
+    
+    return new Output(output, debugOutput);
   }
 }
